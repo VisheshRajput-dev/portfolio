@@ -8,50 +8,75 @@ import { motion, useScroll, useTransform, useInView } from "framer-motion";
  */
 const experiences = [
   {
-    company: "Roboto Studio",
-    role: "Frontend Engineer",
-    duration: "JAN 2025 - Present",
-    location: "London Area, United Kingdom",
-    description:
-      "Architected enterprise-scale, CMS-driven reusable pagebuilder blocks with dynamic configurability using Sanity and Contentful, enabling non-technical teams to manage content across 6+ production websites. Delivered high-performance web applications using Next.js, React, and Tailwind CSS with advanced rendering strategies, achieving 25% increase in user engagement.",
-    tech: ["TypeScript", "Next.js", "Sanity CMS", "Contentful CMS", "Tailwind CSS", "Figma", "Turborepo", "Vercel AI SDK"],
-    highlights: ["40% faster content delivery", "25% increase in user engagement", "20% improvement in Core Web Vitals", "15% reduction in production defects"]
-  },
-  {
-    company: "GitHub",
-    role: "Open Source Contributor",
-    duration: "JUN 2024 - Present",
+    company: "Freelance Developer",
+    role: "Full-Stack & Mobile Developer",
+    duration: "2024 – Present",
     location: "Remote",
     description:
-      "Contributed to open-source projects with 15,000+ Github stars, improving code quality, feature implementations, and documentation. Engaged with developer communities, collaborating on innovative solutions and best practices.",
-    tech: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Turborepo"],
-    highlights: ["15,000+ GitHub stars", "Active community engagement", "Quality improvements"]
+      "Delivered multiple production-ready web and mobile applications for startups and individuals, specializing in rapid MVP delivery. Combined strong coding fundamentals with AI-assisted workflows using ChatGPT, Gemini, Copilot, and n8n to accelerate development and automation.",
+    tech: ["React.js", "Node.js", "Flutter", "MongoDB", "Firebase", "Tailwind CSS", "Razorpay", "OpenAI API"],
+    highlights: [
+      "Delivered 3+ projects for clients within 2-week timelines",
+      "Implemented full-stack systems with authentication, payments, and dashboards",
+      "Used AI tools to boost development speed by 40%",
+      "Successfully managed entire development lifecycle independently"
+    ]
   },
   {
-    company: "Freelance",
-    role: "Full-stack Developer & Problem Solver",
-    duration: "Sep 2023 – Present",
+    company: "Navadurga (Contract Project)",
+    role: "Full-Stack Developer",
+    duration: "Jan 2025 – mar 2025",
     location: "Remote",
     description:
-      "Delivered production-ready MVPs using modern web technologies and AI-assisted development. Specialized in creating dynamic web experiences with clean, efficient code across frontend and backend systems.",
-    tech: ["React", "Node.js", "TypeScript", "Next.js", "AI Tools"],
-    highlights: ["Production-ready MVPs", "AI-assisted development", "Full-stack solutions"]
+      "Built a complete full-stack web portal for Navadurga Pvt. Ltd. to manage and analyze internal business data. Developed a secure admin dashboard with full CRUD functionality, real-time reporting, and data visualization to track customer insights and performance metrics. Integrated Firebase for backend services, Cloudinary for media management, and implemented automated workflows for smoother data handling and decision-making.",
+    tech: ["React.js", "Firebase", "Tailwind CSS", "Cloudinary", "Postman", "Google Stitch"],
+    highlights: [
+      "Architected a scalable admin panel with full CRUD operations",
+      "Implemented interactive dashboards to visualize sales and customer trends",
+      "Integrated Firebase and Cloudinary for secure data and media management",
+      "enhanced ui design using Google Stitch and API-based pipelines",
+      "Delivered a robust, production-ready system within 2 months of contract initiation"
+    ]
   },
   {
-    company: "Personal Projects",
-    role: "Creator & Continuous Learner",
-    duration: "Ongoing",
-    location: "Global",
+    company: "E-GameBazzi (Independent Project)",
+    role: "Founder & Full-Stack Developer",
+    duration: "aug 2025 – sept 2025",
+    location: "Remote",
     description:
-      "Building innovative projects, rapid prototypes, and experiments with cutting-edge technologies. Focus on creating seamless user experiences and staying ahead of industry trends.",
-    tech: ["AI", "React", "Cloud", "Innovation"],
-    highlights: ["Rapid prototyping", "Technology experimentation", "Industry trend analysis"]
+      "Designed and built a fantasy esports platform prototype for games like BGMI, COD, and Valorant. Developed secure authentication, wallet management, and team selection systems using React, Node, and Firebase. Project is disband due to legal issues.",
+    tech: ["React.js", "Node.js", "MongoDB", "postman", "express", "firebase", "Razorpay", "Tailwind CSS"],
+    highlights: [
+      "Engineered a scalable backend with dynamic contest system using express and node.js",
+      "Integrated Razorpay for wallet and payment management",
+      "Created admin panels for KYC, prize distribution, and match results using react and tailwind css",
+    ]
+  },
+  {
+    company: "Open Source & AI Experiments",
+    role: "AI Developer (Self-Learning Projects)",
+    duration: "oct 2025 – present",
+    location: "Remote",
+    description:
+      "Explored AI integrations and workflow automation using OpenAI, Gemini, and n8n. Built tools like a meeting summarizer app, data analysis assistant, and smart automation pipelines connecting APIs and databases.",
+    tech: ["Flutter", "Python", "Firebase", "OpenAI API", "n8n", "Gemini API", "Tailwind CSS", "React.js", "Node.js", "MongoDB", "postman", "express", "firebase", "Razorpay"],
+    highlights: [
+      "Integrated multilingual NLP features for productivity tools using openai api",
+      "Created custom n8n workflows for automation and data syncing using n8n",
+    ]
   },
 ];
 
 export default function ExperienceTimeline() {
   const containerRef = useRef(null);
   const [isInView, setIsInView] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Scroll progress for the timeline line
   const { scrollYProgress } = useScroll({
@@ -80,18 +105,24 @@ export default function ExperienceTimeline() {
           transition={{ duration: 0.8 }}
           className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent mb-6">
+          <h2 className={`font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent mb-6 ${
+            screenWidth < 370 ? "text-xl" : screenWidth < 773 ? "text-2xl" : screenWidth < 898 ? "text-3xl" : screenWidth < 1065 ? "text-4xl" : "text-5xl"
+          }`}>
           My Career Adventures
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-          From “I hope this works” to “Oops, it actually works!” – a timeline of my professional mischiefs and victories.
+          <p className={`text-gray-300 max-w-3xl mx-auto leading-relaxed ${
+            screenWidth < 370 ? "text-sm" : screenWidth < 773 ? "text-base" : screenWidth < 898 ? "text-lg" : screenWidth < 1065 ? "text-xl" : "text-2xl"
+          }`}>
+          From "I hope this works" to "Oops, it actually works!" – a timeline of my professional mischiefs and victories.
           </p>
         </motion.div>
 
         {/* Main Timeline Container */}
         <div className="relative">
           {/* Animated Progress Line - Left aligned */}
-          <div className="absolute left-16 md:left-20 top-0 bottom-0 w-[3px]">
+          <div className={`absolute top-0 bottom-0 w-[3px] ${
+            screenWidth < 370 ? "left-4" : screenWidth < 773 ? "left-6" : screenWidth < 898 ? "left-8" : screenWidth < 1065 ? "left-12" : "left-16"
+          }`}>
             {/* Static gradient background */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/20 to-transparent rounded-full" />
             
@@ -109,12 +140,15 @@ export default function ExperienceTimeline() {
           </div>
 
           {/* Timeline Items - All left aligned */}
-          <div className="relative z-10 space-y-16 md:space-y-20">
+          <div className={`relative z-10 ${
+            screenWidth < 370 ? "space-y-4" : screenWidth < 773 ? "space-y-6" : screenWidth < 898 ? "space-y-8" : screenWidth < 1065 ? "space-y-12" : "space-y-16"
+          }`}>
             {experiences.map((exp, idx) => (
               <TimelineItem 
                 key={idx}
                 experience={exp}
                 index={idx}
+                screenWidth={screenWidth}
               />
             ))}
           </div>
@@ -205,7 +239,7 @@ export default function ExperienceTimeline() {
 }
 
 // Individual Timeline Item Component
-function TimelineItem({ experience, index }) {
+function TimelineItem({ experience, index, screenWidth }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, amount: 0.3 });
 
@@ -221,7 +255,9 @@ function TimelineItem({ experience, index }) {
       className="relative"
     >
       {/* Timeline Dot with Enhanced Animations */}
-      <div className="absolute top-10 left-12 md:left-16 z-30">
+      <div className={`absolute top-10 z-30 ${
+        screenWidth < 370 ? "left-2" : screenWidth < 773 ? "left-4" : screenWidth < 898 ? "left-6" : screenWidth < 1065 ? "left-8" : "left-12"
+      }`}>
         <motion.div
           animate={isInView ? { 
             scale: [1, 1.4, 1],
@@ -279,7 +315,9 @@ function TimelineItem({ experience, index }) {
       </div>
 
       {/* Card Container - Left aligned with consistent spacing */}
-      <div className="ml-24 md:ml-32 w-full max-w-4xl">
+      <div className={`w-full ${
+        screenWidth < 370 ? "ml-8 max-w-xs" : screenWidth < 773 ? "ml-12 max-w-sm" : screenWidth < 898 ? "ml-16 max-w-2xl" : screenWidth < 1065 ? "ml-20 max-w-3xl" : "ml-24 max-w-4xl"
+      }`}>
         <motion.article
           whileHover={{ 
             y: -12,
@@ -293,9 +331,10 @@ function TimelineItem({ experience, index }) {
           className="group relative"
         >
           {/* Enhanced Glassmorphism Card */}
-          <div className="relative bg-white/[0.04] border border-white/[0.1] backdrop-blur-2xl p-8 rounded-3xl shadow-2xl
-            hover:bg-white/[0.06] hover:border-white/[0.15] hover:shadow-purple-500/20 hover:shadow-2xl
-            transition-all duration-700 cursor-pointer overflow-hidden">
+          <div className={`relative bg-white/[0.04] border border-white/[0.1] backdrop-blur-2xl rounded-3xl shadow-2xl ${
+            screenWidth < 370 ? "p-2" : screenWidth < 773 ? "p-3" : screenWidth < 898 ? "p-4" : screenWidth < 1065 ? "p-6" : "p-8"
+          } hover:bg-white/[0.06] hover:border-white/[0.15] hover:shadow-purple-500/20 hover:shadow-2xl
+            transition-all duration-700 cursor-pointer overflow-hidden`}>
             
             {/* Animated background gradient */}
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-500/5 via-transparent to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
@@ -347,7 +386,9 @@ function TimelineItem({ experience, index }) {
 
               {/* Role & Company with enhanced typography */}
               <motion.h3 
-                className="text-2xl md:text-3xl font-bold text-white mb-3 group-hover:text-purple-100 transition-colors duration-300"
+                className={`font-bold text-white mb-3 group-hover:text-purple-100 transition-colors duration-300 ${
+                  screenWidth < 370 ? "text-sm" : screenWidth < 773 ? "text-base" : screenWidth < 898 ? "text-lg" : screenWidth < 1065 ? "text-xl" : "text-2xl"
+                }`}
                 animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
                 transition={{ delay: isInView ? index * 0.2 + 0.4 : 0 }}
                 whileHover={{ x: 5 }}
@@ -356,7 +397,9 @@ function TimelineItem({ experience, index }) {
               </motion.h3>
               
               <motion.h4 
-                className="text-lg md:text-xl font-semibold text-purple-300 mb-6"
+                className={`font-semibold text-purple-300 mb-6 ${
+                  screenWidth < 370 ? "text-xs" : screenWidth < 773 ? "text-sm" : screenWidth < 898 ? "text-base" : screenWidth < 1065 ? "text-lg" : "text-xl"
+                }`}
                 animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
                 transition={{ delay: isInView ? index * 0.2 + 0.5 : 0 }}
                 whileHover={{ x: 5 }}
@@ -366,7 +409,9 @@ function TimelineItem({ experience, index }) {
 
               {/* Description with improved readability */}
               <motion.p 
-                className="text-gray-300 leading-relaxed mb-6 text-sm md:text-base max-w-3xl"
+                className={`text-gray-300 leading-relaxed mb-6 max-w-3xl ${
+                  screenWidth < 370 ? "text-xs" : screenWidth < 773 ? "text-sm" : screenWidth < 898 ? "text-base" : screenWidth < 1065 ? "text-lg" : "text-xl"
+                }`}
                 animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
                 transition={{ delay: isInView ? index * 0.2 + 0.6 : 0 }}
               >

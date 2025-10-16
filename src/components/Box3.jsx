@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import DotGrid from "./ui/dotgrid";
 
 export default function Box3() {
   const [isHovered, setIsHovered] = useState(false);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -66,18 +73,20 @@ export default function Box3() {
       </div>
 
       
-      {/* 🌍 Bottom-left location */}
-<div
-  className="flex flex-col items-center gap-1 relative z-10 self-start mb-2 ml-2"
->
-  <FaMapMarkerAlt
-    className={`text-purple-400 text-3xl transition-transform duration-300 ${
-      isHovered ? "animate-bounce" : ""
-    }`}
-  />
-  <span className="text-gray-300 text-sm">Remote</span>
-  <span className="text-gray-400 text-xs">India</span>
-</div>
+      {/* 🌍 Bottom-left location - Only show for screens >= 1079px */}
+      {screenWidth >= 1079 && (
+        <div
+          className="flex flex-col items-center gap-1 relative z-10 self-start mb-2 ml-2"
+        >
+          <FaMapMarkerAlt
+            className={`text-purple-400 text-3xl transition-transform duration-300 ${
+              isHovered ? "animate-bounce" : ""
+            }`}
+          />
+          <span className="text-gray-300 text-sm">Remote</span>
+          <span className="text-gray-400 text-xs">India</span>
+        </div>
+      )}
 
     </div>
   );
