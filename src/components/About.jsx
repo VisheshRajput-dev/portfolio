@@ -17,8 +17,9 @@ export default function AboutSection() {
   }, []);
 
   const getBoxStyle = (box) => {
-    if (screenWidth < 640 && box.positions.sm) return box.positions.sm;
-    if (screenWidth < 1024 && box.positions.md) return box.positions.md;
+    if (screenWidth < 885 && box.positions.md) return box.positions.md;
+    if (screenWidth < 1079 && box.positions.lg) return box.positions.lg;
+    if (screenWidth < 1430 && box.positions.xl) return box.positions.xl;
     return box.positions.default;
   };
 

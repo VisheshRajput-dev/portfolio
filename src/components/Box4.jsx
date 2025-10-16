@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaRegCopy, FaCheckDouble } from "react-icons/fa";
 import ShinyText from "./ui/shinytext";
 import Aurora from "./ui/Aurora";
 
 export default function Box4() {
   const [copied, setCopied] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const email = "visheshrajput.dev@gmail.com";
+
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(email);
@@ -28,6 +35,15 @@ export default function Box4() {
           right: 0,
           bottom: 0,
           zIndex: 0,
+          // Adjust for different breakpoints to ensure perfect fit
+          width: screenWidth < 370 ? "calc(100% - 2px)" : 
+                 screenWidth < 773 ? "calc(100% - 1px)" : 
+                 screenWidth < 898 ? "calc(100% - 1px)" : 
+                 screenWidth < 1065 ? "calc(100% - 1px)" : "100%",
+          height: screenWidth < 370 ? "calc(100% - 2px)" : 
+                  screenWidth < 773 ? "calc(100% - 1px)" : 
+                  screenWidth < 898 ? "calc(100% - 1px)" : 
+                  screenWidth < 1065 ? "calc(100% - 1px)" : "100%",
         }}
       >
         <Aurora

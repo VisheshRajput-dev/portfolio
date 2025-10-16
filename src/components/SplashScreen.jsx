@@ -1,53 +1,42 @@
-import React, { useEffect, useState } from "react";
-import Lottie from "lottie-react";
-import splashAnimation from "../assets/splash.json";
+import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import logoloaderVideo from "../assets/logoloader.mp4";
 
 const SplashScreen = () => {
   const [isVisible, setIsVisible] = useState(true);
+  const videoRef = useRef(null);
 
   useEffect(() => {
-    // Adjust timeout to match your Lottie animation duration
-    const timer = setTimeout(() => setIsVisible(false), 6000);
+    // Set timeout to match video duration (adjust as needed)
+    const timer = setTimeout(() => setIsVisible(false), 4000);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleVideoEnd = () => {
+    setIsVisible(false);
+  };
 
   return (
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="fixed inset-0 flex items-center justify-center bg-black z-[9999]"
+          className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.75)] z-[9999]"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 0.8 }}
         >
-          {/* Lottie Animation */}
-          <Lottie
-            animationData={splashAnimation}
-            loop={false}
-            autoplay={true}
-            style={{
-              width: "600px",
-              height: "600px",
-            }}
-          />
-
-          {/* Optional fade-in name or tagline */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2.5, duration: 1 }}
-            className="absolute bottom-[20%] text-center"
+          {/* Logo Loader Video */}
+          <video
+            ref={videoRef}
+            className="w-80 h-80 md:w-96 md:h-96 lg:w-[500px] lg:h-[500px] object-contain"
+            autoPlay
+            muted
+            playsInline
+            onEnded={handleVideoEnd}
           >
-           <h2 className="text-3xl sm:text-5xl font-semibold text-white tracking-wider">
-  console.log("Hello, World!");
-</h2>
-<p className="text-gray-400 text-lg mt-2">
-  Just another dev trying to make the web awesome ⚡
-</p>
-
-
-          </motion.div>
+            <source src={logoloaderVideo} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </motion.div>
       )}
     </AnimatePresence>
