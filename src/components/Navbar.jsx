@@ -5,8 +5,6 @@ import logo from "../assets/logo.svg";
 const Navbar = ({ onContactClick }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showNav, setShowNav] = useState(true);
-  const [lastScroll, setLastScroll] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const [activeSection, setActiveSection] = useState("Home");
 

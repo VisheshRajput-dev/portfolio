@@ -18,6 +18,13 @@
 .env.test.local
 .env.production.local
 
+# Firebase credentials and admin data
+.env
+firebase-config.js
+admin-credentials.js
+
+
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

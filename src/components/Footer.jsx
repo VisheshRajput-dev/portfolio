@@ -71,9 +71,9 @@ export default function Footer() {
           {/* Social Icons */}
           <div className={`flex ${screenWidth < 480 ? 'gap-4' : 'gap-8'}`}>
             {[
-              { icon: FaGithub, href: "https://github.com/jerry16-coder", label: "GitHub", color: "hover:text-purple-400" },
-              { icon: FaLinkedin, href: "https://linkedin.com/in/vishesh-rajput", label: "LinkedIn", color: "hover:text-blue-400" },
-              { icon: SiX, href: "https://x.com/yourhandle", label: "Twitter", color: "hover:text-pink-400" },
+              { icon: FaGithub, href: "https://github.com/VisheshRajput-dev", label: "GitHub", color: "hover:text-purple-400" },
+              { icon: FaLinkedin, href: "https://www.linkedin.com/in/vishesh-rajput-dev", label: "LinkedIn", color: "hover:text-blue-400" },
+              { icon: SiX, href: "https://x.com/vishesh_ra3046", label: "Twitter", color: "hover:text-pink-400" },
               { icon: FaEnvelope, href: "mailto:visheshrajput.dev@gmail.com", label: "Email", color: "hover:text-orange-400" }
             ].map((social, index) => (
               <motion.a

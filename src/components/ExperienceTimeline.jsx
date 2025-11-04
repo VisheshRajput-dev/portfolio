@@ -1,12 +1,14 @@
 // src/components/ExperienceTimeline.jsx
-import React, { useRef, useEffect, useState } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import React, { useEffect, useState,useRef } from "react";
+import { motion, useInView, useScroll, useTransform ,  } from "framer-motion";
+import { subscribeToExperiences } from "../firebase/database";
+import { useScrollProgress } from "../hooks/useScrollProgress";
 
 /**
  * Experience data inspired by Aayush Bharti's portfolio
  * Keep descriptions concise and impactful for visual balance.
  */
-const experiences = [
+const defaultExperiences = [
   {
     company: "Freelance Developer",
     role: "Full-Stack & Mobile Developer",
@@ -67,10 +69,36 @@ const experiences = [
   },
 ];
 
+// Separate component for scroll animations to prevent hydration issues
+function ScrollProgressLine({ containerRef, isReady }) {
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 80%", "end 20%"]
+  });
+
+  const progressHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+  return (
+    <>
+      <motion.div
+        style={{ height: progressHeight }}
+        className="absolute top-0 left-0 w-full bg-gradient-to-b from-purple-400 via-pink-400 to-orange-400 rounded-full shadow-lg shadow-purple-500/60"
+      />
+      <motion.div
+        style={{ height: progressHeight }}
+        className="absolute top-0 left-0 w-full bg-gradient-to-b from-purple-400 via-pink-400 to-orange-400 rounded-full blur-sm opacity-60"
+      />
+    </>
+  );
+}
+
 export default function ExperienceTimeline() {
-  const containerRef = useRef(null);
-  const [isInView, setIsInView] = useState(false);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [experiences, setExperiences] = useState(defaultExperiences);
+  const [loading, setLoading] = useState(true);
+  
+  // Use custom hook for safe ref handling
+  const { ref: containerRef, isReady } = useScrollProgress();
 
   useEffect(() => {
     const handleResize = () => setScreenWidth(window.innerWidth);
@@ -78,14 +106,46 @@ export default function ExperienceTimeline() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Scroll progress for the timeline line
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start 80%", "end 20%"]
-  });
+  useEffect(() => {
+    // Subscribe to real-time updates from Firebase
+    const unsubscribe = subscribeToExperiences((firebaseExperiences) => {
+      if (firebaseExperiences && firebaseExperiences.length > 0) {
+        // Convert Firebase data to the format expected by the component
+        const formattedExperiences = firebaseExperiences.map(exp => ({
+          company: exp.company,
+          role: exp.position,
+          duration: exp.current ? `${exp.startDate?.toDate?.()?.getFullYear() || 'N/A'} – Present` : 
+                   `${exp.startDate?.toDate?.()?.getFullYear() || 'N/A'} – ${exp.endDate?.toDate?.()?.getFullYear() || 'N/A'}`,
+          location: exp.location || "Remote",
+          description: exp.description,
+          tech: exp.technologies || [],
+          highlights: exp.highlights || []
+        }));
+        setExperiences(formattedExperiences);
+      } else {
+        // Use default experiences if no Firebase data
+        setExperiences(defaultExperiences);
+      }
+      setLoading(false);
+    });
 
-  // Transform scroll progress to height percentage
-  const progressHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+    return () => unsubscribe();
+  }, []);
+
+
+  if (loading) {
+    return (
+      <section 
+        id="experience" 
+        className="relative w-full min-h-screen py-20 overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-[rgba(0,0,0,0.75)]" />
+        <div className="relative max-w-7xl mx-auto px-6 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section 
@@ -126,17 +186,13 @@ export default function ExperienceTimeline() {
             {/* Static gradient background */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/20 to-transparent rounded-full" />
             
-            {/* Animated progress fill */}
-            <motion.div
-              style={{ height: progressHeight }}
-              className="absolute top-0 left-0 w-full bg-gradient-to-b from-purple-400 via-pink-400 to-orange-400 rounded-full shadow-lg shadow-purple-500/60"
-            />
+            {/* Static progress line fallback */}
+            {!isReady && (
+              <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-purple-400 via-pink-400 to-orange-400 rounded-full shadow-lg shadow-purple-500/60" />
+            )}
             
-            {/* Glowing effect on progress line */}
-            <motion.div
-              style={{ height: progressHeight }}
-              className="absolute top-0 left-0 w-full bg-gradient-to-b from-purple-400 via-pink-400 to-orange-400 rounded-full blur-sm opacity-60"
-            />
+            {/* Scroll progress line with safe animations */}
+            {isReady && <ScrollProgressLine containerRef={containerRef} isReady={isReady} />}
           </div>
 
           {/* Timeline Items - All left aligned */}

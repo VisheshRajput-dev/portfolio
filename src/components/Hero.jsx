@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import ProfileCard from "./ui/ProfileCard";
 import RotatingText from "./ui/RotatingText";
 import avatar from "../assets/avatar.png";
@@ -6,6 +7,8 @@ import icon from "../assets/icon.png";
 import grain from "../assets/grain.png";
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   return (
     <section id="hero"
     className="flex flex-col xl:flex-row items-center justify-between min-h-screen px-6 md:px-16 py-10 pt-24">
@@ -50,7 +53,10 @@ const Hero = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center xl:justify-start">
-          <button className="bg-white text-black px-8 py-3 rounded-xl font-semibold hover:bg-gray-200 transition">
+          <button 
+            onClick={() => navigate('/projects')}
+            className="bg-white text-black px-8 py-3 rounded-xl font-semibold hover:bg-gray-200 transition"
+          >
             View Projects
           </button>
           
