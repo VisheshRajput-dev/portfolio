@@ -234,12 +234,17 @@ const ProjectDetail = () => {
   const navigate = useNavigate();
   const [project, setProject] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isGalleryReady, setIsGalleryReady] = useState(false);
 
   useEffect(() => {
     const foundProject = projectsData.find(p => p.id === parseInt(id));
     setProject(foundProject);
     setTimeout(() => {
       setIsLoading(false);
+      // Wait a bit more for DOM to be ready before showing gallery
+      setTimeout(() => {
+        setIsGalleryReady(true);
+      }, 100);
     }, 300);
   }, [id]);
 
@@ -282,12 +287,16 @@ const ProjectDetail = () => {
 
   // Auto-rotation animation (left swipe)
   useEffect(() => {
+    // Only run if project exists and component is mounted
+    if (!project) return;
+
     let autoRotateRAF = null;
     let isHovered = false;
     let isDragging = false;
     let lastTransformSnapshot = '';
     let transformChangeTime = 0;
     let lastFrameTime = 0;
+    let isMounted = true;
     // 0.8 degrees per second = 0.8/60 = ~0.0133 degrees per frame (at 60fps)
     // But we'll calculate based on actual frame time for precision
     const autoRotationSpeedPerSecond = 0.8; // degrees per second
@@ -295,10 +304,12 @@ const ProjectDetail = () => {
     const TRANSFORM_STABLE_TIME = 600; // ms of no transform changes before resuming
 
     const getSphereElement = () => {
+      if (!isMounted) return null;
       return document.querySelector('.sphere-root .sphere');
     };
 
     const getSphereRoot = () => {
+      if (!isMounted) return null;
       return document.querySelector('.sphere-root');
     };
 
@@ -309,10 +320,21 @@ const ProjectDetail = () => {
     };
 
     const updateAndRotate = (currentTime) => {
+      if (!isMounted) {
+        if (autoRotateRAF) {
+          cancelAnimationFrame(autoRotateRAF);
+          autoRotateRAF = null;
+        }
+        return;
+      }
+
       const sphere = getSphereElement();
       const sphereRoot = getSphereRoot();
       if (!sphere || !sphereRoot) {
-        autoRotateRAF = requestAnimationFrame(updateAndRotate);
+        if (autoRotateRAF) {
+          cancelAnimationFrame(autoRotateRAF);
+          autoRotateRAF = null;
+        }
         return;
       }
 
@@ -499,11 +521,12 @@ const ProjectDetail = () => {
     }, 1000);
 
     return () => {
+      isMounted = false;
       stopAutoRotate();
       observer.disconnect();
       if (attributeObserver) attributeObserver.disconnect();
       clearInterval(enlargeCheckInterval);
-      const cleanupRoot = getSphereRoot();
+      const cleanupRoot = document.querySelector('.sphere-root');
       if (cleanupRoot) {
         cleanupRoot.removeEventListener('mouseenter', handleMouseEnter);
         cleanupRoot.removeEventListener('mouseleave', handleMouseLeave);
@@ -614,105 +637,107 @@ const ProjectDetail = () => {
           </div>
 
           {/* DomeGallery */}
-          <div className="mb-24 w-full bg-transparent" style={{ minHeight: '600px', height: '70vh' }}>
-            <style>{`
-              .sphere-root .stage {
-                background-color: transparent !important;
-              }
-              .sphere-root [style*="radial-gradient"] {
-                opacity: 0 !important;
-                display: none !important;
-              }
-              .sphere-root [style*="linear-gradient"] {
-                opacity: 0 !important;
-                display: none !important;
-              }
-              .sphere-root .item__image img {
-                object-fit: cover !important;
-                object-position: center !important;
-                width: 100% !important;
-                height: 100% !important;
-              }
-              .sphere-root .item__image {
-                background-color: #000;
-              }
-              .sphere-root .enlarge {
-                position: fixed !important;
-                left: 50% !important;
-                top: 50% !important;
-                transform: translate(-50%, -50%) !important;
-                width: 85vw !important;
-                height: 85vh !important;
-                max-width: 1200px !important;
-                max-height: 900px !important;
-                z-index: 9999 !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                border-radius: 16px !important;
-                overflow: hidden !important;
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
-              }
-              .sphere-root .enlarge img {
-                object-fit: contain !important;
-                object-position: center !important;
-                width: 100% !important;
-                height: 100% !important;
-                max-width: 100% !important;
-                max-height: 100% !important;
-                background-color: rgba(0, 0, 0, 0.9) !important;
-                border-radius: 16px !important;
-              }
-              .sphere-root[data-enlarging="true"] .scrim {
-                position: fixed !important;
-                inset: 0 !important;
-                width: 100vw !important;
-                height: 100vh !important;
-                z-index: 9998 !important;
-                background-color: rgba(0, 0, 0, 0.7) !important;
-                backdrop-filter: blur(20px) !important;
-                -webkit-backdrop-filter: blur(20px) !important;
-              }
-              .sphere-root .close-icon-btn {
-                position: absolute;
-                top: 20px;
-                right: 20px;
-                width: 48px;
-                height: 48px;
-                background-color: rgba(0, 0, 0, 0.7);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-size: 24px;
-                font-weight: bold;
-                cursor: pointer;
-                z-index: 10000;
-                transition: all 0.3s ease;
-                backdrop-filter: blur(10px);
-                border: 2px solid rgba(255, 255, 255, 0.2);
-                padding: 0;
-                margin: 0;
-              }
-              .sphere-root .close-icon-btn:hover {
-                background-color: rgba(255, 255, 255, 0.2);
-                transform: scale(1.1);
-                border-color: rgba(255, 255, 255, 0.4);
-              }
-            `}</style>
-            <DomeGallery 
-              images={galleryImages}
-              fit={0.5}
-              minRadius={300}
-              maxVerticalRotationDeg={2}
-              segments={22}
-              overlayBlurColor="#060010"
-              grayscale={true}
-              openedImageWidth="85vw"
-              openedImageHeight="85vh"
-            />
-          </div>
+          {isGalleryReady && (
+            <div className="mb-24 w-full bg-transparent" style={{ minHeight: '600px', height: '70vh' }}>
+              <style>{`
+                .sphere-root .stage {
+                  background-color: transparent !important;
+                }
+                .sphere-root [style*="radial-gradient"] {
+                  opacity: 0 !important;
+                  display: none !important;
+                }
+                .sphere-root [style*="linear-gradient"] {
+                  opacity: 0 !important;
+                  display: none !important;
+                }
+                .sphere-root .item__image img {
+                  object-fit: cover !important;
+                  object-position: center !important;
+                  width: 100% !important;
+                  height: 100% !important;
+                }
+                .sphere-root .item__image {
+                  background-color: #000;
+                }
+                .sphere-root .enlarge {
+                  position: fixed !important;
+                  left: 50% !important;
+                  top: 50% !important;
+                  transform: translate(-50%, -50%) !important;
+                  width: 85vw !important;
+                  height: 85vh !important;
+                  max-width: 1200px !important;
+                  max-height: 900px !important;
+                  z-index: 9999 !important;
+                  display: flex !important;
+                  align-items: center !important;
+                  justify-content: center !important;
+                  border-radius: 16px !important;
+                  overflow: hidden !important;
+                  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
+                }
+                .sphere-root .enlarge img {
+                  object-fit: contain !important;
+                  object-position: center !important;
+                  width: 100% !important;
+                  height: 100% !important;
+                  max-width: 100% !important;
+                  max-height: 100% !important;
+                  background-color: rgba(0, 0, 0, 0.9) !important;
+                  border-radius: 16px !important;
+                }
+                .sphere-root[data-enlarging="true"] .scrim {
+                  position: fixed !important;
+                  inset: 0 !important;
+                  width: 100vw !important;
+                  height: 100vh !important;
+                  z-index: 9998 !important;
+                  background-color: rgba(0, 0, 0, 0.7) !important;
+                  backdrop-filter: blur(20px) !important;
+                  -webkit-backdrop-filter: blur(20px) !important;
+                }
+                .sphere-root .close-icon-btn {
+                  position: absolute;
+                  top: 20px;
+                  right: 20px;
+                  width: 48px;
+                  height: 48px;
+                  background-color: rgba(0, 0, 0, 0.7);
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-size: 24px;
+                  font-weight: bold;
+                  cursor: pointer;
+                  z-index: 10000;
+                  transition: all 0.3s ease;
+                  backdrop-filter: blur(10px);
+                  border: 2px solid rgba(255, 255, 255, 0.2);
+                  padding: 0;
+                  margin: 0;
+                }
+                .sphere-root .close-icon-btn:hover {
+                  background-color: rgba(255, 255, 255, 0.2);
+                  transform: scale(1.1);
+                  border-color: rgba(255, 255, 255, 0.4);
+                }
+              `}</style>
+              <DomeGallery 
+                images={galleryImages}
+                fit={0.5}
+                minRadius={300}
+                maxVerticalRotationDeg={2}
+                segments={22}
+                overlayBlurColor="#060010"
+                grayscale={true}
+                openedImageWidth="85vw"
+                openedImageHeight="85vh"
+              />
+            </div>
+          )}
 
           {/* Content Sections */}
           <div className="space-y-24">
@@ -740,11 +765,18 @@ const ProjectDetail = () => {
                       key={index}
                       className="flex items-start gap-4"
                     >
-                      <div className="flex-shrink-0 mt-1.5">
-                        <div 
-                          className="w-1.5 h-1.5 rounded-full"
-                          style={{ background: project.gradient }}
-                        ></div>
+                      <div className="flex-shrink-0 mt-1">
+                        <span 
+                          className="text-sm font-medium"
+                          style={{ 
+                            background: project.gradient,
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            backgroundClip: 'text'
+                          }}
+                        >
+                          &gt;
+                        </span>
                       </div>
                       <p className="text-sm lg:text-base text-white/90 font-light leading-relaxed tracking-wide flex-1">
                         {highlight}
@@ -764,17 +796,49 @@ const ProjectDetail = () => {
                 {project.tech.map((tech, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-2.5"
+                    className="group relative"
                   >
-                    <div className="text-white/80 text-lg">
-                      {getTechIcon(tech)}
+                    <div className="relative flex items-center gap-2.5 px-4 py-3 rounded-xl border border-white/10 bg-white/5 backdrop-blur-xl hover:border-white/20 hover:bg-white/10 transition-all duration-300 overflow-hidden">
+                      {/* Shiny hover effect */}
+                      <div 
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 tech-shimmer"
+                        style={{
+                          background: `linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%)`
+                        }}
+                      ></div>
+                      
+                      {/* Content */}
+                      <div className="relative z-10 flex items-center gap-2.5">
+                        <div className="text-white/80 group-hover:text-white text-lg transition-colors duration-300">
+                          {getTechIcon(tech)}
+                        </div>
+                        <span className="text-white/80 group-hover:text-white font-light text-sm tracking-wide transition-colors duration-300">
+                          {tech}
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-white/80 font-light text-sm tracking-wide">
-                      {tech}
-                    </span>
                   </div>
                 ))}
               </div>
+              
+              {/* Shimmer animation */}
+              <style>{`
+                @keyframes shimmer {
+                  0% {
+                    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+                  }
+                  100% {
+                    transform: translateX(100%) translateY(100%) rotate(45deg);
+                  }
+                }
+                .tech-shimmer {
+                  width: 200%;
+                  height: 200%;
+                }
+                .group:hover .tech-shimmer {
+                  animation: shimmer 1s ease-in-out;
+                }
+              `}</style>
             </section>
 
             {/* Challenges & Learnings Section */}
@@ -789,11 +853,18 @@ const ProjectDetail = () => {
                       key={index}
                       className="flex items-start gap-4"
                     >
-                      <div className="flex-shrink-0 mt-1.5">
-                        <div 
-                          className="w-1.5 h-1.5 rounded-full"
-                          style={{ background: project.gradient }}
-                        ></div>
+                      <div className="flex-shrink-0 mt-1">
+                        <span 
+                          className="text-sm font-medium"
+                          style={{ 
+                            background: project.gradient,
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            backgroundClip: 'text'
+                          }}
+                        >
+                          &gt;
+                        </span>
                       </div>
                       <p className="text-sm lg:text-base text-gray-300/90 leading-relaxed font-light flex-1 tracking-wide">
                         {challenge}
@@ -811,11 +882,18 @@ const ProjectDetail = () => {
               </h2>
               <div className="max-w-4xl">
                 <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 mt-1.5">
-                    <div
-                      className="w-1.5 h-1.5 rounded-full"
-                      style={{ background: project.gradient }}
-                    ></div>
+                  <div className="flex-shrink-0 mt-1">
+                    <span 
+                      className="text-sm font-medium"
+                      style={{ 
+                        background: project.gradient,
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text'
+                      }}
+                    >
+                      &gt;
+                    </span>
                   </div>
                   <p className="text-sm lg:text-base text-white/90 leading-relaxed font-light tracking-wide flex-1">
                     {project.outcome}
