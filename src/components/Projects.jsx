@@ -677,7 +677,7 @@ export default function Projects() {
           >
             <button
               onClick={() => navigate('/projects')}
-              className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 backdrop-blur-sm border border-cyan-500/30 rounded-full text-white font-semibold text-lg transition-all duration-300 hover:from-cyan-500/30 hover:to-blue-500/30 hover:border-cyan-500/50 hover:shadow-lg hover:shadow-cyan-500/20 hover:scale-105"
+              className="group relative px-8 py-4 bg-black border border-white/20 rounded-full text-white font-semibold text-lg transition-all duration-300 hover:bg-black/80 hover:border-white/30 hover:shadow-lg hover:shadow-white/10 hover:scale-105"
             >
               <span className="relative z-10 flex items-center gap-2">
                 View All Projects
@@ -690,7 +690,6 @@ export default function Projects() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300"></div>
             </button>
           </motion.div>
         )}
