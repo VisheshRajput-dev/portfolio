@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/logo.svg";
+import SearchModal from "./SearchModal";
 
 const Navbar = ({ onContactClick }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
   const [activeSection, setActiveSection] = useState("Home");
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const items = [
     { label: "Home", href: "#hero" },
@@ -65,6 +67,7 @@ const Navbar = ({ onContactClick }) => {
     
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Smooth scroll + handle contact
@@ -158,14 +161,15 @@ const Navbar = ({ onContactClick }) => {
 
           {/* Right side infinity symbol - Hidden on mobile */}
           {!isMobile && (
-            <motion.div
-              className="ml-6 w-10 h-10 rounded-full bg-black border border-purple-400/30 flex items-center justify-center"
+            <motion.button
+              onClick={() => setSearchOpen(true)}
+              className="ml-6 w-10 h-10 rounded-full bg-black border border-purple-400/30 flex items-center justify-center cursor-pointer"
               whileHover={{ scale: 1.1, rotate: 180 }}
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.3 }}
             >
               <span className="text-white text-lg font-bold">∞</span>
-            </motion.div>
+            </motion.button>
           )}
 
           {/* Mobile Menu Button */}
@@ -239,6 +243,9 @@ const Navbar = ({ onContactClick }) => {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Search Modal */}
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </motion.nav>
   );
 };

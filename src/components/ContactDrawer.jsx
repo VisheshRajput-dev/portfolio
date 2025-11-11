@@ -39,6 +39,7 @@ export default function ContactDrawer({ onClose }) {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setSuccess(false);
 
     try {
       const result = await addContactSubmission(formData);
@@ -53,44 +54,48 @@ export default function ContactDrawer({ onClose }) {
           preferredTime: '', 
           callType: 'general' 
         });
+        // Smooth delay before closing
         setTimeout(() => {
           setSuccess(false);
-          onClose();
+          setLoading(false);
+          setTimeout(() => {
+            onClose();
+          }, 300);
         }, 2000);
       } else {
         setError(result.error);
+        setLoading(false);
       }
     } catch (error) {
       setError('Something went wrong. Please try again.');
+      setLoading(false);
     }
-    
-    setLoading(false);
   };
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence>
       <motion.div
         className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-end z-[999]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ 
-          duration: 0.2, 
-          ease: "easeOut"
+          duration: 0.3, 
+          ease: [0.4, 0, 0.2, 1]
         }}
         onClick={onClose}
       >
         <motion.div
           onClick={(e) => e.stopPropagation()}
-          initial={{ y: "100%", opacity: 0, scale: 0.95 }}
-          animate={{ y: 0, opacity: 1, scale: 1 }}
-          exit={{ y: "100%", opacity: 0, scale: 0.95 }}
+          initial={{ y: "100%", opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: "100%", opacity: 0 }}
           transition={{ 
             duration: 0.4, 
-            ease: [0.25, 0.1, 0.25, 1],
+            ease: [0.4, 0, 0.2, 1],
             type: "tween"
           }}
-          className="relative w-full max-w-5xl bg-[rgba(0,0,0,0.9)] backdrop-blur-xl border-t border-white/10 rounded-t-3xl shadow-[0_-20px_60px_rgba(0,0,0,0.5)] px-6 py-8 text-center"
+          className="relative w-full max-w-5xl bg-[rgba(0,0,0,0.95)] backdrop-blur-xl border-t border-white/10 rounded-t-3xl shadow-[0_-20px_60px_rgba(0,0,0,0.5)] px-6 py-8 text-center overflow-y-auto max-h-[90vh]"
         >
           {/* Close Button */}
           <motion.button
@@ -218,10 +223,10 @@ export default function ContactDrawer({ onClose }) {
             {mode === "quick" ? (
               <motion.div
                 key="quick"
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 30, scale: 0.95 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                 className="max-w-4xl mx-auto"
               >
                 {!showCallForm ? (
@@ -266,7 +271,8 @@ export default function ContactDrawer({ onClose }) {
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                     className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm"
                   >
                     <div className="flex items-center justify-between mb-6">
@@ -367,19 +373,25 @@ export default function ContactDrawer({ onClose }) {
                         />
                       </div>
 
-                      <motion.select
+                      <select
                         name="callType"
                         value={formData.callType}
                         onChange={handleInputChange}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300"
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer"
+                        style={{
+                          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E")`,
+                          backgroundPosition: 'right 0.5rem center',
+                          backgroundRepeat: 'no-repeat',
+                          backgroundSize: '1.5em 1.5em',
+                          paddingRight: '2.5rem'
+                        }}
                         required
-                        whileFocus={{ scale: 1.02 }}
                       >
-                        <option value="general" className="bg-black text-white">General Discussion</option>
-                        <option value="project" className="bg-black text-white">Project Consultation</option>
-                        <option value="collaboration" className="bg-black text-white">Collaboration</option>
-                        <option value="mentoring" className="bg-black text-white">Mentoring Session</option>
-                      </motion.select>
+                        <option value="general" style={{ backgroundColor: '#000000', color: '#ffffff' }}>General Discussion</option>
+                        <option value="project" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Project Consultation</option>
+                        <option value="collaboration" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Collaboration</option>
+                        <option value="mentoring" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Mentoring Session</option>
+                      </select>
 
                       <motion.textarea
                         name="message"
@@ -395,11 +407,38 @@ export default function ContactDrawer({ onClose }) {
                       <motion.button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl py-4 hover:from-purple-600 hover:to-pink-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-purple-500/25"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl py-4 hover:from-purple-600 hover:to-pink-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-purple-500/25 relative overflow-hidden"
+                        whileHover={!loading ? { scale: 1.02 } : {}}
+                        whileTap={!loading ? { scale: 0.98 } : {}}
                       >
-                        {loading ? 'Sending...' : '📞 Book My Call'}
+                        {loading && (
+                          <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600"
+                            initial={{ x: '-100%' }}
+                            animate={{ x: '100%' }}
+                            transition={{ 
+                              duration: 1.5,
+                              repeat: Infinity,
+                              ease: "linear"
+                            }}
+                          />
+                        )}
+                        <span className="relative z-10 flex items-center justify-center gap-2">
+                          {loading ? (
+                            <>
+                              <motion.span
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                className="inline-block"
+                              >
+                                ⏳
+                              </motion.span>
+                              Sending...
+                            </>
+                          ) : (
+                            '📞 Book My Call'
+                          )}
+                        </span>
                       </motion.button>
                     </motion.form>
                   </motion.div>
@@ -408,10 +447,10 @@ export default function ContactDrawer({ onClose }) {
             ) : (
               <motion.div
                 key="form"
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 30, scale: 0.95 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                 className="max-w-2xl mx-auto"
               >
                 <motion.form
@@ -490,11 +529,38 @@ export default function ContactDrawer({ onClose }) {
                   <motion.button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl py-4 hover:from-purple-600 hover:to-pink-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-purple-500/25"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl py-4 hover:from-purple-600 hover:to-pink-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-purple-500/25 relative overflow-hidden"
+                    whileHover={!loading ? { scale: 1.02 } : {}}
+                    whileTap={!loading ? { scale: 0.98 } : {}}
                   >
-                    {loading ? 'Sending...' : 'Send Message 🚀'}
+                    {loading && (
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600"
+                        initial={{ x: '-100%' }}
+                        animate={{ x: '100%' }}
+                        transition={{ 
+                          duration: 1.5,
+                          repeat: Infinity,
+                          ease: "linear"
+                        }}
+                      />
+                    )}
+                    <span className="relative z-10 flex items-center justify-center gap-2">
+                      {loading ? (
+                        <>
+                          <motion.span
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                            className="inline-block"
+                          >
+                            ⏳
+                          </motion.span>
+                          Sending...
+                        </>
+                      ) : (
+                        'Send Message 🚀'
+                      )}
+                    </span>
                   </motion.button>
                 </motion.form>
               </motion.div>

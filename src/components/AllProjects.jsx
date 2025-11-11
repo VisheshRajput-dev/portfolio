@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
 import realdeskVideo from "../assets/webview/realdesk_web.mp4";
@@ -493,7 +493,6 @@ const PreviewCard = ({ project }) => {
 };
 
 const AllProjects = () => {
-  const { scrollYProgress } = useScroll();
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
