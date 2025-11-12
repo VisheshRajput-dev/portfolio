@@ -9,7 +9,7 @@ const SEO = ({
   type = "website"
 }) => {
   const location = useLocation();
-  const baseUrl = "https://visheshrajput.vercel.app";
+  const baseUrl = "https://visheshrajputdev-portfolio.vercel.app";
   const url = `${baseUrl}${location.pathname}`;
 
   useEffect(() => {

@@ -4,4 +4,4 @@ Allow: /
 Disallow: /admin
 
 # Sitemap
-Sitemap: https://visheshrajput.vercel.app/sitemap.xml
+Sitemap: https://visheshrajputdev-portfolio.vercel.app/sitemap.xml
