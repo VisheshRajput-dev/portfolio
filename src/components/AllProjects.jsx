@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
+import SEO from "./SEO";
 import realdeskVideo from "../assets/webview/realdesk_web.mp4";
 import realdeskLogo from "../assets/logos/realdesk_logo.png";
 import devsyncVideo from "../assets/webview/devsync_web.mp4";
@@ -659,6 +660,11 @@ const AllProjects = () => {
 
   return (
     <>
+      <SEO 
+        title="All Projects - Vishesh Rajput | Full-Stack Developer Portfolio"
+        description="Explore all projects by Vishesh Rajput - Software Engineer. View RealDesk, DevSync, Vishti Shop and more innovative full-stack web applications built with React, Node.js, TypeScript, and modern technologies."
+        keywords="Vishesh Rajput projects, Vishesh Rajput portfolio projects, RealDesk, DevSync, Vishti Shop, full-stack projects, React projects, web development projects"
+      />
       <style>{cardStyles}</style>
       <div className="min-h-screen bg-black text-white relative overflow-x-hidden" style={{ scrollBehavior: 'smooth' }}>
         <section id="all-projects" className="pt-24 pb-32 bg-[rgba(0,0,0,0.3)] relative overflow-hidden">

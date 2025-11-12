@@ -14,6 +14,7 @@ import BackgroundParticles from "./components/backgroundparticles";
 import Admin from "./components/admin/Admin";
 import AllProjects from "./components/AllProjects";
 import ProjectDetail from "./components/ProjectDetail";
+import SEO from "./components/SEO";
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -27,6 +28,7 @@ function App() {
   return (
     <Router>
       <div className="App relative">
+        <SEO />
         <BackgroundParticles />
 
         <Routes>

@@ -1,3 +1,7 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin
+
+# Sitemap
+Sitemap: https://visheshrajput.vercel.app/sitemap.xml

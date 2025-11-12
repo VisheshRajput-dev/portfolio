@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Footer from "./Footer";
 import DomeGallery from "./ui/DomeGallery";
 import BgParticles from "./bgparticle";
+import SEO from "./SEO";
 import { FaGithub } from "react-icons/fa";
 import { HiArrowUpRight } from "react-icons/hi2";
 import realdeskImage1 from "../assets/domeimages/realdesk/1.png";
@@ -579,6 +580,11 @@ const ProjectDetail = () => {
 
   return (
     <div className="min-h-screen bg-transparent text-white relative overflow-x-hidden">
+      <SEO 
+        title={`${project.title} - ${project.subtitle} | Vishesh Rajput Portfolio`}
+        description={project.description || project.overview || `Explore ${project.title} by Vishesh Rajput - ${project.subtitle}. Built with ${project.tech.slice(0, 3).join(', ')} and more.`}
+        keywords={`${project.title}, Vishesh Rajput, ${project.title} project, ${project.tech.join(', ')}, ${project.category}, web development, software engineering`}
+      />
       {/* Particle Background */}
       <BgParticles />
 
