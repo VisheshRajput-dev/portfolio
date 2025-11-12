@@ -38,8 +38,8 @@ export default function Resume() {
 
                 <div>
                     <a
-                        href="/assets/Vishesh_Rajput_Resume.pdf"
-                        download
+                        href={`${process.env.PUBLIC_URL || ''}/assets/Vishesh_Rajput_Resume.pdf`}
+                        download="Vishesh_Rajput_Resume.pdf"
                         className="inline-block px-10 py-4 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-white font-semibold rounded-xl shadow-lg hover:from-purple-400 hover:via-pink-400 hover:to-orange-400 transition-all duration-300 text-lg lg:text-xl hover:shadow-purple-500/30"
                     >
                         Download Resume 
