@@ -273,105 +273,229 @@ const SkeletonProjectDetails = () => (
 // Browser-Style Preview Card Component
 const PreviewCard = ({ project }) => {
   return (
-    <div 
-      className="w-full h-[32rem] rounded-2xl border border-white/20 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col bg-black/60"
-    >
-      {/* Website Logo & Title Section - Top */}
-      <div 
-        className="relative z-10 backdrop-blur-sm border-b border-white/20 p-4 flex-shrink-0 bg-black/60"
-      >
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className="w-10 h-10 bg-black/60 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-              {project.logo ? (
-                <img 
-                  src={project.logo} 
-                  alt={`${project.title} logo`}
-                  className="w-full h-full object-contain"
-                />
-              ) : (
-                <span className="text-white text-lg font-bold">{project.title.charAt(0)}</span>
-              )}
-            </div>
-            <div className="flex-1 min-w-0 pr-2">
-              <h4 className="text-white text-lg font-semibold truncate mb-1">{project.title}</h4>
-              <p className="text-gray-400 text-sm break-words leading-tight" style={{ 
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden',
-                maxHeight: '2.5rem'
-              }}>{project.subtitle}</p>
-            </div>
-          </div>
-          
-          {/* External Link Button - Top Right */}
+    <>
+      {/* Mobile View - Simplified: Title, Arrow, Video, and Compact Description */}
+      <div className="lg:hidden w-full space-y-4">
+        {/* Simple Title and Arrow Row */}
+        <div className="flex items-center justify-between px-2">
+          <h4 className="text-white text-lg font-bold">{project.title}</h4>
           {project.liveUrl && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 window.open(project.liveUrl, '_blank', 'noopener,noreferrer');
               }}
-              className="group flex items-center justify-center w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/30 transition-all duration-300 hover:scale-110 flex-shrink-0"
+              className="group flex items-center justify-center w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/30 transition-all duration-300 hover:scale-110"
               title={`Visit ${project.title}`}
             >
               <HiArrowUpRight className="w-4 h-4 text-white/80 group-hover:text-white transition-colors duration-300" />
             </button>
           )}
         </div>
-      </div>
-      
-      {/* Preview Content Area - Full Space */}
-      <div className="flex-1 relative overflow-hidden bg-black/60"
-      >
-        {/* Website Preview Content - GIF/Video with Fallback Animation */}
-        <div className="h-full w-full bg-white/10 rounded-lg backdrop-blur-sm border border-white/20 p-4 relative overflow-hidden preview-scale">
-          {/* Live Preview Badge */}
-          <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 px-2.5 py-1 bg-gradient-to-r from-green-500/20 via-emerald-500/25 to-green-500/20 backdrop-blur-md rounded-full border border-green-400/50 shadow-lg shadow-green-500/20">
-            <div className="relative">
-              <div className="w-1.5 h-1.5 bg-gradient-to-br from-green-400 to-emerald-300 rounded-full animate-pulse shadow-sm shadow-green-400/50"></div>
-              <div className="absolute inset-0 w-1.5 h-1.5 bg-green-400/60 rounded-full animate-ping"></div>
-            </div>
-            <span className="text-white text-[10px] font-semibold tracking-wide">Live</span>
-          </div>
+        
+        {/* Direct Webview - No containers */}
+        <div className="w-full relative" style={{ aspectRatio: '16/9', minHeight: '200px' }}>
+          {project.previewImage && (project.previewImage === realdeskVideo || (typeof project.previewImage === 'string' && project.previewImage.includes('.mp4'))) ? (
+            <video 
+              src={project.previewImage}
+              alt={`${project.title} preview`}
+              className="w-full h-full object-contain rounded-lg"
+              autoPlay
+              loop
+              muted
+              playsInline
+              onError={(e) => {
+                e.target.style.display = 'none';
+                const fallback = e.target.parentElement.querySelector('.fallback-animation');
+                if (fallback) {
+                  fallback.style.display = 'flex';
+                  fallback.style.alignItems = 'center';
+                  fallback.style.justifyContent = 'center';
+                }
+              }}
+            />
+          ) : (
+            <img 
+              src={project.previewImage} 
+              alt={`${project.title} preview`}
+              className="w-full h-full object-contain rounded-lg"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                const fallback = e.target.parentElement.querySelector('.fallback-animation');
+                if (fallback) {
+                  fallback.style.display = 'flex';
+                  fallback.style.alignItems = 'center';
+                  fallback.style.justifyContent = 'center';
+                }
+              }}
+            />
+          )}
           
-          {/* Real Website Preview GIF/Video */}
-          <div className="w-full h-full flex items-center justify-center relative">
-            {project.previewImage && (project.previewImage === realdeskVideo || (typeof project.previewImage === 'string' && project.previewImage.includes('.mp4'))) ? (
-              <video 
-                src={project.previewImage}
-                alt={`${project.title} preview`}
-                className="w-full h-full object-cover rounded-lg shadow-lg relative z-10"
-                autoPlay
-                loop
-                muted
-                playsInline
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                  const fallback = e.target.parentElement.querySelector('.fallback-animation');
-                  if (fallback) {
-                    fallback.style.display = 'flex';
-                    fallback.style.alignItems = 'center';
-                    fallback.style.justifyContent = 'center';
-                  }
-                }}
-              />
-            ) : (
-              <img 
-                src={project.previewImage} 
-                alt={`${project.title} preview`}
-                className="w-full h-full object-cover rounded-lg shadow-lg relative z-10"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                  const fallback = e.target.parentElement.querySelector('.fallback-animation');
-                  if (fallback) {
-                    fallback.style.display = 'flex';
-                    fallback.style.alignItems = 'center';
-                    fallback.style.justifyContent = 'center';
-                  }
-                }}
-              />
+          {/* Fallback Animation - Hidden by default */}
+          <div className="fallback-animation w-full h-full items-center justify-center absolute inset-0 z-0 hidden" style={{ display: 'none' }}>
+            <motion.div
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+              animate={{ 
+                rotate: 360,
+                scale: [1, 1.1, 1]
+              }}
+              transition={{ 
+                rotate: { duration: 3, repeat: Infinity, ease: "linear" },
+                scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+              }}
+            >
+              <div className="w-8 h-8 border-2 border-cyan-400/50 border-t-cyan-400 rounded-full"></div>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Compact Description Card for Mobile */}
+        <div className="px-2 space-y-3">
+          {/* Description */}
+          <p className="text-gray-300 text-sm leading-relaxed line-clamp-3">
+            {project.description}
+          </p>
+          
+          {/* Key Highlights - Compact */}
+          {project.highlights && project.highlights.length > 0 && (
+            <div className="space-y-2">
+              {project.highlights.slice(0, 2).map((highlight, idx) => (
+                <div key={idx} className="flex items-start gap-2">
+                  <div 
+                    className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5"
+                    style={{ background: project.gradient }}
+                  />
+                  <span className="text-white text-xs leading-relaxed">{highlight}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Tech Stack - Compact Scrollable */}
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            {project.tech.slice(0, 6).map((tech) => (
+              <div 
+                key={tech}
+                className="flex items-center gap-1 px-2 py-1 bg-white/5 rounded-md border border-white/10 text-white text-[10px] font-medium"
+              >
+                <div className="flex-shrink-0 text-white">
+                  {getTechIcon(tech)}
+                </div>
+                <span className="whitespace-nowrap">{tech}</span>
+              </div>
+            ))}
+            {project.tech.length > 6 && (
+              <div className="flex items-center px-2 py-1 bg-white/5 rounded-md border border-white/10 text-gray-400 text-[10px]">
+                +{project.tech.length - 6}
+              </div>
             )}
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop View - Full Card Design */}
+      <div 
+        className="hidden lg:flex w-full h-[32rem] rounded-2xl border border-white/20 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden flex-col bg-black/60"
+      >
+        {/* Website Logo & Title Section - Top */}
+        <div 
+          className="relative z-10 backdrop-blur-sm border-b border-white/20 p-4 flex-shrink-0 bg-black/60"
+        >
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <div className="w-10 h-10 bg-black/60 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+                {project.logo ? (
+                  <img 
+                    src={project.logo} 
+                    alt={`${project.title} logo`}
+                    className="w-full h-full object-contain"
+                  />
+                ) : (
+                  <span className="text-white text-lg font-bold">{project.title.charAt(0)}</span>
+                )}
+              </div>
+              <div className="flex-1 min-w-0 pr-2">
+                <h4 className="text-white text-lg font-semibold truncate mb-1">{project.title}</h4>
+                <p className="text-gray-400 text-sm break-words leading-tight" style={{ 
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  maxHeight: '2.5rem'
+                }}>{project.subtitle}</p>
+              </div>
+            </div>
+            
+            {/* External Link Button - Top Right */}
+            {project.liveUrl && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.open(project.liveUrl, '_blank', 'noopener,noreferrer');
+                }}
+                className="group flex items-center justify-center w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/30 transition-all duration-300 hover:scale-110 flex-shrink-0"
+                title={`Visit ${project.title}`}
+              >
+                <HiArrowUpRight className="w-4 h-4 text-white/80 group-hover:text-white transition-colors duration-300" />
+              </button>
+            )}
+          </div>
+        </div>
+        
+        {/* Preview Content Area - Full Space */}
+        <div className="flex-1 relative overflow-hidden bg-black/60">
+          {/* Website Preview Content - GIF/Video with Fallback Animation */}
+          <div className="h-full w-full bg-white/10 rounded-lg backdrop-blur-sm border border-white/20 p-4 relative overflow-hidden preview-scale">
+            {/* Live Preview Badge */}
+            <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 px-2.5 py-1 bg-gradient-to-r from-green-500/20 via-emerald-500/25 to-green-500/20 backdrop-blur-md rounded-full border border-green-400/50 shadow-lg shadow-green-500/20">
+              <div className="relative">
+                <div className="w-1.5 h-1.5 bg-gradient-to-br from-green-400 to-emerald-300 rounded-full animate-pulse shadow-sm shadow-green-400/50"></div>
+                <div className="absolute inset-0 w-1.5 h-1.5 bg-green-400/60 rounded-full animate-ping"></div>
+              </div>
+              <span className="text-white text-[10px] font-semibold tracking-wide">Live</span>
+            </div>
+            
+            {/* Real Website Preview GIF/Video - Responsive Container */}
+            <div className="w-full h-full flex items-center justify-center relative">
+              {project.previewImage && (project.previewImage === realdeskVideo || (typeof project.previewImage === 'string' && project.previewImage.includes('.mp4'))) ? (
+                <div className="w-full h-full relative flex items-center justify-center">
+                  <video 
+                    src={project.previewImage}
+                    alt={`${project.title} preview`}
+                    className="w-full h-full object-contain rounded-lg shadow-lg relative z-10"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    style={{ maxWidth: '100%', maxHeight: '100%' }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      const fallback = e.target.parentElement.querySelector('.fallback-animation');
+                      if (fallback) {
+                        fallback.style.display = 'flex';
+                        fallback.style.alignItems = 'center';
+                        fallback.style.justifyContent = 'center';
+                      }
+                    }}
+                  />
+                </div>
+              ) : (
+                <img 
+                  src={project.previewImage} 
+                  alt={`${project.title} preview`}
+                  className="w-full h-full object-contain rounded-lg shadow-lg relative z-10"
+                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    const fallback = e.target.parentElement.querySelector('.fallback-animation');
+                    if (fallback) {
+                      fallback.style.display = 'flex';
+                      fallback.style.alignItems = 'center';
+                      fallback.style.justifyContent = 'center';
+                    }
+                  }}
+                />
+              )}
             
             {/* Fallback Animation - Hidden by default, shown only on error */}
             <div className="fallback-animation w-full h-full items-center justify-center absolute inset-0 z-0 hidden" style={{ display: 'none' }}>
@@ -484,11 +608,12 @@ const PreviewCard = ({ project }) => {
             </div>
           </div>
           
-          {/* Overlay for realistic browser feel */}
-          <div className="absolute inset-0 bg-black/60 "></div>
+            {/* Overlay for realistic browser feel */}
+            <div className="absolute inset-0 bg-black/60 "></div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -645,8 +770,8 @@ const AllProjects = () => {
                       </div>
                     </div>
                     
-                    {/* Project Details - Right Side (40% width) */}
-                    <div className="w-full lg:w-[40%] flex flex-col pt-5 pr-4 lg:pr-8 px-4 lg:px-0">
+                    {/* Project Details - Right Side (40% width) - Hidden on mobile, shown on desktop */}
+                    <div className="hidden lg:flex w-full lg:w-[40%] flex-col pt-5 pr-4 lg:pr-8 px-4 lg:px-0">
                       {/* Project Title with Gradient Dash */}
                       <div className="flex items-center gap-3 mb-4">
                         <div 

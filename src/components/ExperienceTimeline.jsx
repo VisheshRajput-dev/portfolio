@@ -1,6 +1,6 @@
 // src/components/ExperienceTimeline.jsx
-import React, { useEffect, useState,useRef } from "react";
-import { motion, useInView, useScroll, useTransform ,  } from "framer-motion";
+import React, { useEffect, useState, useRef } from "react";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { subscribeToExperiences } from "../firebase/database";
 import { useScrollProgress } from "../hooks/useScrollProgress";
 
@@ -96,6 +96,7 @@ export default function ExperienceTimeline() {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [experiences, setExperiences] = useState(defaultExperiences);
   const [loading, setLoading] = useState(true);
+  const isMobile = screenWidth < 773;
   
   // Use custom hook for safe ref handling
   const { ref: containerRef, isReady } = useScrollProgress();
@@ -161,8 +162,8 @@ export default function ExperienceTimeline() {
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
           className="text-center mb-20"
         >
           <h2 className={`font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent mb-6 ${
@@ -177,162 +178,264 @@ export default function ExperienceTimeline() {
           </p>
         </motion.div>
 
-        {/* Main Timeline Container */}
-        <div className="relative">
-          {/* Animated Progress Line - Left aligned */}
-          <div className={`absolute top-0 bottom-0 w-[3px] ${
-            screenWidth < 370 ? "left-4" : screenWidth < 773 ? "left-6" : screenWidth < 898 ? "left-8" : screenWidth < 1065 ? "left-12" : "left-16"
-          }`}>
-            {/* Static gradient background */}
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/20 to-transparent rounded-full" />
-            
-            {/* Static progress line fallback */}
-            {!isReady && (
-              <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-purple-400 via-pink-400 to-orange-400 rounded-full shadow-lg shadow-purple-500/60" />
-            )}
-            
-            {/* Scroll progress line with safe animations */}
-            {isReady && <ScrollProgressLine containerRef={containerRef} isReady={isReady} />}
+        {/* Mobile Swipeable Carousel */}
+        {isMobile ? (
+          <MobileExperienceCarousel experiences={experiences} screenWidth={screenWidth} />
+        ) : (
+          /* Desktop Timeline */
+          <div className="relative">
+            {/* Animated Progress Line - Left aligned */}
+            <div className={`absolute top-0 bottom-0 w-[3px] ${
+              screenWidth < 898 ? "left-8" : screenWidth < 1065 ? "left-12" : "left-16"
+            }`}>
+              {/* Static gradient background */}
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/20 to-transparent rounded-full" />
+              
+              {/* Static progress line fallback */}
+              {!isReady && (
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-purple-400 via-pink-400 to-orange-400 rounded-full shadow-lg shadow-purple-500/60" />
+              )}
+              
+              {/* Scroll progress line with safe animations */}
+              {isReady && <ScrollProgressLine containerRef={containerRef} isReady={isReady} />}
+            </div>
+
+            {/* Timeline Items - All left aligned */}
+            <div className={`relative z-10 ${
+              screenWidth < 898 ? "space-y-8" : screenWidth < 1065 ? "space-y-12" : "space-y-16"
+            }`}>
+              {experiences.map((exp, idx) => (
+                <TimelineItem 
+                  key={idx}
+                  experience={exp}
+                  index={idx}
+                  screenWidth={screenWidth}
+                  isDesktop={true}
+                />
+              ))}
+            </div>
           </div>
+        )}
+      </div>
 
-          {/* Timeline Items - All left aligned */}
-          <div className={`relative z-10 ${
-            screenWidth < 370 ? "space-y-4" : screenWidth < 773 ? "space-y-6" : screenWidth < 898 ? "space-y-8" : screenWidth < 1065 ? "space-y-12" : "space-y-16"
-          }`}>
-            {experiences.map((exp, idx) => (
-              <TimelineItem 
-                key={idx}
-                experience={exp}
-                index={idx}
-                screenWidth={screenWidth}
-              />
-            ))}
+      {/* Reduced Floating Elements for Desktop Only */}
+      {!isMobile && (
+        <>
+          <div className="absolute right-8 bottom-8 w-12 h-12 opacity-40 pointer-events-none">
+            <motion.div
+              animate={{ 
+                rotate: 360,
+                scale: [1, 1.05, 1],
+                y: [0, -8, 0]
+              }}
+              transition={{ 
+                duration: 25,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            >
+              <svg viewBox="0 0 64 64" fill="none" className="w-full h-full">
+                <defs>
+                  <linearGradient id="floatingGradient" x1="0" x2="1">
+                    <stop offset="0" stopColor="#7C3AED" />
+                    <stop offset="1" stopColor="#FB7185" />
+                  </linearGradient>
+                </defs>
+                <circle cx="32" cy="32" r="24" fill="url(#floatingGradient)" opacity="0.6"/>
+                <path d="M20 28h24v8H20z" fill="white" opacity="0.7"/>
+                <circle cx="26" cy="32" r="2" fill="#7C3AED"/>
+                <circle cx="38" cy="32" r="2" fill="#FB7185"/>
+              </svg>
+            </motion.div>
           </div>
-        </div>
-      </div>
-
-      {/* Enhanced Floating Elements */}
-      <div className="absolute right-8 bottom-8 w-16 h-16 opacity-60 pointer-events-none">
-        <motion.div
-          animate={{ 
-            rotate: 360,
-            scale: [1, 1.1, 1],
-            y: [0, -10, 0]
-          }}
-          transition={{ 
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        >
-          <svg viewBox="0 0 64 64" fill="none" className="w-full h-full">
-            <defs>
-              <linearGradient id="floatingGradient" x1="0" x2="1">
-                <stop offset="0" stopColor="#7C3AED" />
-                <stop offset="1" stopColor="#FB7185" />
-              </linearGradient>
-            </defs>
-            <circle cx="32" cy="32" r="24" fill="url(#floatingGradient)" opacity="0.8"/>
-            <path d="M20 28h24v8H20z" fill="white" opacity="0.9"/>
-            <circle cx="26" cy="32" r="2" fill="#7C3AED"/>
-            <circle cx="38" cy="32" r="2" fill="#FB7185"/>
-          </svg>
-        </motion.div>
-      </div>
-
-      {/* Additional floating particles */}
-      <div className="absolute top-20 left-10 w-4 h-4 opacity-40 pointer-events-none">
-        <motion.div
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.4, 1, 0.4],
-            scale: [1, 1.2, 1]
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="w-full h-full bg-purple-400 rounded-full blur-sm"
-        />
-      </div>
-
-      <div className="absolute top-1/2 right-20 w-3 h-3 opacity-30 pointer-events-none">
-        <motion.div
-          animate={{
-            y: [0, -20, 0],
-            opacity: [0.3, 0.8, 0.3],
-            scale: [1, 1.3, 1]
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1
-          }}
-          className="w-full h-full bg-pink-400 rounded-full blur-sm"
-        />
-      </div>
-
-      <div className="absolute bottom-1/3 left-20 w-2 h-2 opacity-50 pointer-events-none">
-        <motion.div
-          animate={{
-            y: [0, -25, 0],
-            opacity: [0.5, 1, 0.5],
-            scale: [1, 1.5, 1]
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2
-          }}
-          className="w-full h-full bg-orange-400 rounded-full blur-sm"
-        />
-      </div>
+        </>
+      )}
     </section>
   );
 }
 
+// Mobile Swipeable Carousel Component
+function MobileExperienceCarousel({ experiences, screenWidth }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const carouselRef = useRef(null);
+
+  const handleDragEnd = (event, info) => {
+    const swipeThreshold = 50;
+    const velocityThreshold = 500;
+
+    if (Math.abs(info.offset.x) > swipeThreshold || Math.abs(info.velocity.x) > velocityThreshold) {
+      if (info.offset.x > 0 && currentIndex > 0) {
+        setCurrentIndex(currentIndex - 1);
+      } else if (info.offset.x < 0 && currentIndex < experiences.length - 1) {
+        setCurrentIndex(currentIndex + 1);
+      }
+    }
+  };
+
+  const goToSlide = (index) => {
+    setCurrentIndex(index);
+  };
+
+  return (
+    <div className="relative w-full">
+      {/* Carousel Container */}
+      <div className="relative w-full overflow-hidden">
+        <motion.div
+          ref={carouselRef}
+          className="flex"
+          animate={{
+            x: `-${currentIndex * 100}%`
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 30
+          }}
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.2}
+          onDragEnd={handleDragEnd}
+        >
+          {experiences.map((exp, idx) => (
+            <div
+              key={idx}
+              className="w-full flex-shrink-0 px-4"
+            >
+              <MobileExperienceCard experience={exp} screenWidth={screenWidth} />
+            </div>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* Pagination Dots */}
+      <div className="flex justify-center gap-2 mt-8">
+        {experiences.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => goToSlide(idx)}
+            className={`transition-all duration-300 rounded-full ${
+              idx === currentIndex
+                ? "w-8 h-2 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500"
+                : "w-2 h-2 bg-gray-600 hover:bg-gray-500"
+            }`}
+            aria-label={`Go to experience ${idx + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Swipe Indicator */}
+      <div className="text-center mt-4 text-gray-400 text-xs">
+        <span>Swipe left or right to explore</span>
+      </div>
+    </div>
+  );
+}
+
+// Mobile Experience Card Component
+function MobileExperienceCard({ experience, screenWidth }) {
+  return (
+    <div className="relative bg-black/80 backdrop-blur-sm border border-white/10 rounded-2xl p-6 shadow-2xl">
+      {/* Date & Location */}
+      <div className="flex items-center gap-2 mb-4">
+        <span className="text-xs font-semibold text-purple-300 uppercase tracking-wider bg-purple-500/10 px-3 py-1 rounded-full border border-purple-400/20">
+          {experience.duration}
+        </span>
+        <span className="text-xs text-gray-400">•</span>
+        <span className="text-xs text-gray-400 font-medium">{experience.location}</span>
+      </div>
+
+      {/* Role & Company */}
+      <h3 className={`font-bold text-white mb-2 ${
+        screenWidth < 370 ? "text-base" : "text-lg"
+      }`}>
+        {experience.role}
+      </h3>
+      
+      <h4 className={`font-semibold text-purple-300 mb-4 ${
+        screenWidth < 370 ? "text-sm" : "text-base"
+      }`}>
+        @ {experience.company}
+      </h4>
+
+      {/* Description */}
+      <p className={`text-gray-300 leading-relaxed mb-6 ${
+        screenWidth < 370 ? "text-xs" : "text-sm"
+      }`}>
+        {experience.description}
+      </p>
+
+      {/* Highlights */}
+      {experience.highlights && experience.highlights.length > 0 && (
+        <div className="mb-6">
+          <h5 className="text-xs font-semibold text-purple-200 mb-2 uppercase tracking-wider">Key Highlights</h5>
+          <div className="flex flex-wrap gap-2">
+            {experience.highlights.map((highlight, i) => (
+              <span
+                key={i}
+                className="text-xs px-3 py-1.5 rounded-full bg-purple-500/20 border border-purple-400/30 text-purple-200"
+              >
+                {highlight}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Tech Stack */}
+      <div>
+        <h5 className="text-xs font-semibold text-gray-300 mb-2 uppercase tracking-wider">Technologies</h5>
+        <div className="flex flex-wrap gap-2">
+          {experience.tech.map((tech, i) => (
+            <span
+              key={i}
+              className="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-200"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Individual Timeline Item Component
-function TimelineItem({ experience, index, screenWidth }) {
+function TimelineItem({ experience, index, screenWidth, isDesktop = false }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, amount: 0.3 });
+  const isInView = useInView(ref, { once: true, amount: 0.2 });
 
   return (
     <motion.div
       ref={ref}
-      animate={isInView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: -100, y: 40 }}
+      animate={isInView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: -50, y: 20 }}
       transition={{ 
-        duration: 0.8, 
-        delay: isInView ? index * 0.2 : 0,
+        duration: isDesktop ? 0.4 : 0.8, 
+        delay: isDesktop ? 0 : (isInView ? index * 0.2 : 0),
         ease: [0.25, 0.46, 0.45, 0.94]
       }}
       className="relative"
     >
-      {/* Timeline Dot with Enhanced Animations */}
+      {/* Timeline Dot with Optimized Animations */}
       <div className={`absolute top-10 z-30 ${
-        screenWidth < 370 ? "left-2" : screenWidth < 773 ? "left-4" : screenWidth < 898 ? "left-6" : screenWidth < 1065 ? "left-8" : "left-12"
+        screenWidth < 898 ? "left-6" : screenWidth < 1065 ? "left-8" : "left-12"
       }`}>
         <motion.div
           animate={isInView ? { 
-            scale: [1, 1.4, 1],
-            rotate: [0, 180, 360],
-            boxShadow: [
+            scale: isDesktop ? 1 : [1, 1.2, 1],
+            boxShadow: isDesktop ? "0 0 0 0 rgba(124, 58, 237, 0)" : [
               "0 0 0 0 rgba(124, 58, 237, 0.4)",
-              "0 0 0 15px rgba(124, 58, 237, 0.1)",
+              "0 0 0 10px rgba(124, 58, 237, 0.1)",
               "0 0 0 0 rgba(124, 58, 237, 0)"
             ]
-          } : { scale: 1, rotate: 0, boxShadow: "0 0 0 0 rgba(124, 58, 237, 0)" }}
+          } : { scale: 1, boxShadow: "0 0 0 0 rgba(124, 58, 237, 0)" }}
           transition={{ 
-            duration: 2, 
-            delay: isInView ? index * 0.2 + 0.5 : 0,
+            duration: isDesktop ? 0.3 : 1.5, 
+            delay: isDesktop ? 0 : (isInView ? index * 0.2 + 0.3 : 0),
             ease: "easeInOut"
           }}
-          whileHover={{ 
-            scale: 1.3,
-            rotate: 360,
-            transition: { duration: 0.6 }
+          whileHover={isDesktop ? {} : { 
+            scale: 1.2,
+            transition: { duration: 0.3 }
           }}
           className="relative cursor-pointer group/dot"
         >
@@ -342,31 +445,22 @@ function TimelineItem({ experience, index, screenWidth }) {
           {/* Inner glow */}
           <div className="absolute inset-1 rounded-full bg-white/30 backdrop-blur-sm" />
           
-          {/* Continuous pulse animation */}
-          <motion.div
-            animate={{
-              scale: [1, 1.5, 1],
-              opacity: [0.6, 0, 0.6],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: index * 0.5
-            }}
-            className="absolute inset-0 rounded-full bg-purple-400/40 blur-sm"
-          />
-          
-          {/* Rotating ring */}
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-            className="absolute -inset-2 rounded-full border-2 border-purple-400/20"
-          />
+          {/* Reduced pulse animation for desktop */}
+          {!isDesktop && (
+            <motion.div
+              animate={{
+                scale: [1, 1.3, 1],
+                opacity: [0.4, 0, 0.4],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: index * 0.5
+              }}
+              className="absolute inset-0 rounded-full bg-purple-400/30 blur-sm"
+            />
+          )}
         </motion.div>
       </div>
 
@@ -375,7 +469,14 @@ function TimelineItem({ experience, index, screenWidth }) {
         screenWidth < 370 ? "ml-8 max-w-xs" : screenWidth < 773 ? "ml-12 max-w-sm" : screenWidth < 898 ? "ml-16 max-w-2xl" : screenWidth < 1065 ? "ml-20 max-w-3xl" : "ml-24 max-w-4xl"
       }`}>
         <motion.article
-          whileHover={{ 
+          whileHover={isDesktop ? { 
+            y: -6,
+            scale: 1.01,
+            transition: { 
+              duration: 0.2,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            }
+          } : { 
             y: -12,
             scale: 1.02,
             transition: { 
@@ -395,35 +496,37 @@ function TimelineItem({ experience, index, screenWidth }) {
             {/* Animated background gradient */}
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-500/5 via-transparent to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
             
-            {/* Floating particles effect */}
-            <div className="absolute inset-0 overflow-hidden rounded-3xl">
-              <motion.div
-                className="absolute -top-4 -right-4 w-8 h-8 bg-purple-400/20 rounded-full blur-sm"
-                animate={{
-                  y: [0, -20, 0],
-                  x: [0, 10, 0],
-                  opacity: [0, 1, 0],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  delay: index * 0.5,
-                }}
-              />
-              <motion.div
-                className="absolute -bottom-4 -left-4 w-6 h-6 bg-pink-400/20 rounded-full blur-sm"
-                animate={{
-                  y: [0, 20, 0],
-                  x: [0, -10, 0],
-                  opacity: [0, 1, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  delay: index * 0.7,
-                }}
-              />
-            </div>
+            {/* Reduced floating particles for desktop */}
+            {!isDesktop && (
+              <div className="absolute inset-0 overflow-hidden rounded-3xl">
+                <motion.div
+                  className="absolute -top-4 -right-4 w-8 h-8 bg-purple-400/20 rounded-full blur-sm"
+                  animate={{
+                    y: [0, -20, 0],
+                    x: [0, 10, 0],
+                    opacity: [0, 1, 0],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    delay: index * 0.5,
+                  }}
+                />
+                <motion.div
+                  className="absolute -bottom-4 -left-4 w-6 h-6 bg-pink-400/20 rounded-full blur-sm"
+                  animate={{
+                    y: [0, 20, 0],
+                    x: [0, -10, 0],
+                    opacity: [0, 1, 0],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    delay: index * 0.7,
+                  }}
+                />
+              </div>
+            )}
             
             {/* Content */}
             <div className="relative z-10">
@@ -431,7 +534,10 @@ function TimelineItem({ experience, index, screenWidth }) {
               <motion.div 
                 className="flex items-center gap-2 mb-4"
                 animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-                transition={{ delay: isInView ? index * 0.2 + 0.3 : 0 }}
+                transition={{ 
+                  duration: isDesktop ? 0.3 : 0.5,
+                  delay: isDesktop ? 0 : (isInView ? index * 0.2 + 0.3 : 0) 
+                }}
               >
                 <span className="text-xs font-semibold text-purple-300 uppercase tracking-wider bg-purple-500/10 px-3 py-1 rounded-full border border-purple-400/20">
                   {experience.duration}
@@ -443,22 +549,28 @@ function TimelineItem({ experience, index, screenWidth }) {
               {/* Role & Company with enhanced typography */}
               <motion.h3 
                 className={`font-bold text-white mb-3 group-hover:text-purple-100 transition-colors duration-300 ${
-                  screenWidth < 370 ? "text-sm" : screenWidth < 773 ? "text-base" : screenWidth < 898 ? "text-lg" : screenWidth < 1065 ? "text-xl" : "text-2xl"
+                  screenWidth < 898 ? "text-lg" : screenWidth < 1065 ? "text-xl" : "text-2xl"
                 }`}
                 animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-                transition={{ delay: isInView ? index * 0.2 + 0.4 : 0 }}
-                whileHover={{ x: 5 }}
+                transition={{ 
+                  duration: isDesktop ? 0.3 : 0.5,
+                  delay: isDesktop ? 0 : (isInView ? index * 0.2 + 0.4 : 0) 
+                }}
+                whileHover={isDesktop ? {} : { x: 5 }}
               >
                 {experience.role}
               </motion.h3>
               
               <motion.h4 
                 className={`font-semibold text-purple-300 mb-6 ${
-                  screenWidth < 370 ? "text-xs" : screenWidth < 773 ? "text-sm" : screenWidth < 898 ? "text-base" : screenWidth < 1065 ? "text-lg" : "text-xl"
+                  screenWidth < 898 ? "text-base" : screenWidth < 1065 ? "text-lg" : "text-xl"
                 }`}
                 animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-                transition={{ delay: isInView ? index * 0.2 + 0.5 : 0 }}
-                whileHover={{ x: 5 }}
+                transition={{ 
+                  duration: isDesktop ? 0.3 : 0.5,
+                  delay: isDesktop ? 0 : (isInView ? index * 0.2 + 0.5 : 0) 
+                }}
+                whileHover={isDesktop ? {} : { x: 5 }}
               >
                 @ {experience.company}
               </motion.h4>
@@ -466,10 +578,13 @@ function TimelineItem({ experience, index, screenWidth }) {
               {/* Description with improved readability */}
               <motion.p 
                 className={`text-gray-300 leading-relaxed mb-6 max-w-3xl ${
-                  screenWidth < 370 ? "text-xs" : screenWidth < 773 ? "text-sm" : screenWidth < 898 ? "text-base" : screenWidth < 1065 ? "text-lg" : "text-xl"
+                  screenWidth < 898 ? "text-base" : screenWidth < 1065 ? "text-lg" : "text-xl"
                 }`}
                 animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-                transition={{ delay: isInView ? index * 0.2 + 0.6 : 0 }}
+                transition={{ 
+                  duration: isDesktop ? 0.3 : 0.5,
+                  delay: isDesktop ? 0 : (isInView ? index * 0.2 + 0.6 : 0) 
+                }}
               >
                 {experience.description}
               </motion.p>
@@ -479,7 +594,10 @@ function TimelineItem({ experience, index, screenWidth }) {
                 <motion.div 
                   className="mb-6"
                   animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ delay: isInView ? index * 0.2 + 0.7 : 0 }}
+                  transition={{ 
+                    duration: isDesktop ? 0.3 : 0.5,
+                    delay: isDesktop ? 0 : (isInView ? index * 0.2 + 0.7 : 0) 
+                  }}
                 >
                   <div className="flex flex-wrap gap-2">
                     {experience.highlights.map((highlight, i) => (
@@ -510,12 +628,15 @@ function TimelineItem({ experience, index, screenWidth }) {
               <motion.div 
                 className="flex flex-wrap gap-2"
                 animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ delay: isInView ? index * 0.2 + 0.8 : 0 }}
+                transition={{ 
+                  duration: isDesktop ? 0.3 : 0.5,
+                  delay: isDesktop ? 0 : (isInView ? index * 0.2 + 0.8 : 0) 
+                }}
               >
                 {experience.tech.map((tech, i) => (
                   <motion.span
                     key={i}
-                    whileHover={{ 
+                    whileHover={isDesktop ? {} : { 
                       scale: 1.1,
                       y: -2,
                       rotate: [0, -2, 2, 0],
@@ -523,7 +644,10 @@ function TimelineItem({ experience, index, screenWidth }) {
                     }}
                     whileTap={{ scale: 0.95 }}
                     animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                    transition={{ delay: isInView ? i * 0.1 + index * 0.2 : 0 }}
+                    transition={{ 
+                      duration: isDesktop ? 0.2 : 0.3,
+                      delay: isDesktop ? 0 : (isInView ? i * 0.1 + index * 0.2 : 0) 
+                    }}
                     className="text-xs px-3 py-1.5 rounded-lg bg-white/[0.08] border border-white/[0.15] text-gray-200
                       hover:bg-gradient-to-r hover:from-purple-500/20 hover:to-pink-500/20 hover:border-purple-400/30 
                       hover:text-white transition-all duration-300 cursor-pointer relative overflow-hidden group/tech"

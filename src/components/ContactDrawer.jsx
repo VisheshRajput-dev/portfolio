@@ -59,7 +59,7 @@ export default function ContactDrawer({ onClose }) {
           setSuccess(false);
           setLoading(false);
           setTimeout(() => {
-            onClose();
+          onClose();
           }, 300);
         }, 2000);
       } else {

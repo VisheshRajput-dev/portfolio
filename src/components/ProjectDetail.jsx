@@ -235,6 +235,7 @@ const ProjectDetail = () => {
   const [project, setProject] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isGalleryReady, setIsGalleryReady] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
 
   useEffect(() => {
     const foundProject = projectsData.find(p => p.id === parseInt(id));
@@ -247,6 +248,18 @@ const ProjectDetail = () => {
       }, 100);
     }, 300);
   }, [id]);
+
+  // Track screen width for responsive gallery
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Initial call
+    
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Add close button functionality for full-screen images
   useEffect(() => {
@@ -574,17 +587,17 @@ const ProjectDetail = () => {
         <div className="max-w-7xl mx-auto">
           {/* Top Section - Back Button, Title, Subtitle */}
           <div className="mb-12 relative">
-            {/* Action Buttons - Top Right */}
-            <div className="absolute top-0 right-0 flex items-center gap-3">
+            {/* Action Buttons - Top Right - Responsive */}
+            <div className="absolute top-0 right-0 flex items-center gap-2 sm:gap-3">
               {project.githubUrl && (
                 <a
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center w-10 h-10 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-300 group hover:scale-110 hover:shadow-lg hover:shadow-white/10"
+                  className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-300 group hover:scale-110 hover:shadow-lg hover:shadow-white/10"
                   title="View on GitHub"
                 >
-                  <FaGithub className="w-5 h-5 text-gray-400 group-hover:text-white transition-all duration-300 group-hover:rotate-12" />
+                  <FaGithub className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-white transition-all duration-300 group-hover:rotate-12" />
                 </a>
               )}
               {project.liveUrl && (
@@ -592,12 +605,13 @@ const ProjectDetail = () => {
                   href={project.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-300 group hover:scale-105 hover:shadow-lg hover:shadow-white/10"
+                  className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-300 group hover:scale-105 hover:shadow-lg hover:shadow-white/10"
                 >
-                  <span className="text-xs font-medium tracking-wide uppercase text-gray-400 group-hover:text-white transition-colors duration-300">
-                    Check it out
+                  <span className="text-[10px] sm:text-xs font-medium tracking-wide uppercase text-gray-400 group-hover:text-white transition-colors duration-300 whitespace-nowrap">
+                    <span className="hidden sm:inline">Check it out</span>
+                    <span className="sm:hidden">Check</span>
                   </span>
-                  <HiArrowUpRight className="w-4 h-4 text-gray-400 group-hover:text-white transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                  <HiArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 group-hover:text-white transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 flex-shrink-0" />
                 </a>
               )}
             </div>
@@ -605,7 +619,7 @@ const ProjectDetail = () => {
             {/* Back Button - Top Left */}
             <button
               onClick={() => navigate('/')}
-              className="mb-6 flex items-center gap-2 text-gray-400 hover:text-white transition-colors duration-300 group"
+              className="mb-6 flex items-center gap-2 text-gray-400 hover:text-white transition-colors duration-300 group pr-20 sm:pr-0"
             >
               <div className="w-6 h-6 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/10 group-hover:border-white/20 transition-all duration-300">
                 <svg
@@ -625,20 +639,23 @@ const ProjectDetail = () => {
               <span className="text-xs font-medium tracking-wide uppercase">Back to Projects</span>
             </button>
 
-            {/* Project Title */}
-            <h1 className="text-4xl lg:text-5xl font-medium mb-2 leading-[1.2] tracking-wide text-white/95">
+            {/* Project Title - Responsive with padding for buttons */}
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-medium mb-2 leading-[1.2] tracking-wide text-white/95 pr-20 sm:pr-0">
               {project.title}
             </h1>
 
-            {/* Project Subtitle */}
-            <p className="text-base lg:text-lg text-gray-400/80 font-light leading-relaxed max-w-4xl tracking-wide">
+            {/* Project Subtitle - Responsive */}
+            <p className="text-sm sm:text-base lg:text-lg text-gray-400/80 font-light leading-relaxed max-w-4xl tracking-wide pr-20 sm:pr-0">
               {project.subtitle}
             </p>
           </div>
 
-          {/* DomeGallery */}
+          {/* DomeGallery - Responsive for Mobile */}
           {isGalleryReady && (
-            <div className="mb-24 w-full bg-transparent" style={{ minHeight: '600px', height: '70vh' }}>
+            <div className="mb-12 sm:mb-16 lg:mb-24 w-full bg-transparent" style={{ 
+              minHeight: screenWidth < 640 ? '300px' : screenWidth < 1024 ? '450px' : '600px', 
+              height: screenWidth < 640 ? '40vh' : screenWidth < 1024 ? '55vh' : '70vh' 
+            }}>
               <style>{`
                 .sphere-root .stage {
                   background-color: transparent !important;
@@ -665,8 +682,8 @@ const ProjectDetail = () => {
                   left: 50% !important;
                   top: 50% !important;
                   transform: translate(-50%, -50%) !important;
-                  width: 85vw !important;
-                  height: 85vh !important;
+                  width: 90vw !important;
+                  height: 90vh !important;
                   max-width: 1200px !important;
                   max-height: 900px !important;
                   z-index: 9999 !important;
@@ -676,6 +693,12 @@ const ProjectDetail = () => {
                   border-radius: 16px !important;
                   overflow: hidden !important;
                   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
+                }
+                @media (min-width: 640px) {
+                  .sphere-root .enlarge {
+                    width: 85vw !important;
+                    height: 85vh !important;
+                  }
                 }
                 .sphere-root .enlarge img {
                   object-fit: contain !important;
@@ -724,30 +747,66 @@ const ProjectDetail = () => {
                   transform: scale(1.1);
                   border-color: rgba(255, 255, 255, 0.4);
                 }
+                /* Mobile responsive close button */
+                @media (max-width: 639px) {
+                  .sphere-root .close-icon-btn {
+                    top: 10px;
+                    right: 10px;
+                    width: 40px;
+                    height: 40px;
+                    font-size: 20px;
+                  }
+                }
+                /* Mobile scroll fix - allow vertical scrolling */
+                @media (max-width: 1023px) {
+                  .sphere-root main {
+                    touch-action: pan-y !important;
+                    overflow-y: auto !important;
+                    -webkit-overflow-scrolling: touch !important;
+                  }
+                  .sphere-root .stage {
+                    touch-action: pan-y !important;
+                  }
+                  .sphere-root .sphere {
+                    touch-action: pan-y !important;
+                  }
+                  /* Only prevent default on horizontal drag, allow vertical scroll */
+                  body.dg-scroll-lock {
+                    overflow: hidden !important;
+                    position: fixed !important;
+                    width: 100% !important;
+                  }
+                }
+                /* Ensure page can scroll on mobile when gallery is not being interacted with */
+                @media (max-width: 1023px) {
+                  html {
+                    -webkit-overflow-scrolling: touch !important;
+                  }
+                }
               `}</style>
               <DomeGallery 
                 images={galleryImages}
-                fit={0.5}
-                minRadius={300}
+                fit={screenWidth < 640 ? 0.35 : screenWidth < 1024 ? 0.4 : 0.5}
+                minRadius={screenWidth < 640 ? 180 : screenWidth < 1024 ? 240 : 300}
                 maxVerticalRotationDeg={2}
-                segments={22}
+                segments={screenWidth < 640 ? 16 : screenWidth < 1024 ? 20 : 22}
                 overlayBlurColor="#060010"
                 grayscale={true}
-                openedImageWidth="85vw"
-                openedImageHeight="85vh"
+                openedImageWidth={screenWidth < 640 ? "90vw" : "85vw"}
+                openedImageHeight={screenWidth < 640 ? "90vh" : "85vh"}
               />
             </div>
           )}
 
-          {/* Content Sections */}
-          <div className="space-y-24">
+          {/* Content Sections - Responsive Spacing */}
+          <div className="space-y-12 sm:space-y-16 lg:space-y-24">
             {/* Overview Section */}
             <section>
               <div className="max-w-4xl">
-                <h2 className="text-3xl lg:text-4xl font-medium mb-8 leading-[1.2] tracking-wide text-white/95">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-medium mb-6 sm:mb-8 leading-[1.2] tracking-wide text-white/95">
                   Overview
                 </h2>
-                <p className="text-sm lg:text-base text-gray-300/90 leading-relaxed font-light tracking-wide">
+                <p className="text-sm sm:text-base lg:text-base text-gray-300/90 leading-relaxed font-light tracking-wide">
                   {project.overview || project.description}
                 </p>
               </div>
@@ -755,11 +814,11 @@ const ProjectDetail = () => {
 
             {/* Key Features Section */}
             <section>
-              <h2 className="text-3xl lg:text-4xl font-medium mb-10 leading-[1.2] tracking-wide text-white/95">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-medium mb-8 sm:mb-10 leading-[1.2] tracking-wide text-white/95">
                 Key Features
               </h2>
               <div className="max-w-5xl">
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   {project.highlights.map((highlight, index) => (
                     <div
                       key={index}
@@ -789,10 +848,10 @@ const ProjectDetail = () => {
 
             {/* Tech Stack Section */}
             <section>
-              <h2 className="text-3xl lg:text-4xl font-medium mb-10 leading-[1.2] tracking-wide text-white/95">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-medium mb-8 sm:mb-10 leading-[1.2] tracking-wide text-white/95">
                 Tech Stack
               </h2>
-              <div className="flex flex-wrap gap-4 max-w-5xl">
+              <div className="flex flex-wrap gap-2 sm:gap-3 lg:gap-4 max-w-5xl">
                 {project.tech.map((tech, index) => (
                   <div
                     key={index}
@@ -843,11 +902,11 @@ const ProjectDetail = () => {
 
             {/* Challenges & Learnings Section */}
             <section>
-              <h2 className="text-3xl lg:text-4xl font-medium mb-10 leading-[1.2] tracking-wide text-white/95">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-medium mb-8 sm:mb-10 leading-[1.2] tracking-wide text-white/95">
                 Challenges & Learnings
               </h2>
               <div className="max-w-5xl">
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   {project.challenges.map((challenge, index) => (
                     <div
                       key={index}
@@ -877,7 +936,7 @@ const ProjectDetail = () => {
 
             {/* Outcome Section */}
             <section>
-              <h2 className="text-3xl lg:text-4xl font-medium mb-10 leading-[1.2] tracking-wide text-white/95">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-medium mb-8 sm:mb-10 leading-[1.2] tracking-wide text-white/95">
                 Outcome
               </h2>
               <div className="max-w-4xl">
