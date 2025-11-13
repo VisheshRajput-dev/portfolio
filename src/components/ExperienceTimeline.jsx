@@ -258,28 +258,61 @@ export default function ExperienceTimeline() {
 function MobileExperienceCarousel({ experiences, screenWidth }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselRef = useRef(null);
+  const isDraggingRef = useRef(false);
+  const lastSwipeTimeRef = useRef(0);
+
+  const handleDragStart = () => {
+    isDraggingRef.current = true;
+  };
 
   const handleDragEnd = (event, info) => {
-    const swipeThreshold = 50;
-    const velocityThreshold = 500;
+    isDraggingRef.current = false;
+    
+    // Prevent rapid consecutive swipes (debounce)
+    const now = Date.now();
+    if (now - lastSwipeTimeRef.current < 300) {
+      return;
+    }
 
-    if (Math.abs(info.offset.x) > swipeThreshold || Math.abs(info.velocity.x) > velocityThreshold) {
+    const swipeThreshold = 80; // Increased threshold for more intentional swipes
+    const velocityThreshold = 800; // Increased velocity threshold
+    
+    // Calculate swipe direction and distance
+    const swipeDistance = Math.abs(info.offset.x);
+    const swipeVelocity = Math.abs(info.velocity.x);
+    
+    // Only trigger if swipe is significant enough
+    if (swipeDistance > swipeThreshold || swipeVelocity > velocityThreshold) {
+      lastSwipeTimeRef.current = now;
+      
+      // Determine direction: positive offset = swipe right (previous), negative = swipe left (next)
       if (info.offset.x > 0 && currentIndex > 0) {
-        setCurrentIndex(currentIndex - 1);
+        // Swipe right - go to previous
+        setCurrentIndex(prev => Math.max(0, prev - 1));
       } else if (info.offset.x < 0 && currentIndex < experiences.length - 1) {
-        setCurrentIndex(currentIndex + 1);
+        // Swipe left - go to next
+        setCurrentIndex(prev => Math.min(experiences.length - 1, prev + 1));
       }
     }
   };
 
   const goToSlide = (index) => {
+    // Prevent navigation while dragging
+    if (isDraggingRef.current) return;
+    
+    const now = Date.now();
+    if (now - lastSwipeTimeRef.current < 300) {
+      return;
+    }
+    
+    lastSwipeTimeRef.current = now;
     setCurrentIndex(index);
   };
 
   return (
     <div className="relative w-full">
       {/* Carousel Container */}
-      <div className="relative w-full overflow-hidden">
+      <div className="relative w-full overflow-hidden touch-pan-y">
         <motion.div
           ref={carouselRef}
           className="flex"
@@ -287,14 +320,17 @@ function MobileExperienceCarousel({ experiences, screenWidth }) {
             x: `-${currentIndex * 100}%`
           }}
           transition={{
-            type: "spring",
-            stiffness: 300,
-            damping: 30
+            type: "tween",
+            duration: 0.4,
+            ease: [0.25, 0.46, 0.45, 0.94] // Smooth easing, no bounce
           }}
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.2}
+          dragElastic={0.1} // Reduced elastic for less bounce
+          dragMomentum={false} // Disable momentum to prevent double swipes
+          onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
+          style={{ touchAction: "pan-y pinch-zoom" }}
         >
           {experiences.map((exp, idx) => (
             <div

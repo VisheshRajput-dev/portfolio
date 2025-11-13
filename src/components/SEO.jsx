@@ -4,8 +4,8 @@ import { useLocation } from 'react-router-dom';
 const SEO = ({ 
   title = "Vishesh Rajput - Software Engineer | Full-Stack Developer Portfolio",
   description = "Vishesh Rajput - Software Engineer & Full-Stack Developer. Explore my portfolio showcasing innovative projects like RealDesk, DevSync, and Vishti Shop. Specialized in React, Node.js, TypeScript, and modern web technologies.",
-  keywords = "Vishesh Rajput, Vishesh Rajput dev, Vishesh Rajput portfolio, Vishesh Rajput software engineer, Vishesh Rajput developer, full-stack developer, React developer, Node.js developer, TypeScript developer, web developer portfolio, software engineer portfolio, frontend developer, backend developer, MERN stack developer",
-  image = "/logo.svg",
+  keywords = "Vishesh Rajput, Vishesh Rajput dev, Vishesh Rajput portfolio, Vishesh Rajput software engineer, Vishesh Rajput developer, Vishesh Rajput GitHub, Vishesh Rajput LinkedIn, Vishesh Rajput Twitter, Vishesh Rajput X, full-stack developer, React developer, Node.js developer, TypeScript developer, web developer portfolio, software engineer portfolio, frontend developer, backend developer, MERN stack developer",
+  image = "/avatar.png",
   type = "website"
 }) => {
   const location = useLocation();
@@ -46,6 +46,14 @@ const SEO = ({
     updateMetaTag('twitter:description', description, true);
     updateMetaTag('twitter:url', url, true);
     updateMetaTag('twitter:image', `${baseUrl}${image}`, true);
+    updateMetaTag('twitter:creator', '@vishesh_ra3046', true);
+    updateMetaTag('twitter:site', '@vishesh_ra3046', true);
+    
+    // Update Open Graph image dimensions
+    updateMetaTag('og:image:width', '1200', true);
+    updateMetaTag('og:image:height', '1200', true);
+    updateMetaTag('og:image:type', 'image/png', true);
+    updateMetaTag('og:image:alt', 'Vishesh Rajput - Software Engineer & Full-Stack Developer', true);
 
     // Update canonical URL
     let canonical = document.querySelector('link[rel="canonical"]');
