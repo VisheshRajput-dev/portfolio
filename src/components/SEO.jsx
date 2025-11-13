@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 const SEO = ({ 
   title = "Vishesh Rajput - Software Engineer | Full-Stack Developer Portfolio",
   description = "Vishesh Rajput - Software Engineer & Full-Stack Developer. Explore my portfolio showcasing innovative projects like RealDesk, DevSync, and Vishti Shop. Specialized in React, Node.js, TypeScript, and modern web technologies.",
-  keywords = "Vishesh Rajput, Vishesh Rajput dev, Vishesh Rajput portfolio, Vishesh Rajput software engineer, Vishesh Rajput developer, Vishesh Rajput GitHub, Vishesh Rajput LinkedIn, Vishesh Rajput Twitter, Vishesh Rajput X, full-stack developer, React developer, Node.js developer, TypeScript developer, web developer portfolio, software engineer portfolio, frontend developer, backend developer, MERN stack developer",
+  keywords = "Vishesh, Vishesh Rajput, Vishesh Rajput dev, Vishesh Rajput developer, Vishesh Rajput software engineer, Vishesh Rajput portfolio, Vishesh Rajput website, Vishesh Rajput GitHub, Vishesh Rajput LinkedIn, Vishesh Rajput Twitter, Vishesh Rajput X, Vishesh Rajput Instagram, Vishesh Rajput email, Vishesh Rajput photos, Vishesh Rajput images, full-stack developer, React developer, Node.js developer, TypeScript developer, web developer portfolio, software engineer portfolio, frontend developer, backend developer, MERN stack developer",
   image = "/avatar.png",
   type = "website"
 }) => {

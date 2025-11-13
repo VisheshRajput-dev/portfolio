@@ -9,6 +9,10 @@ import grain from "../assets/grain.png";
 const Hero = () => {
   const navigate = useNavigate();
 
+  const handleConnectClick = () => {
+    window.open('https://www.linkedin.com/in/vishesh-rajput-dev', '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <section id="hero"
     className="flex flex-col xl:flex-row items-center justify-between min-h-screen px-6 md:px-16 py-10 pt-24">
@@ -23,6 +27,7 @@ const Hero = () => {
           handle="VisheshRajput"
           status="Available"
           contactText="Let's Connect"
+          onContactClick={handleConnectClick}
         />
       </div>
 

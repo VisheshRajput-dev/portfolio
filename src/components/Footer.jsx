@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaGithub, FaLinkedin, FaEnvelope,  FaHeart, FaCode, FaRocket, FaCoffee } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope, FaInstagram, FaHeart, FaCode, FaRocket, FaCoffee } from "react-icons/fa";
 import { SiX } from "react-icons/si";
 
 import { motion } from "framer-motion";
@@ -74,6 +74,7 @@ export default function Footer() {
               { icon: FaGithub, href: "https://github.com/VisheshRajput-dev", label: "GitHub", color: "hover:text-purple-400" },
               { icon: FaLinkedin, href: "https://www.linkedin.com/in/vishesh-rajput-dev", label: "LinkedIn", color: "hover:text-blue-400" },
               { icon: SiX, href: "https://x.com/vishesh_ra3046", label: "Twitter", color: "hover:text-pink-400" },
+              { icon: FaInstagram, href: "https://www.instagram.com/vishesh_rajput.dev/", label: "Instagram", color: "hover:text-pink-500" },
               { icon: FaEnvelope, href: "mailto:visheshrajput.dev@gmail.com", label: "Email", color: "hover:text-orange-400" }
             ].map((social, index) => (
               <motion.a

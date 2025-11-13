@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaGithub, FaLinkedin, FaEnvelope, FaPhoneAlt } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope, FaPhoneAlt, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { addContactSubmission } from "../firebase/database";
 
@@ -182,6 +182,16 @@ export default function ContactDrawer({ onClose }) {
               whileTap={{ scale: 0.95 }}
             >
               <FaLinkedin />
+            </motion.a>
+            <motion.a
+              href="https://www.instagram.com/vishesh_rajput.dev/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-white/60 hover:text-pink-500 transition-all duration-300 hover:scale-110"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <FaInstagram />
             </motion.a>
           </motion.div>
 
