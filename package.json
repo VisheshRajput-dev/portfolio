@@ -2,6 +2,7 @@
   "name": "portfolioo",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://visheshrajputdev-portfolio.vercel.app",
   "dependencies": {
     "@gsap/react": "^2.1.2",
     "@lottiefiles/react-lottie-player": "^3.6.0",

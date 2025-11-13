@@ -21,7 +21,7 @@
     <meta property="og:url" content="https://visheshrajputdev-portfolio.vercel.app/" />
     <meta property="og:title" content="Vishesh Rajput - Software Engineer | Full-Stack Developer Portfolio" />
     <meta property="og:description" content="Vishesh Rajput - Software Engineer & Full-Stack Developer. Explore innovative projects like RealDesk, DevSync, and Vishti Shop. Specialized in React, Node.js, TypeScript, and modern web technologies." />
-    <meta property="og:image" content="%PUBLIC_URL%/avatar.png" />
+    <meta property="og:image" content="https://visheshrajputdev-portfolio.vercel.app/avatar.png" />
     <meta property="og:image:secure_url" content="https://visheshrajputdev-portfolio.vercel.app/avatar.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="1200" />
@@ -35,7 +35,7 @@
     <meta property="twitter:url" content="https://visheshrajputdev-portfolio.vercel.app/" />
     <meta property="twitter:title" content="Vishesh Rajput - Software Engineer | Full-Stack Developer Portfolio" />
     <meta property="twitter:description" content="Vishesh Rajput - Software Engineer & Full-Stack Developer. Explore innovative projects like RealDesk, DevSync, and Vishti Shop." />
-    <meta property="twitter:image" content="%PUBLIC_URL%/avatar.png" />
+    <meta property="twitter:image" content="https://visheshrajputdev-portfolio.vercel.app/avatar.png" />
     <meta name="twitter:creator" content="@vishesh_ra3046" />
     <meta name="twitter:site" content="@vishesh_ra3046" />
     
@@ -48,15 +48,16 @@
     <meta name="reply-to" content="visheshrajput.dev@gmail.com" />
     <link rel="canonical" href="https://visheshrajputdev-portfolio.vercel.app/" />
     
-    <!-- Icons -->
-    <link rel="icon" type="image/png" href="%PUBLIC_URL%/logo.png" />
-    <link rel="shortcut icon" type="image/png" href="%PUBLIC_URL%/logo.png" />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo.png" />
-    <link rel="apple-touch-icon" sizes="192x192" href="%PUBLIC_URL%/logo.png" />
-    <link rel="apple-touch-icon" sizes="512x512" href="%PUBLIC_URL%/logo.png" />
+    <!-- Icons - Using absolute URLs for better crawler compatibility -->
+    <link rel="icon" type="image/png" href="https://visheshrajputdev-portfolio.vercel.app/logo.png" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="shortcut icon" type="image/png" href="https://visheshrajputdev-portfolio.vercel.app/logo.png" />
+    <link rel="apple-touch-icon" href="https://visheshrajputdev-portfolio.vercel.app/logo.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="https://visheshrajputdev-portfolio.vercel.app/logo.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="https://visheshrajputdev-portfolio.vercel.app/logo.png" />
     
     <!-- Manifest -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="manifest" href="/manifest.json" />
     
     <!-- Fonts -->
     <link
@@ -289,7 +290,19 @@
     </script>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>
+      <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+        <h1>Vishesh Rajput - Software Engineer | Full-Stack Developer</h1>
+        <p>Software Engineer & Full-Stack Developer Portfolio</p>
+        <p>You need to enable JavaScript to run this app.</p>
+        <p>
+          <a href="https://github.com/VisheshRajput-dev" style="margin: 0 10px;">GitHub</a>
+          <a href="https://www.linkedin.com/in/vishesh-rajput-dev" style="margin: 0 10px;">LinkedIn</a>
+          <a href="https://x.com/vishesh_ra3046" style="margin: 0 10px;">Twitter</a>
+          <a href="https://www.instagram.com/vishesh_rajput.dev/" style="margin: 0 10px;">Instagram</a>
+        </p>
+      </div>
+    </noscript>
     <div id="root"></div>
     <!--
       This HTML file is a template.
