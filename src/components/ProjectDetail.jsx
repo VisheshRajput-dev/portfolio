@@ -112,7 +112,7 @@ const projectsData = [
     overview: "DevSync streamlines software team collaboration by integrating real-time communication, version tracking, and task management into a single platform. It offers developers an intuitive dashboard to manage commits, issues, and updates with GitHub synchronization and live activity tracking. Designed for modern teams, DevSync fosters a transparent and efficient workflow from idea to deployment.",
     tech: ["React", "Node.js", "Express", "MongoDB", "Socket.io", "Tailwind", "Firebase Auth"],
     category: "MERN Stack",
-    liveUrl: "https://devsync.vercel.app/",
+    liveUrl: "https://devsync-dev.vercel.app/",
     githubUrl: "https://github.com/VisheshRajput-dev/devsync",
     highlights: [
       "Real-time team communication and activity updates using WebSockets",
