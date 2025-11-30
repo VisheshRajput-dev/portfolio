@@ -312,7 +312,7 @@ function MobileExperienceCarousel({ experiences, screenWidth }) {
   return (
     <div className="relative w-full">
       {/* Carousel Container */}
-      <div className="relative w-full overflow-hidden touch-pan-y">
+        <div className= "relative w-full overflow-hidden touch-pan-y">
         <motion.div
           ref={carouselRef}
           className="flex"

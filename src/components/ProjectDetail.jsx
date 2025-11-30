@@ -38,6 +38,13 @@ import vishtiShopImage10 from "../assets/domeimages/vishtishop/10.png";
 import vishtiShopImage11 from "../assets/domeimages/vishtishop/11.png";
 import vishtiShopImage12 from "../assets/domeimages/vishtishop/12.png";
 import vishtiShopImage13 from "../assets/domeimages/vishtishop/13.png";
+import vishtiConvertorImage1 from "../assets/domeimages/vishticonvertor/1.png";
+import vishtiConvertorImage2 from "../assets/domeimages/vishticonvertor/2.png";
+import vishtiConvertorImage3 from "../assets/domeimages/vishticonvertor/3.png";
+import vishtiConvertorImage4 from "../assets/domeimages/vishticonvertor/4.png";
+import vishtiConvertorImage5 from "../assets/domeimages/vishticonvertor/5.png";
+import vishtiConvertorImage6 from "../assets/domeimages/vishticonvertor/6.png";
+import vishtiConvertorImage7 from "../assets/domeimages/vishticonvertor/7.png";
 import { 
   SiReact, 
   SiNextdotjs, 
@@ -179,6 +186,42 @@ const projectsData = [
     gradient: "linear-gradient(135deg, #FFD3A5 0%, #FD6585 50%, #F64F59 100%)",
     gradientName: "Warm Sunset",
     accentColor: "emerald"
+  },
+  {
+    id: 4,
+    title: "VishtiConvertor",
+    subtitle: "A Modern Web-Based Image Converter and Editor",
+    description: "A beautiful, modern web-based image converter and editor that runs entirely in your browser. Convert, compress, resize, rotate, flip, and apply filters to images without uploading to any server - all processing happens client-side for maximum privacy and speed.",
+    overview: "VishtiConvertor is a comprehensive image processing tool built entirely for the browser. It provides users with powerful image conversion, editing, and optimization capabilities without ever uploading files to a server. The application supports multiple image formats including JPEG, PNG, WebP, AVIF, BMP, GIF, and TIFF, with features like batch processing, adjustable compression, flexible resizing modes, rotation, flipping, and a variety of filters. Built with modern web technologies, it offers a seamless, privacy-focused experience with real-time previews and file size comparisons.",
+    tech: ["React", "TypeScript", "Vite", "Tailwind CSS", "shadcn/ui", "browser-image-compression", "Canvas API", "react-dropzone"],
+    category: "Frontend",
+    liveUrl: "https://vishti-convertor.vercel.app/",
+    githubUrl: "https://github.com/VisheshRajput-dev/vishti-convertor.git",
+    highlights: [
+      "Client-side image processing ensuring complete privacy and security",
+      "Support for 7+ image formats with batch conversion capabilities",
+      "Advanced editing features: resize, rotate, flip, and multiple filter effects",
+      "Real-time preview with file size comparison and compression savings"
+    ],
+    challenges: [
+      "Implementing efficient client-side image processing without server uploads",
+      "Handling large image files (up to 50MB) and batch processing (10 files) in the browser",
+      "Creating a responsive UI that works seamlessly on desktop and mobile devices",
+      "Optimizing Canvas API operations for smooth performance with multiple filters"
+    ],
+    outcome: "Successfully developed a fully client-side image converter and editor that prioritizes user privacy while delivering professional-grade image processing capabilities. VishtiConvertor demonstrates the power of modern web APIs and provides users with a fast, secure, and feature-rich image editing experience without any data leaving their device.",
+    galleryImages: [
+      vishtiConvertorImage1,
+      vishtiConvertorImage2,
+      vishtiConvertorImage3,
+      vishtiConvertorImage4,
+      vishtiConvertorImage5,
+      vishtiConvertorImage6,
+      vishtiConvertorImage7
+    ],
+    gradient: "linear-gradient(135deg, #7F7FD5 0%, #91EAE4 50%, #86A8E7 100%)",
+    gradientName: "Ocean Breeze",
+    accentColor: "cyan"
   }
 ];
 
@@ -222,8 +265,12 @@ const getTechIcon = (tech) => {
     'cloudinary': null,
     'Razorpay': null,
     'Tailwind': null,
+    'Tailwind CSS': null,
     'shadcn/ui': null,
-    'Vite': null
+    'Vite': null,
+    'browser-image-compression': null,
+    'Canvas API': null,
+    'react-dropzone': null
   };
   
   const IconComponent = iconMap[tech];

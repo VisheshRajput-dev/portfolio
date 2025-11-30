@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
@@ -9,6 +9,8 @@ import devsyncVideo from "../assets/webview/devsync_web.mp4";
 import devsyncLogo from "../assets/logos/devsync_logo.png";
 import vishtiShopVideo from "../assets/webview/vishti_shop_web.mp4";
 import vishtiShopLogo from "../assets/logos/vishti_shop_logo.png";
+import vishtiConvertorVideo from "../assets/webview/vishti_convertor_web.mp4";
+import vishtiConvertorLogo from "../assets/logos/vishti_convertor_logo.png";
 import { 
   SiReact, 
   SiNextdotjs, 
@@ -110,6 +112,19 @@ const cardStyles = `
   .preview-scale:hover {
     transform: scale(1.05);
   }
+  
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
 `;
 
 
@@ -162,6 +177,22 @@ const projectsData = [
     gradient: "linear-gradient(135deg, #FFD3A5 0%, #FD6585 50%, #F64F59 100%)",
     gradientName: "Warm Sunset",
     accentColor: "emerald"
+  },
+  {
+    id: 4,
+    title: "VishtiConvertor",
+    subtitle: "A modern web-based image converter and editor",
+    description: "A beautiful, modern web-based image converter and editor that runs entirely in your browser. Convert, compress, resize, rotate, flip, and apply filters to images without uploading to any server - all processing happens client-side for maximum privacy and speed.",
+    tech: ["React", "TypeScript", "Vite", "Tailwind", "shadcn/ui", "browser-image-compression", "Canvas API", "react-dropzone"],
+    category: "Frontend",
+    liveUrl: "https://vishti-convertor.vercel.app/",
+    githubUrl: "https://github.com/VisheshRajput-dev/vishti-convertor.git",
+    highlights: ["Client-side image processing for complete privacy", "Support for multiple formats (JPEG, PNG, WebP, AVIF, BMP, GIF, TIFF)", "Batch processing with real-time preview and file size comparison"],
+    previewImage: vishtiConvertorVideo,
+    logo: vishtiConvertorLogo,
+    gradient: "linear-gradient(135deg, #7F7FD5 0%, #91EAE4 50%, #86A8E7 100%)",
+    gradientName: "Ocean Breeze",
+    accentColor: "cyan"
   },
   
 ];
@@ -271,8 +302,91 @@ const SkeletonProjectDetails = () => (
   </div>
 );
 
+// Video Skeleton Loading Component
+const VideoSkeleton = () => (
+  <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-gray-800/50 via-gray-700/30 to-gray-800/50 rounded-lg overflow-hidden">
+    {/* Animated shimmer effect */}
+    <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+    
+    {/* Skeleton content */}
+    <div className="w-full h-full flex flex-col items-center justify-center gap-4 p-4">
+      {/* Browser-like skeleton */}
+      <div className="w-full max-w-md space-y-3">
+        {/* Browser header */}
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-3 h-3 bg-gray-600/50 rounded-full animate-pulse"></div>
+          <div className="w-3 h-3 bg-gray-600/50 rounded-full animate-pulse"></div>
+          <div className="w-3 h-3 bg-gray-600/50 rounded-full animate-pulse"></div>
+          <div className="flex-1 h-6 bg-gray-700/50 rounded-md ml-4 animate-pulse"></div>
+        </div>
+        
+        {/* Content bars */}
+        <div className="space-y-2">
+          <div className="h-3 bg-gray-700/50 rounded animate-pulse" style={{ width: '85%' }}></div>
+          <div className="h-3 bg-gray-700/50 rounded animate-pulse" style={{ width: '70%' }}></div>
+          <div className="h-3 bg-gray-700/50 rounded animate-pulse" style={{ width: '90%' }}></div>
+        </div>
+        
+        {/* Image placeholder */}
+        <div className="w-full h-32 bg-gray-700/50 rounded-lg animate-pulse mt-4"></div>
+        
+        {/* Buttons */}
+        <div className="flex gap-2 mt-4">
+          <div className="h-8 bg-gray-700/50 rounded w-20 animate-pulse"></div>
+          <div className="h-8 bg-gray-700/50 rounded w-24 animate-pulse"></div>
+        </div>
+      </div>
+      
+      {/* Loading indicator */}
+      <div className="absolute bottom-4 flex items-center gap-2 text-gray-400 text-xs">
+        <motion.div
+          className="w-2 h-2 bg-cyan-400/60 rounded-full"
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.5, 1, 0.5]
+          }}
+          transition={{ 
+            duration: 1.5,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <span>Loading preview...</span>
+      </div>
+    </div>
+  </div>
+);
+
 // Browser-Style Preview Card Component
 const PreviewCard = ({ project }) => {
+  const [isVideoLoading, setIsVideoLoading] = useState(true);
+  const [hasVideoError, setHasVideoError] = useState(false);
+  const videoRef = useRef(null);
+
+  const isVideo = project.previewImage && (
+    project.previewImage === realdeskVideo || 
+    project.previewImage === devsyncVideo || 
+    project.previewImage === vishtiShopVideo || 
+    project.previewImage === vishtiConvertorVideo || 
+    (typeof project.previewImage === 'string' && project.previewImage.includes('.mp4'))
+  );
+
+  const handleVideoLoaded = () => {
+    setIsVideoLoading(false);
+  };
+
+  const handleVideoError = (e) => {
+    setIsVideoLoading(false);
+    setHasVideoError(true);
+    e.target.style.display = 'none';
+    const fallback = e.target.parentElement.querySelector('.fallback-animation');
+    if (fallback) {
+      fallback.style.display = 'flex';
+      fallback.style.alignItems = 'center';
+      fallback.style.justifyContent = 'center';
+    }
+  };
+
   return (
     <>
       {/* Mobile View - Simplified: Title, Arrow, Video, and Compact Description */}
@@ -296,24 +410,22 @@ const PreviewCard = ({ project }) => {
         
         {/* Direct Webview - No containers */}
         <div className="w-full relative" style={{ aspectRatio: '16/9', minHeight: '200px' }}>
-          {project.previewImage && (project.previewImage === realdeskVideo || (typeof project.previewImage === 'string' && project.previewImage.includes('.mp4'))) ? (
+          {/* Video Skeleton - Show while loading */}
+          {isVideoLoading && isVideo && !hasVideoError && <VideoSkeleton />}
+          
+          {isVideo ? (
             <video 
+              ref={videoRef}
               src={project.previewImage}
               alt={`${project.title} preview`}
-              className="w-full h-full object-contain rounded-lg"
+              className={`w-full h-full object-contain rounded-lg transition-opacity duration-500 ${isVideoLoading ? 'opacity-0 absolute' : 'opacity-100 relative'}`}
               autoPlay
               loop
               muted
               playsInline
-              onError={(e) => {
-                e.target.style.display = 'none';
-                const fallback = e.target.parentElement.querySelector('.fallback-animation');
-                if (fallback) {
-                  fallback.style.display = 'flex';
-                  fallback.style.alignItems = 'center';
-                  fallback.style.justifyContent = 'center';
-                }
-              }}
+              onLoadedData={handleVideoLoaded}
+              onCanPlay={handleVideoLoaded}
+              onError={handleVideoError}
             />
           ) : (
             <img 
@@ -458,26 +570,24 @@ const PreviewCard = ({ project }) => {
             
             {/* Real Website Preview GIF/Video - Responsive Container */}
             <div className="w-full h-full flex items-center justify-center relative">
-              {project.previewImage && (project.previewImage === realdeskVideo || (typeof project.previewImage === 'string' && project.previewImage.includes('.mp4'))) ? (
-                <div className="w-full h-full relative flex items-center justify-center">
+              {/* Video Skeleton - Show while loading */}
+              {isVideoLoading && isVideo && !hasVideoError && <VideoSkeleton />}
+              
+              {isVideo ? (
+                <div className={`w-full h-full relative flex items-center justify-center ${isVideoLoading ? 'opacity-0 absolute' : 'opacity-100 relative z-10'}`}>
                   <video 
+                    ref={videoRef}
                     src={project.previewImage}
                     alt={`${project.title} preview`}
-                    className="w-full h-full object-contain rounded-lg shadow-lg relative z-10"
+                    className="w-full h-full object-contain rounded-lg shadow-lg transition-opacity duration-500"
                     autoPlay
                     loop
                     muted
                     playsInline
                     style={{ maxWidth: '100%', maxHeight: '100%' }}
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                      const fallback = e.target.parentElement.querySelector('.fallback-animation');
-                      if (fallback) {
-                        fallback.style.display = 'flex';
-                        fallback.style.alignItems = 'center';
-                        fallback.style.justifyContent = 'center';
-                      }
-                    }}
+                    onLoadedData={handleVideoLoaded}
+                    onCanPlay={handleVideoLoaded}
+                    onError={handleVideoError}
                   />
                 </div>
               ) : (
