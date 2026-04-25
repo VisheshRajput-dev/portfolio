@@ -3,17 +3,33 @@ import { addExperience } from '../firebase/database';
 // Default experiences to populate Firebase
 const defaultExperiences = [
   {
+    company: "PointsFly Technologies Private Limited",
+    position: "Founding Engineer",
+    startDate: new Date('2025-12-01'),
+    endDate: null,
+    location: "Onsite, Noida",
+    description: "Building the PointsFly website, mobile application, and AIRA from scratch. The product helps users understand the rupee value of their credit card points, compare flight and hotel redemption options across major travel programs, manage multiple cards, and discover where nearby rewards can actually be used. AIRA is positioned as an autonomous rewards assistant for India's emerging fin-travel space.",
+    technologies: ["Next.js", "Node.js", "Express.js", "MongoDB", "AWS", "Clerk", "React Native", "REST APIs"],
+    highlights: [
+      "Leading end-to-end product engineering for the website, app, and core rewards platform",
+      "Built flows that calculate credit card point value and surface practical redemption choices",
+      "Worked on travel reward discovery covering flights, hotels, nearby merchant usage, and card management",
+      "Helped shape AIRA as an AI-driven rewards assistant in the fin-travel category"
+    ],
+    current: true
+  },
+  {
     company: "Freelance Developer",
     position: "Full-Stack & Mobile Developer",
     startDate: new Date('2024-01-01'),
     endDate: null,
     location: "Remote",
-    description: "Delivered multiple production-ready web and mobile applications for startups and individuals, specializing in rapid MVP delivery. Combined strong coding fundamentals with AI-assisted workflows using ChatGPT, Gemini, Copilot, and n8n to accelerate development and automation.",
+    description: "Built and shipped production-ready web and mobile apps for startups and independent clients, with a strong focus on fast MVP delivery. I combined solid engineering fundamentals with practical automation to move quicker without turning the product into a mess.",
     technologies: ["React.js", "Node.js", "Flutter", "MongoDB", "Firebase", "Tailwind CSS", "Razorpay", "OpenAI API"],
     highlights: [
       "Delivered 3+ projects for clients within 2-week timelines",
       "Implemented full-stack systems with authentication, payments, and dashboards",
-      "Used AI tools to boost development speed by 40%",
+      "Used modern tooling and automation to speed up delivery without cutting corners",
       "Successfully managed entire development lifecycle independently"
     ],
     current: true
@@ -31,7 +47,7 @@ const defaultExperiences = [
       "Implemented interactive dashboards to visualize sales and customer trends",
       "Integrated Firebase and Cloudinary for secure data and media management",
       "enhanced ui design using Google Stitch and API-based pipelines",
-      "Delivered a robust, production-ready system within 2 months of contract initiation"
+      "Delivered a production-ready internal system within two months of the contract kickoff"
     ],
     current: false
   },
@@ -51,12 +67,12 @@ const defaultExperiences = [
     current: false
   },
   {
-    company: "Open Source & AI Experiments",
-    position: "AI Developer (Self-Learning Projects)",
+    company: "Open Source and Automation Experiments",
+    position: "Builder, Researcher, and Self-Directed Learner",
     startDate: new Date('2025-10-01'),
     endDate: null,
     location: "Remote",
-    description: "Explored AI integrations and workflow automation using OpenAI, Gemini, and n8n. Built tools like a meeting summarizer app, data analysis assistant, and smart automation pipelines connecting APIs and databases.",
+    description: "Explored AI integrations and workflow automation with OpenAI, Gemini, and n8n. Built tools such as a meeting summarizer, a data analysis assistant, and automation flows that connect APIs with internal data.",
     technologies: ["Flutter", "Python", "Firebase", "OpenAI API", "n8n", "Gemini API", "Tailwind CSS", "React.js", "Node.js", "MongoDB", "postman", "express", "firebase", "Razorpay"],
     highlights: [
       "Integrated multilingual NLP features for productivity tools using openai api",

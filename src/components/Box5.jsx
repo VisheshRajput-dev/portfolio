@@ -28,7 +28,7 @@ export default function Box5() {
 
       {/* Subtitle */}
       <p className="text-gray-400 text-sm md:text-base font-light text-center max-w-[90%] mt-2">
-        I learn something new every night — sometimes on purpose.
+        I usually end the day learning something new, whether I planned it or not.
       </p>
 
       {/* ☕ Coffee Lottie Animation at bottom-right - Only show for screens >= 1079px */}

@@ -9,10 +9,19 @@ import {
   orderBy,
   onSnapshot 
 } from 'firebase/firestore';
-import { db } from './config';
+import { db, isFirebaseConfigured } from './config';
+
+const firebaseUnavailableResult = (message = 'Firebase is not configured.') => ({
+  success: false,
+  error: message
+});
 
 // Experience Timeline Management
 export const getExperiences = async () => {
+  if (!db) {
+    return [];
+  }
+
   try {
     const experiencesRef = collection(db, 'experiences');
     const q = query(experiencesRef, orderBy('startDate', 'desc'));
@@ -25,6 +34,10 @@ export const getExperiences = async () => {
 };
 
 export const addExperience = async (experienceData) => {
+  if (!db) {
+    return firebaseUnavailableResult();
+  }
+
   try {
     const docRef = await addDoc(collection(db, 'experiences'), experienceData);
     return { success: true, id: docRef.id };
@@ -35,6 +48,10 @@ export const addExperience = async (experienceData) => {
 };
 
 export const updateExperience = async (id, experienceData) => {
+  if (!db) {
+    return firebaseUnavailableResult();
+  }
+
   try {
     const experienceRef = doc(db, 'experiences', id);
     await updateDoc(experienceRef, experienceData);
@@ -46,6 +63,10 @@ export const updateExperience = async (id, experienceData) => {
 };
 
 export const deleteExperience = async (id) => {
+  if (!db) {
+    return firebaseUnavailableResult();
+  }
+
   try {
     await deleteDoc(doc(db, 'experiences', id));
     return { success: true };
@@ -57,6 +78,10 @@ export const deleteExperience = async (id) => {
 
 // Contact Form Submissions Management
 export const getContactSubmissions = async () => {
+  if (!db) {
+    return [];
+  }
+
   try {
     const submissionsRef = collection(db, 'contactSubmissions');
     const q = query(submissionsRef, orderBy('timestamp', 'desc'));
@@ -69,6 +94,10 @@ export const getContactSubmissions = async () => {
 };
 
 export const addContactSubmission = async (submissionData) => {
+  if (!db) {
+    return firebaseUnavailableResult('Contact submissions are unavailable until Firebase is configured.');
+  }
+
   try {
     const docRef = await addDoc(collection(db, 'contactSubmissions'), {
       ...submissionData,
@@ -83,6 +112,10 @@ export const addContactSubmission = async (submissionData) => {
 };
 
 export const updateSubmissionStatus = async (id, status) => {
+  if (!db) {
+    return firebaseUnavailableResult();
+  }
+
   try {
     const submissionRef = doc(db, 'contactSubmissions', id);
     await updateDoc(submissionRef, { status });
@@ -95,6 +128,11 @@ export const updateSubmissionStatus = async (id, status) => {
 
 // Real-time listeners
 export const subscribeToExperiences = (callback) => {
+  if (!db || !isFirebaseConfigured) {
+    callback([]);
+    return () => {};
+  }
+
   const experiencesRef = collection(db, 'experiences');
   const q = query(experiencesRef, orderBy('startDate', 'desc'));
   return onSnapshot(q, (querySnapshot) => {
@@ -104,6 +142,11 @@ export const subscribeToExperiences = (callback) => {
 };
 
 export const subscribeToContactSubmissions = (callback) => {
+  if (!db || !isFirebaseConfigured) {
+    callback([]);
+    return () => {};
+  }
+
   const submissionsRef = collection(db, 'contactSubmissions');
   const q = query(submissionsRef, orderBy('timestamp', 'desc'));
   return onSnapshot(q, (querySnapshot) => {

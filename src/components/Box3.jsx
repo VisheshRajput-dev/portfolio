@@ -68,7 +68,7 @@ export default function Box3() {
       {/* 😆 Centered Description */}
       <div className="flex-1 flex items-center justify-center relative z-10">
         <p className="text-sm md:text-base text-gray-300 leading-relaxed text-center max-w-[90%]">
-          Morning in New York, Coffee in London, Evening in Tokyo — I’m always coding somewhere!
+          Morning in New York, coffee in London, evening in Tokyo. If the work matters, I will meet it where it is.
         </p>
       </div>
 

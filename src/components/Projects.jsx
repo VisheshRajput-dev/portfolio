@@ -128,7 +128,7 @@ const projectsData = [
     id: 1,
     title: "RealDesk",
     subtitle: "a developer internship simulator",
-    description: "Simulate a real developer workspace with realistic tasks, bug reports, deadlines, and client interactions — a developer internship simulator.",
+    description: "A developer internship simulator built around realistic tasks, bug reports, deadlines, and client conversations.",
     tech: ["React", "Vite", "TypeScript", "Tailwind", "shadcn/ui", "Monaco", "Firebase", "Gemini"],
     category: "Full-Stack",
     liveUrl: "https://realdesk.vercel.app/",
@@ -781,7 +781,7 @@ export default function Projects() {
               y: useTransform(scrollYProgress, [0, 0.3], [30, 0])
             }}
           >
-            Because real developers don't just write code — they rewrite it until it behaves.
+            Real products take iteration. I keep refining until the experience feels right and the code holds up.
           </motion.p>
         </motion.div>
 

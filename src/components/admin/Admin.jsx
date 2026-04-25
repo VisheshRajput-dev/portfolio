@@ -10,6 +10,11 @@ const Admin = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!auth) {
+      setLoading(false);
+      return undefined;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user && isAdmin(user)) {
         setUser(user);

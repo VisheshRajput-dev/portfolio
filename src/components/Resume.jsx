@@ -33,7 +33,7 @@ export default function Resume() {
                 </h2>
 
                 <p className={`text-gray-300 text-lg lg:text-xl leading-relaxed ${screenWidth >= 1224 ? 'max-w-lg' : 'max-w-full mx-auto'}`}>
-                    A quick scroll through my journey — where ideas meet execution, and pixels learn some manners. I build things that <span className="font-semibold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">look good</span>, <span className="font-semibold bg-gradient-to-r from-pink-400 to-orange-400 bg-clip-text text-transparent">work fast</span>, and <span className="font-semibold bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent">actually make sense</span>.
+                    A quick look at how I work, what I build, and the kind of problems I like solving. I care about products that <span className="font-semibold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">look sharp</span>, <span className="font-semibold bg-gradient-to-r from-pink-400 to-orange-400 bg-clip-text text-transparent">run smoothly</span>, and <span className="font-semibold bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent">feel well thought out</span>.
                 </p>
 
                 <div>
@@ -84,7 +84,7 @@ export default function Resume() {
                                 Frontend Sorcerer ✨
                             </h3>
                             <p className={`text-gray-200 ${screenWidth >= 1224 ? 'text-lg' : 'text-base'} leading-relaxed`}>
-                                I speak fluent React and Tailwind. My components not only render fast — they also behave better than most people on Monday mornings.
+                                I spend most of my frontend time in React and Tailwind, building interfaces that feel clean, responsive, and dependable under real use.
                             </p>
                         </div>
                     </Card>
@@ -132,7 +132,7 @@ export default function Resume() {
                                 Stack Tamer 🧠
                             </h3>
                             <p className={`text-gray-200 ${screenWidth >= 1224 ? 'text-lg' : 'text-base'} leading-relaxed`}>
-                                React, Node, MongoDB, Firebase, Tailwind — I juggle them all without dropping performance. Console.logs are my spirit animal.
+                                React, Node, MongoDB, Firebase, and Tailwind are all tools I reach for regularly. The goal is never the stack itself, it is keeping the product fast, stable, and maintainable.
                             </p>
                         </div>
                     </Card>

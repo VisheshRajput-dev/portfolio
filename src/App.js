@@ -28,7 +28,12 @@ function App() {
   return (
     <Router>
       <div className="App relative">
-        <SEO />
+        <SEO
+          title="Vishesh Rajput | Founding Engineer at PointsFly | Full-Stack Developer"
+          description="Portfolio of Vishesh Rajput, Founding Engineer at PointsFly, building PointsFly and AIRA across web, mobile, credit card rewards, travel intelligence, and scalable full-stack systems."
+          keywords="Vishesh Rajput, Founding Engineer, Founding Engineer at PointsFly, PointsFly, PointsFly developer, building PointsFly, AIRA, Autonomous Intelligent Rewards Agent, AI rewards agent, credit card points, travel rewards, fin travel, Next.js developer, Node.js developer, Express.js developer, MongoDB developer, AWS developer, Clerk, software engineer India, software engineer Noida"
+          image="/logo.png"
+        />
         <BackgroundParticles />
 
         <Routes>
@@ -51,7 +56,7 @@ function App() {
                   <Projects />
                   {/* <Game /> */}
 
-                  {/* Contact Drawer — only shows when Contact clicked */}
+                  {/* Contact Drawer only shows when Contact is clicked */}
                   {showContact && (
                     <ContactDrawer onClose={() => setShowContact(false)} />
                   )}

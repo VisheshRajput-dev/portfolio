@@ -3,6 +3,13 @@ import { auth } from './config';
 
 // Admin login function
 export const adminLogin = async (email, password) => {
+  if (!auth) {
+    return {
+      success: false,
+      error: 'Firebase authentication is not configured.'
+    };
+  }
+
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     return { success: true, user: userCredential.user };
@@ -13,6 +20,13 @@ export const adminLogin = async (email, password) => {
 
 // Admin logout function
 export const adminLogout = async () => {
+  if (!auth) {
+    return {
+      success: false,
+      error: 'Firebase authentication is not configured.'
+    };
+  }
+
   try {
     await signOut(auth);
     return { success: true };

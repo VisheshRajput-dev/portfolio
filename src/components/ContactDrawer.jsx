@@ -602,7 +602,7 @@ export default function ContactDrawer({ onClose }) {
                   ease: "easeInOut",
                 }}
               />
-              <span>Currently online — open for collaborations & ideas</span>
+              <span>Currently online, open to collaborations and new ideas</span>
             </motion.div>
           </motion.div>
         </motion.div>

@@ -12,9 +12,9 @@ export default function Box1() {
 
   const getTextContent = () => {
     if (screenWidth < 1430) {
-      return "I build stuff that works — fast. Web, mobile, backend — all covered with React, Node, and Flutter. My AI crew handles the boring bits; I handle the logic and design.";
+      return "I build things that ship fast. Web, mobile, and backend are all in play with React, Node, and Flutter. AI helps with the repetitive parts so I can stay focused on product thinking and clean execution.";
     }
-    return "I turn coffee and ideas into working code — fast. From web apps to mobile and backend systems, I build full products using React, Node.js, Flutter, Firebase, and MongoDB. I also team up with my favorite AI colleagues — ChatGPT, Gemini, Copilot, Cursor, and n8n — to skip the boring stuff and focus on logic, design, and creativity. Why take months when I can ship it in weeks?";
+    return "I turn rough ideas into working products fast. From web apps to mobile builds and backend systems, I work across React, Node.js, Flutter, Firebase, and MongoDB. I also use tools like ChatGPT, Gemini, Copilot, Cursor, and n8n to cut down repetitive work and spend more time on architecture, design, and the parts that actually need judgment.";
   };
 
   return (

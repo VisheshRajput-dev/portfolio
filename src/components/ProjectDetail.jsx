@@ -79,8 +79,8 @@ const projectsData = [
     id: 1,
     title: "RealDesk",
     subtitle: "A Developer Internship Simulator",
-    description: "Experience the life of a professional developer through realistic simulations — from debugging and client interactions to task deadlines and performance reviews.",
-    overview: "RealDesk is an interactive developer internship simulator designed to bridge the gap between theory and industry practice. It replicates the real-life experience of working in a tech company, where users receive realistic tasks, bug reports, deadlines, and client messages. The platform integrates a professional-grade in-browser code editor with multi-file support, syntax highlighting, and AI-powered feedback, allowing developers to learn through hands-on experience.",
+    description: "A developer internship simulator that recreates realistic debugging, deadlines, client messages, and day-to-day engineering work.",
+    overview: "RealDesk is an interactive developer internship simulator built to close the gap between tutorials and actual team workflows. It recreates the pace of a tech workplace with realistic tasks, bug reports, deadlines, and client messages. The platform includes an in-browser code editor with multi-file support, syntax highlighting, and AI-assisted feedback so users can learn by doing instead of only reading.",
     tech: ["React", "Vite", "TypeScript", "Tailwind", "shadcn/ui", "Monaco", "Firebase", "Gemini API"],
     category: "Full-Stack",
     liveUrl: "https://realdesk.vercel.app/",
@@ -95,7 +95,7 @@ const projectsData = [
       "Designing a modular workspace simulation with realistic task scenarios",
       "Building a reward-driven experience system that adapts to user progress dynamically"
     ],
-    outcome: "Launched a fully functional developer simulator that blends learning with real-world practice. RealDesk helps developers gain experience in a controlled yet authentic environment through project-based simulations and AI-guided feedback.",
+    outcome: "Launched a working developer simulator that mixes learning with practical workflow pressure. RealDesk gives users a safer place to build confidence with realistic projects, deadlines, and guided feedback.",
     galleryImages: [
       realdeskImage1,
       realdeskImage2,
@@ -115,7 +115,7 @@ const projectsData = [
     id: 2,
     title: "DevSync",
     subtitle: "Team Collaboration & Project Sync Platform",
-    description: "A modern developer collaboration platform that syncs teams, tasks, and codebases — bringing seamless workflow to distributed projects.",
+    description: "A collaboration platform that keeps teams, tasks, and codebases aligned across distributed projects.",
     overview: "DevSync streamlines software team collaboration by integrating real-time communication, version tracking, and task management into a single platform. It offers developers an intuitive dashboard to manage commits, issues, and updates with GitHub synchronization and live activity tracking. Designed for modern teams, DevSync fosters a transparent and efficient workflow from idea to deployment.",
     tech: ["React", "Node.js", "Express", "MongoDB", "Socket.io", "Tailwind", "Firebase Auth"],
     category: "MERN Stack",
@@ -624,13 +624,53 @@ const ProjectDetail = () => {
 
   // Prepare images for DomeGallery
   const galleryImages = project.galleryImages || [project.previewImage];
+  const projectKeywords = [
+    "Vishesh Rajput",
+    `${project.title}`,
+    `${project.title} project`,
+    `${project.title} case study`,
+    project.subtitle,
+    project.category,
+    ...project.tech,
+    "full-stack developer portfolio",
+    "software engineering project"
+  ].join(", ");
+  const projectDescription = project.overview || project.description || `Explore ${project.title} by Vishesh Rajput.`;
+  const primaryImage = galleryImages[0] || "/logo.png";
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    name: project.title,
+    description: projectDescription,
+    url: `https://visheshrajputdev-portfolio.vercel.app/project/${project.id}`,
+    author: {
+      "@type": "Person",
+      name: "Vishesh Rajput"
+    },
+    creator: {
+      "@type": "Person",
+      name: "Vishesh Rajput"
+    },
+    programmingLanguage: project.tech,
+    codeRepository: project.githubUrl,
+    applicationCategory: project.category,
+    image: primaryImage,
+    keywords: projectKeywords
+  };
+
+  if (project.liveUrl) {
+    structuredData.sameAs = [project.liveUrl];
+  }
 
   return (
     <div className="min-h-screen bg-transparent text-white relative overflow-x-hidden">
       <SEO 
-        title={`${project.title} - ${project.subtitle} | Vishesh Rajput Portfolio`}
-        description={project.description || project.overview || `Explore ${project.title} by Vishesh Rajput - ${project.subtitle}. Built with ${project.tech.slice(0, 3).join(', ')} and more.`}
-        keywords={`${project.title}, Vishesh Rajput, ${project.title} project, ${project.tech.join(', ')}, ${project.category}, web development, software engineering`}
+        title={`${project.title} | ${project.subtitle} | Vishesh Rajput`}
+        description={projectDescription}
+        keywords={projectKeywords}
+        image={primaryImage}
+        type="article"
+        structuredData={structuredData}
       />
       {/* Particle Background */}
       <BgParticles />

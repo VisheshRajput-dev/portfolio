@@ -2,7 +2,6 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
-// Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -12,13 +11,31 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const requiredConfigKeys = [
+  'apiKey',
+  'authDomain',
+  'projectId',
+  'storageBucket',
+  'messagingSenderId',
+  'appId'
+];
 
-// Initialize Firebase Authentication and get a reference to the service
-export const auth = getAuth(app);
+const missingConfigKeys = requiredConfigKeys.filter((key) => {
+  const value = firebaseConfig[key];
+  return typeof value !== 'string' || value.trim() === '';
+});
 
-// Initialize Cloud Firestore and get a reference to the service
-export const db = getFirestore(app);
+export const isFirebaseConfigured = missingConfigKeys.length === 0;
+
+if (!isFirebaseConfigured) {
+  console.warn(
+    `Firebase is disabled. Missing environment variables: ${missingConfigKeys.join(', ')}`
+  );
+}
+
+const app = isFirebaseConfigured ? initializeApp(firebaseConfig) : null;
+
+export const auth = app ? getAuth(app) : null;
+export const db = app ? getFirestore(app) : null;
 
 export default app;

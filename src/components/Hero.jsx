@@ -52,9 +52,9 @@ const Hero = () => {
         </h1>
 
         <p className="text-gray-400 text-base sm:text-lg max-w-md mx-auto xl:mx-0">
-          Turning imagination into interactive reality — building seamless,
-          dynamic, and modern web experiences using React, Node.js, and the best
-          of today's tech.
+          I build polished, interactive products for the web with React,
+          Node.js, and a stack chosen to fit the problem instead of chasing
+          trends.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center xl:justify-start">

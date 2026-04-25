@@ -10,24 +10,39 @@ import { useScrollProgress } from "../hooks/useScrollProgress";
  */
 const defaultExperiences = [
   {
+    company: "PointsFly Technologies Private Limited",
+    role: "Founding Engineer",
+    duration: "Dec 2025 to Current",
+    location: "Onsite, Noida",
+    description:
+      "Building the PointsFly website, mobile application, and AIRA from scratch. The product helps users understand the rupee value of their credit card points, compare flight and hotel redemption options across major travel programs, manage multiple cards, and discover where nearby rewards can actually be used. AIRA is positioned as an autonomous rewards assistant for India's emerging fin-travel space.",
+    tech: ["Next.js", "Node.js", "Express.js", "MongoDB", "AWS", "Clerk", "React Native", "REST APIs"],
+    highlights: [
+      "Leading end-to-end product engineering for the website, app, and core rewards platform",
+      "Built flows that calculate credit card point value and surface practical redemption choices",
+      "Worked on travel reward discovery covering flights, hotels, nearby merchant usage, and card management",
+      "Helped shape AIRA as an AI-driven rewards assistant in the fin-travel category"
+    ]
+  },
+  {
     company: "Freelance Developer",
     role: "Full-Stack & Mobile Developer",
-    duration: "2024 – Present",
+    duration: "2024 to Present",
     location: "Remote",
     description:
-      "Delivered multiple production-ready web and mobile applications for startups and individuals, specializing in rapid MVP delivery. Combined strong coding fundamentals with AI-assisted workflows using ChatGPT, Gemini, Copilot, and n8n to accelerate development and automation.",
+      "Built and shipped production-ready web and mobile apps for startups and independent clients, with a strong focus on fast MVP delivery. I combined solid engineering fundamentals with practical automation to move quicker without turning the product into a mess.",
     tech: ["React.js", "Node.js", "Flutter", "MongoDB", "Firebase", "Tailwind CSS", "Razorpay", "OpenAI API"],
     highlights: [
       "Delivered 3+ projects for clients within 2-week timelines",
       "Implemented full-stack systems with authentication, payments, and dashboards",
-      "Used AI tools to boost development speed by 40%",
+      "Used modern tooling and automation to speed up delivery without cutting corners",
       "Successfully managed entire development lifecycle independently"
     ]
   },
   {
     company: "Navadurga (Contract Project)",
     role: "Full-Stack Developer",
-    duration: "Jan 2025 – mar 2025",
+    duration: "Jan 2025 to Mar 2025",
     location: "Remote",
     description:
       "Built a complete full-stack web portal for Navadurga Pvt. Ltd. to manage and analyze internal business data. Developed a secure admin dashboard with full CRUD functionality, real-time reporting, and data visualization to track customer insights and performance metrics. Integrated Firebase for backend services, Cloudinary for media management, and implemented automated workflows for smoother data handling and decision-making.",
@@ -37,13 +52,13 @@ const defaultExperiences = [
       "Implemented interactive dashboards to visualize sales and customer trends",
       "Integrated Firebase and Cloudinary for secure data and media management",
       "enhanced ui design using Google Stitch and API-based pipelines",
-      "Delivered a robust, production-ready system within 2 months of contract initiation"
+      "Delivered a production-ready internal system within two months of the contract kickoff"
     ]
   },
   {
     company: "E-GameBazzi (Independent Project)",
     role: "Founder & Full-Stack Developer",
-    duration: "aug 2025 – sept 2025",
+    duration: "Aug 2025 to Sept 2025",
     location: "Remote",
     description:
       "Designed and built a fantasy esports platform prototype for games like BGMI, COD, and Valorant. Developed secure authentication, wallet management, and team selection systems using React, Node, and Firebase. Project is disband due to legal issues.",
@@ -55,12 +70,12 @@ const defaultExperiences = [
     ]
   },
   {
-    company: "Open Source & AI Experiments",
-    role: "AI Developer (Self-Learning Projects)",
-    duration: "oct 2025 – present",
+    company: "Open Source and Automation Experiments",
+    role: "Builder, Researcher, and Self-Directed Learner",
+    duration: "Oct 2025 to Present",
     location: "Remote",
     description:
-      "Explored AI integrations and workflow automation using OpenAI, Gemini, and n8n. Built tools like a meeting summarizer app, data analysis assistant, and smart automation pipelines connecting APIs and databases.",
+      "Explored AI integrations and workflow automation with OpenAI, Gemini, and n8n. Built tools such as a meeting summarizer, a data analysis assistant, and automation flows that connect APIs with internal data.",
     tech: ["Flutter", "Python", "Firebase", "OpenAI API", "n8n", "Gemini API", "Tailwind CSS", "React.js", "Node.js", "MongoDB", "postman", "express", "firebase", "Razorpay"],
     highlights: [
       "Integrated multilingual NLP features for productivity tools using openai api",
@@ -115,8 +130,8 @@ export default function ExperienceTimeline() {
         const formattedExperiences = firebaseExperiences.map(exp => ({
           company: exp.company,
           role: exp.position,
-          duration: exp.current ? `${exp.startDate?.toDate?.()?.getFullYear() || 'N/A'} – Present` : 
-                   `${exp.startDate?.toDate?.()?.getFullYear() || 'N/A'} – ${exp.endDate?.toDate?.()?.getFullYear() || 'N/A'}`,
+          duration: exp.current ? `${exp.startDate?.toDate?.()?.getFullYear() || 'N/A'} to Present` : 
+                   `${exp.startDate?.toDate?.()?.getFullYear() || 'N/A'} to ${exp.endDate?.toDate?.()?.getFullYear() || 'N/A'}`,
           location: exp.location || "Remote",
           description: exp.description,
           tech: exp.technologies || [],
@@ -169,12 +184,12 @@ export default function ExperienceTimeline() {
           <h2 className={`font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent mb-6 ${
             screenWidth < 370 ? "text-xl" : screenWidth < 773 ? "text-2xl" : screenWidth < 898 ? "text-3xl" : screenWidth < 1065 ? "text-4xl" : "text-5xl"
           }`}>
-          My Career Adventures
+          Career Journey
           </h2>
           <p className={`text-gray-300 max-w-3xl mx-auto leading-relaxed ${
             screenWidth < 370 ? "text-sm" : screenWidth < 773 ? "text-base" : screenWidth < 898 ? "text-lg" : screenWidth < 1065 ? "text-xl" : "text-2xl"
           }`}>
-          From "I hope this works" to "Oops, it actually works!" – a timeline of my professional mischiefs and victories.
+          A timeline of the teams, products, experiments, and lessons that shaped how I build.
           </p>
         </motion.div>
 

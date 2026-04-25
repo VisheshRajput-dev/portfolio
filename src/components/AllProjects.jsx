@@ -134,7 +134,7 @@ const projectsData = [
     id: 1,
     title: "RealDesk",
     subtitle: "a developer internship simulator",
-    description: "Simulate a real developer workspace with realistic tasks, bug reports, deadlines, and client interactions — a developer internship simulator.",
+    description: "A developer internship simulator built around realistic tasks, bug reports, deadlines, and client conversations.",
     tech: ["React", "Vite", "TypeScript", "Tailwind", "shadcn/ui", "Monaco", "Firebase", "Gemini"],
     category: "Full-Stack",
     liveUrl: "https://realdesk.vercel.app/",
@@ -771,9 +771,29 @@ const AllProjects = () => {
   return (
     <>
       <SEO 
-        title="All Projects - Vishesh Rajput | Full-Stack Developer Portfolio"
-        description="Explore all projects by Vishesh Rajput - Software Engineer. View RealDesk, DevSync, Vishti Shop and more innovative full-stack web applications built with React, Node.js, TypeScript, and modern technologies."
-        keywords="Vishesh Rajput projects, Vishesh Rajput portfolio projects, RealDesk, DevSync, Vishti Shop, full-stack projects, React projects, web development projects"
+        title="Projects by Vishesh Rajput | Full-Stack Case Studies and Product Builds"
+        description="Explore full-stack projects by Vishesh Rajput, including RealDesk, DevSync, Vishti Shop, and VishtiConvertor. Case studies cover product thinking, engineering decisions, and implementation across React, Next.js, Node.js, MongoDB, and modern web tools."
+        keywords="Vishesh Rajput projects, Vishesh Rajput portfolio projects, Vishesh Rajput case studies, RealDesk, DevSync, Vishti Shop, VishtiConvertor, full-stack projects, React projects, Node.js projects, MongoDB projects, frontend projects, product engineering portfolio"
+        image="/logo.png"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "@id": "https://visheshrajputdev-portfolio.vercel.app/projects#webpage",
+          name: "Projects by Vishesh Rajput",
+          url: "https://visheshrajputdev-portfolio.vercel.app/projects",
+          description: "A collection of project case studies and product builds by Vishesh Rajput.",
+          about: {
+            "@type": "Person",
+            name: "Vishesh Rajput",
+            jobTitle: "Founding Engineer"
+          },
+          hasPart: projectsData.map((project) => ({
+            "@type": "CreativeWork",
+            name: project.title,
+            url: `https://visheshrajputdev-portfolio.vercel.app/project/${project.id}`,
+            description: project.description
+          }))
+        }}
       />
       <style>{cardStyles}</style>
       <div className="min-h-screen bg-black text-white relative overflow-x-hidden" style={{ scrollBehavior: 'smooth' }}>
@@ -822,7 +842,7 @@ const AllProjects = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
               >
-                A complete collection of my work — where ideas meet execution, and pixels learn some manners.
+                A full collection of the products, experiments, and builds I have worked on so far.
               </motion.p>
             </motion.div>
 
