@@ -1,0 +1,154 @@
+.v3 .proc {
+  position: relative;
+  height: 520vh;
+  background: var(--ivory);
+  border-top: 1px solid var(--rule);
+}
+
+.v3 .proc-stick {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.v3 .proc-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+/* Paper fades over the scene where the copy and the steps sit. */
+.v3 .proc-stick::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, var(--ivory) 0%, rgba(238, 234, 226, 0.92) 24%, rgba(238, 234, 226, 0) 46%),
+    linear-gradient(0deg, var(--ivory) 0%, rgba(238, 234, 226, 0.85) 70px, rgba(238, 234, 226, 0) 170px);
+}
+
+.v3 .proc-head,
+.v3 .proc-copy,
+.v3 .proc-foot {
+  z-index: 2;
+}
+
+.v3 .proc-head {
+  position: absolute;
+  top: 96px;
+  left: var(--gutter);
+  right: var(--gutter);
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.v3 .proc-head p { margin: 0; }
+
+.v3 .proc-to {
+  font-size: 16px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.v3 .proc-copy {
+  position: absolute;
+  left: var(--gutter);
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(460px, 36vw);
+  pointer-events: none;
+}
+
+.v3 .proc-ch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform: translateY(-50%);
+}
+
+.v3 .proc-ch > * {
+  margin: 0;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s var(--ease-out), transform 0.9s var(--ease-out);
+}
+
+.v3 .proc-ch.is-on > * {
+  opacity: 1;
+  transform: none;
+}
+
+.v3 .proc-ch.is-on > :nth-child(2) { transition-delay: 0.05s; }
+.v3 .proc-ch.is-on > :nth-child(3) { transition-delay: 0.12s; }
+.v3 .proc-ch.is-on > :nth-child(4) { transition-delay: 0.18s; }
+
+.v3 .proc-word {
+  font-size: clamp(64px, 8.4vw, 136px);
+  margin: 14px 0 18px !important;
+}
+
+.v3 .proc-line {
+  font-size: clamp(26px, 2.4vw, 38px);
+  line-height: 1.1;
+  margin-bottom: 18px !important;
+}
+
+.v3 .proc-body {
+  max-width: 360px;
+  color: var(--mute);
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: 12.5px;
+  line-height: 1.7;
+}
+
+.v3 .proc-foot {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.v3 .proc-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  color: var(--mute);
+}
+
+.v3 .proc-steps .is-done { color: var(--ink); }
+
+.v3 .proc-bar {
+  height: 1px;
+  background: var(--rule);
+}
+
+.v3 .proc-bar i {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+@media (max-width: 800px) {
+  .v3 .proc-stick::after {
+    background: linear-gradient(0deg, var(--ivory) 0%, rgba(238, 234, 226, 0.95) 42%, rgba(238, 234, 226, 0) 62%);
+  }
+  .v3 .proc-copy {
+    top: auto;
+    bottom: 96px;
+    transform: none;
+    width: auto;
+    right: var(--gutter);
+  }
+  .v3 .proc-ch { top: auto; bottom: 0; transform: none; }
+  .v3 .proc-word { font-size: 17vw; }
+  .v3 .proc-canvas { bottom: 30%; }
+}

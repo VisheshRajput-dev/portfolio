@@ -1,0 +1,167 @@
+.v3 .hero {
+  position: relative;
+  height: 100svh;
+  min-height: 680px;
+  overflow: hidden;
+  background: var(--ivory);
+}
+
+.v3 .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.v3 .hero-name {
+  margin: 0;
+  font-weight: inherit;
+}
+
+.v3 .hero-first,
+.v3 .hero-last {
+  position: absolute;
+  display: block;
+  font-size: 14vw;
+  white-space: nowrap;
+}
+
+.v3 .hero-first {
+  left: calc(var(--gutter) - 0.04em);
+  top: 18.5vh;
+  z-index: 1;
+}
+
+/* RAJPUT sits over the portrait and inverts against the ink. */
+.v3 .hero-last {
+  right: calc(var(--gutter) - 0.02em);
+  bottom: 10.5vh;
+  z-index: 3;
+  color: #eeeae2;
+  mix-blend-mode: difference;
+}
+
+.v3 .hero-portrait {
+  --ph: 73vh;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin-inline: auto;
+  height: var(--ph);
+  width: calc(var(--ph) * 506 / 447);
+  max-width: 100%;
+  transform-origin: 50% 100%;
+  z-index: 2;
+  cursor: crosshair;
+}
+
+.v3 .hero-portrait .hero-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.v3 .hero-flourish {
+  position: absolute;
+  left: 63%;
+  top: 38vh;
+  z-index: 4;
+  margin: 0;
+  font-size: 8.4vw;
+  line-height: 1;
+  transform: rotate(-7deg);
+  pointer-events: none;
+}
+
+.v3 .hero-side {
+  position: absolute;
+  z-index: 5;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.v3 .hero-side ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.v3 .hero-side p {
+  margin: 0;
+}
+
+.v3 .hero-side-l {
+  left: var(--gutter);
+  top: 47vh;
+}
+
+.v3 .hero-side-r {
+  right: var(--gutter);
+  top: 56vh;
+  width: 270px;
+}
+
+.v3 .hero-foot {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 26px;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+.v3 .hero-foot p {
+  margin: 0;
+}
+
+.v3 .hero-scroll {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.v3 .hero-scroll svg {
+  animation: hero-bob 1.8s var(--ease-in-out) infinite;
+}
+
+@keyframes hero-bob {
+  50% { transform: translateY(4px); }
+}
+
+/* Centre hint would sit over the hoodie on narrow screens. */
+.v3 .hero-hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  bottom: 0;
+  color: #eeeae2 !important;
+  mix-blend-mode: difference;
+}
+
+@media (hover: none) {
+  .v3 .hero-hint { display: none; }
+}
+
+@media (max-width: 1000px) {
+  .v3 .hero-side { display: none; }
+  .v3 .hero-portrait { --ph: 64vh; }
+  .v3 .hero-flourish { left: 58%; top: 34vh; font-size: 11vw; }
+}
+
+@media (max-width: 640px) {
+  .v3 .hero { min-height: 600px; }
+  .v3 .hero-first,
+  .v3 .hero-last { font-size: 16.2vw; }
+  .v3 .hero-first { top: 15vh; }
+  .v3 .hero-last { bottom: 13vh; }
+  .v3 .hero-portrait { --ph: 62vh; }
+  .v3 .hero-flourish { left: 46%; top: 22vh; font-size: 15vw; }
+}

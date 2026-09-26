@@ -1,0 +1,29 @@
+.v3 .mq {
+  position: relative;
+  z-index: 6;
+  overflow: hidden;
+  background: var(--red);
+  color: var(--paper);
+  border-block: 1px solid var(--ink);
+  padding: 16px 0;
+}
+
+.v3 .mq-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  font-size: 13px;
+}
+
+.v3 .mq-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 28px;
+  padding-right: 28px;
+  white-space: nowrap;
+}
+
+.v3 .mq-star {
+  width: 13px;
+  height: 13px;
+}
