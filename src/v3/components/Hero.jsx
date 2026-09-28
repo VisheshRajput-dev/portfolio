@@ -32,14 +32,25 @@ export default function Hero({ ready }) {
         )
         .from(".hero-reveal", { y: 18, opacity: 0, duration: 1, stagger: 0.07 }, 0.9);
 
-      // Scroll-out: the page peels apart as you leave the hero.
       if (!quick) {
+        // Scrolling develops the real photograph through the engraving,
+        // line by line from the top, like the loupe but across the portrait.
+        gsap.fromTo(
+          portrait.current,
+          { photo: 0 },
+          {
+            photo: 1,
+            ease: "none",
+            scrollTrigger: { trigger: root.current, start: "top top", end: "+=55%", scrub: 1.4 },
+          }
+        );
+
+        // Scroll-out: the page peels apart as you leave the hero.
         const out = gsap.timeline({
           scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: true },
         });
         out.to(".hero-first", { yPercent: -60, ease: "none" }, 0)
           .to(".hero-last", { xPercent: -12, ease: "none" }, 0)
-          .to(".hero-portrait", { yPercent: 14, scale: 0.94, ease: "none" }, 0)
           .to(".hero-flourish", { yPercent: -120, rotate: -14, ease: "none" }, 0)
           .to(".hero-side", { opacity: 0, ease: "none" }, 0);
       }
@@ -90,7 +101,7 @@ export default function Hero({ ready }) {
       <div className="hero-side hero-side-r">
         <p className="t-mono is-mute hero-reveal">( Currently )</p>
         <p className="t-mono hero-reveal">
-          {person.role} at {person.company}. Building the web app, the mobile app and AIRA, an AI rewards assistant.
+          {person.role} at {person.company}
         </p>
       </div>
 

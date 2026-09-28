@@ -8,13 +8,15 @@ import SEO from "./components/SEO";
 const ClassicHome = lazy(() => import("./components/ClassicHome"));
 const Admin = lazy(() => import("./components/admin/Admin"));
 const AllProjects = lazy(() => import("./components/AllProjects"));
-const ProjectDetail = lazy(() => import("./components/ProjectDetail"));
+const CaseStudy = lazy(() => import("./v3/pages/CaseStudy"));
 const BackgroundParticles = lazy(() => import("./components/backgroundparticles"));
+const Concept = lazy(() => import("./concept/Concept"));
 
-// The particle field belongs to the classic pages; the v3 home paints its own ground.
+// The particle field belongs to the classic pages; v3 pages paint their own ground.
 function LegacyBackground() {
   const { pathname } = useLocation();
-  return pathname === "/" ? null : <BackgroundParticles />;
+  const own = pathname === "/" || pathname === "/concept" || pathname.startsWith("/project/");
+  return own ? null : <BackgroundParticles />;
 }
 
 function App() {
@@ -32,9 +34,10 @@ function App() {
           <Routes>
             <Route path="/admin" element={<Admin />} />
             <Route path="/projects" element={<AllProjects />} />
-            <Route path="/project/:id" element={<ProjectDetail />} />
+            <Route path="/project/:id" element={<CaseStudy />} />
             <Route path="/" element={<HomeV3 />} />
             <Route path="/classic" element={<ClassicHome />} />
+            <Route path="/concept" element={<Concept />} />
           </Routes>
         </Suspense>
       </div>

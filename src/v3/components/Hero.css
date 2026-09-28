@@ -51,7 +51,7 @@
   bottom: 0;
   margin-inline: auto;
   height: var(--ph);
-  width: calc(var(--ph) * 506 / 447);
+  width: calc(var(--ph) * 708 / 1100);
   max-width: 100%;
   transform-origin: 50% 100%;
   z-index: 2;

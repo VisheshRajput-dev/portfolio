@@ -1,0 +1,22 @@
+Create a believable professional photograph of the actual person in the references, suitable for his personal portfolio. The user rejected earlier results because the head looked oversized and pasted onto a smaller body. Prioritize photographic coherence and correct anatomy.
+
+REFERENCE ROLES:
+Image 1: original avatar; use its straight-on standing pose, black hoodie, and relaxed framing as a general layout guide ONLY.
+Image 2: the user's actual face close-up. Sole authority for facial identity together with image 3.
+Image 3: real frontal photograph of the user wearing a black suit against flowers. Primary reference for frontal facial anatomy, his actual slim frame and body proportions.
+Do not copy or blend a synthetic face from image 1. Depict the same recognizable real man from images 2 and 3, with his real glasses, face, hair and natural age. Do not invent a fashion model or exaggerate features.
+
+COMPOSITION AND PROPORTIONS:
+One cohesive waist-up studio photograph, vertical 4:5. Include the entire head, shoulders, both elbows, hoodie pocket and upper hips. Give the torso substantial room in the image. Natural slim adult body with shoulders approximately 2.6 times the width of the head; head from top of hair to chin takes about one quarter of the total visible figure height. Head at a believable size relative to shoulders. Do not achieve this with exaggerated muscular shoulders: recreate the slender real person's proportions. Head, neck, shoulders and torso must be naturally anatomically connected, photographed from ONE eye-level camera at a moderate distance using an 85mm lens. No separate headshot pasted onto a body. Natural neck length, appropriate hoodie neckline. Head facing lens with a calm neutral expression, shoulders relaxed, both hands inside hoodie front pocket.
+
+CLOTHING AND HAIR:
+Plain matte black cotton hoodie, normal relaxed fit, realistic seams, simple front pocket, hood down, slight natural wrinkles, no branding. Hairstyle matches the actual user: thick black hair swept gently up and to the side, neat short sides, natural restrained volume. Avoid an oversized high quiff. Preserve his real hairline.
+
+PHOTOGRAPHIC TREATMENT:
+Authentic unretouched editorial portrait, soft window key with gentle room fill, consistent light direction and shadow strength on face, neck AND clothing. Natural skin texture including subtle imperfections, real fine facial hair, natural eye reflections. Face and clothing must have consistent sharpness and grain. No skin smoothing, no overly sharpened eyes, no waxy skin, no digital beauty filter. Preserve the person's real cheek, nose, jaw, lips and rectangular glasses as seen in the real references. No widening of his face. Natural warm skin color and restrained neutral color grade.
+
+BACKGROUND:
+Plain seamless very light warm-grey / ivory studio background. A real solid studio backdrop, NOT transparent and absolutely NO checkerboard. Subtle background tonal falloff is fine. Keep the subject well separated and the surroundings completely uncluttered. The image should be usable directly as a portrait on a cream portfolio card.
+No text, watermark, logos, vignette, special effects, poster or UI. One photograph.
+
+Generated using built-in ImageGen. Solid warm ivory background; not transparent. Original public/avatar.png remains unchanged.

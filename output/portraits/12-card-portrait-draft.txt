@@ -1,0 +1,15 @@
+Edit the supplied REAL photograph. Create a polished upper-body transparent PNG cutout of this exact man for a portfolio card.
+
+SOURCE PRESERVATION IS CRITICAL: keep the original three-quarter side-facing head angle looking toward image-right, exact expression, actual face shape, eyes, nose, lips, chin, eyebrows, hairstyle, hairline, moustache/light beard, grey rectangular eyeglasses, skin tone and slim build. Do not rotate the face toward camera. Do not replace or reshape his face. This is a careful photographic retouch and background removal of the source, not an invented studio model.
+
+Crop/reframe from slightly above the complete hair to just below the waist, with BOTH shoulders and upper arms fully inside frame and a little transparent padding around the silhouette. Keep the original body stance. The lower crop may end cleanly at the bottom edge for card placement.
+
+Remove the entire venue background, furniture, flowers, picture frames and every non-subject element. Output a REAL transparent alpha background, not white, grey, black or a simulated checkerboard. Clean accurate hair edges, natural fine hair, clean suit edges, no colored halo, no background shadow.
+
+Retouch gently: correct the warm indoor color cast, subtly lift exposure on the face and eyes so the actual features are clear at small card size, reduce distracting glasses glare without removing the lenses or frames, mild photographic sharpening and noise cleanup, natural skin texture and pores. Preserve actual skin tone and facial proportions. No facial slimming, widening, beauty filter, invented details or heavy smoothing.
+
+Keep the original BLACK SUIT JACKET and BLACK OPEN-COLLAR SHIRT, but refine presentation: straighten uneven collar and lapels, tidy distracting creases and puckering, make fabric appear clean matte black with subtle readable folds and tailoring, preserve realistic slim fit and shoulder width. Keep his small chain if naturally visible. No added accessories, sunglasses, tie or logos.
+
+Result: one photorealistic COLOR upper-body portrait cutout with transparent alpha, crisp enough for a portfolio card, natural and recognizably the same person as the original photo. No text, watermark, border, card design, effects or illustration. Aim for high-resolution portrait 3:4 composition.
+
+Created with built-in ImageGen. IMPORTANT: This is an RGB draft with a rendered checkerboard, not a transparent PNG. A second ImageGen background extraction attempt also returned RGB. Background removal is unfinished.

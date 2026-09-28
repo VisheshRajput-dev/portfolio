@@ -103,8 +103,8 @@ export const journey = [
 ];
 
 export const disciplines = [
-  "Web apps",
-  "Mobile — Flutter & React Native",
-  "Backend & APIs",
-  "AI automation",
+  "Web applications",
+  "Mobile applications",
+  "Scalable backends & APIs",
+  "AI — RAG & LLM apps",
 ];

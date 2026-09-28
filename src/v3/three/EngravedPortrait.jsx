@@ -30,6 +30,7 @@ const fragment = /* glsl */ `
   uniform float uAspect;
   uniform vec3 uInk;
   uniform vec3 uPaper;
+  uniform float uPhoto;
 
   float hash(float n) { return fract(sin(n * 12.9898) * 43758.5453); }
 
@@ -75,7 +76,9 @@ const fragment = /* glsl */ `
     vec3 engraved = mix(uPaper, uInk, ink * drawn);
     vec3 photo = vec3(luma(tex.rgb));
     photo = mix(photo, tex.rgb, 0.35);
-    vec3 col = mix(engraved, photo, lens);
+    // Scroll: the photo develops through the plate, line by line from the top.
+    float develop = smoothstep(0.0, 0.1, uPhoto * 1.6 - hash(lineId + 3.0) * 0.2 - (1.0 - vUv.y) * 1.15);
+    vec3 col = mix(engraved, photo, max(lens, develop));
     col = mix(col, uInk, ring);
 
     gl_FragColor = vec4(col, tex.a * smoothstep(0.0, 0.08, uReveal));
@@ -107,6 +110,7 @@ function Plane({ src, state }) {
       uAspect: { value: aspect },
       uInk: { value: hexToVec3("#0e0d0c") },
       uPaper: { value: hexToVec3("#eeeae2") },
+      uPhoto: { value: 0 },
     }),
     [tex, aspect]
   );
@@ -120,6 +124,7 @@ function Plane({ src, state }) {
     if (!u) return;
     u.uTime.value += dt;
     u.uReveal.value = state.current.reveal;
+    u.uPhoto.value = state.current.photo;
     // Line density follows the rendered height so strokes stay ~3.5px apart.
     u.uLines.value = Math.max(70, (size.height * (planeH / viewport.height)) / 3.6);
     u.uMouse.value.lerp(state.current.mouse, 1 - Math.pow(0.0008, dt));
@@ -162,6 +167,7 @@ export default function EngravedPortrait({ src, state, className }) {
 
 export const createPortraitState = () => ({
   reveal: 0,
+  photo: 0,
   lens: 0,
   mouse: new THREE.Vector2(0.5, 0.6),
 });

@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 // Base tokens first so each section's stylesheet can override them.
 import "./v3.css";
-import { getLenis, useSmoothScroll, ScrollTrigger } from "./lib/motion";
+import { getLenis, useSmoothScroll, ScrollTrigger, scrollToTarget } from "./lib/motion";
 import Preloader from "./components/Preloader";
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import Marquee from "./components/Marquee";
+import About from "./components/About";
 import Process from "./components/Process";
 import Work from "./components/Work";
 import Journey from "./components/Journey";
@@ -13,6 +15,7 @@ import Contact from "./components/Contact";
 
 export default function HomeV3() {
   const [ready, setReady] = useState(false);
+  const { state } = useLocation();
 
   useSmoothScroll();
 
@@ -23,6 +26,8 @@ export default function HomeV3() {
       lenis?.start();
       document.documentElement.style.overflow = "";
       ScrollTrigger.refresh();
+      // Coming back from a case study: land on the section it came from.
+      if (state?.to) requestAnimationFrame(() => scrollToTarget(state.to, { immediate: true }));
     } else {
       lenis?.stop();
       document.documentElement.style.overflow = "hidden";
@@ -46,9 +51,10 @@ export default function HomeV3() {
       <main>
         <Hero ready={ready} />
         <Marquee />
-        <Process />
+        <About />
         <Work />
         <Journey />
+        <Process />
         <Contact />
       </main>
       <div className="v3-grain" aria-hidden="true" />

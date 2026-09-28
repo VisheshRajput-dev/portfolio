@@ -1,0 +1,14 @@
+EDIT THE FIRST IMAGE, do not invent a new portrait concept.
+User correction: "Make the face straight. This image doesn't look like me at all. Make it look like me."
+Image 1 is the edit target: black and white man in black knit sweater hands in pockets. The face in this image is WRONG. Do not treat its facial anatomy as a likeness reference.
+Images 2, 3, 4, 5 are real photographs of the actual user and are the ONLY identity source:
+Image 2: frontal outdoor portrait in cream traditional vest.
+Image 3: frontal portrait in black suit against flowers and red drapery.
+Image 4: black suit reflected in mirror.
+Image 5: casual black T-shirt outdoors at blue wall.
+Use the frontal image 3 as the primary guide to actual head/face proportions, corroborating with image 2 and others. Reconstruct the user's actual face faithfully rather than blending with the synthetic target's face. Prioritize identity over idealization: natural facial width and length, eye size/spacing, thick nearly connected eyebrows, nose bridge/tip/nostril proportions, actual lips, cheek fullness, chin shape, hairline, ear shape, light beard distribution and moustache. Keep the user's large rectangular translucent grey glasses with their actual proportions and his real thick black swept-up hair with short sides. Do not enlarge the jaw, lengthen or slim the face, smooth away distinctive features, add a fashion-model face, or turn his hair into curls. Natural skin and facial hair texture.
+REQUIRED POSE CHANGE: head truly straight and front-facing, zero left/right rotation, zero sideways tilt, chin level. Nose aligned to image center, both ears similarly visible, both eyes looking directly into lens, glasses level. Relaxed mouth with neutral expression as in the frontal black suit photograph. Maintain his natural asymmetry rather than making an artificially perfectly symmetrical face.
+PRESERVE IMAGE 1 FROM NECK DOWN as closely as possible: exact black textured crewneck sweater, full-length sleeves, ribbed cuffs and hem, both hands in trouser pockets with thumbs outside, trousers, relaxed stance, slim build, crop, portrait proportions, subject scale, and near-black seamless backdrop. Modify only head/face, the neck connection needed for frontal pose, and small facial-light adjustments.
+Keep the original low-key black-and-white studio look and left-side key light. Add only a small amount of fill on the darker half of the face so BOTH eyes and actual facial proportions remain readable; do not obscure likeness behind black shadow. Natural glasses reflections without hiding eyes. Same realistic photograph finish, no beauty retouch that changes identity, no illustration, no text or watermarks. The result must look like a studio photograph of the real person in images 2-5, not a variation of the wrong face in image 1.
+
+Created using built-in ImageGen with the selected portrait as edit target and four real photographs as identity references.

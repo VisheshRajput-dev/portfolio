@@ -3,10 +3,10 @@ import { gsap, getLenis, prefersReducedMotion } from "../lib/motion";
 import "./Marquee.css";
 
 const items = [
-  "Web apps",
-  "Mobile",
-  "Backend & APIs",
-  "AI automation",
+  "Web applications",
+  "Mobile applications",
+  "Scalable backends & APIs",
+  "AI — RAG & LLM apps",
   "Founding engineer @ PointsFly",
   "Available for projects",
 ];
@@ -51,7 +51,7 @@ export default function Marquee() {
     ));
 
   return (
-    <div className="mq" role="marquee" aria-label={items.join(", ")}>
+    <div className="mq" role="marquee" data-nav="dark" aria-label={items.join(", ")}>
       <div className="mq-track t-mono" ref={track}>
         {row(false)}
         {row(true)}

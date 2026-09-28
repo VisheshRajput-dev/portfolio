@@ -4,9 +4,10 @@ import { person } from "../data";
 import "./Nav.css";
 
 const links = [
+  { label: "About", target: "#about" },
   { label: "Work", target: "#work" },
-  { label: "Process", target: "#process" },
   { label: "Journey", target: "#journey" },
+  { label: "Process", target: "#process" },
   { label: "Contact", target: "#contact" },
 ];
 

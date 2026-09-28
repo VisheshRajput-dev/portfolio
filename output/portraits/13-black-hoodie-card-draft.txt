@@ -1,0 +1,13 @@
+Edit the supplied real photograph into an upper-body portrait asset for a portfolio card.
+The supplied photograph is the ONLY face and identity reference. Preserve the actual man's three-quarter side-view looking toward image-right, exact facial proportions, nose profile, jaw, expression, dark rectangular eyeglasses, thick swept-up short black hair, moustache and light beard. Do not turn his head forward, invent a model face, widen or slim his cheeks, or change apparent age. Retouch facial clarity gently with readable eyes, reduced distracting glare, natural texture. Preserve the real person's likeness above all else.
+
+Requested clothing change: replace the suit, formal black shirt and chain with a premium plain BLACK PULLOVER HOODIE, hood DOWN resting naturally behind neck, relaxed normal fit on his slim body, clean slightly structured cotton fleece, ribbed cuffs and waistband, front kangaroo pocket, no logo, no print, no zipper, no visible jewelry. Minimal or no drawstrings.
+
+Requested hand/arm change: BOTH HANDS casually tucked inside the hoodie kangaroo pocket, forearms angling inward, elbows relaxed close to the body, shoulders natural. Plausible anatomy and pocket openings, avoid crossed arms or hands in trouser pockets.
+
+Requested finish: BLACK AND WHITE photographic portrait, flattering soft directional studio-style lighting while preserving facial details, rich black hoodie with folds and fabric detail, natural skin tones converted to grayscale, no harsh split lighting obscuring his face. Keep original side-facing gaze and calm expression.
+Composition: complete head and hair, shoulders and elbows fully visible; crop just below hoodie waistband, enough transparent top and side padding, centered vertical 3:4 upper-body image. No legs needed.
+
+Remove all background, decorations, furniture, flowers. Output actual transparent-background PNG with alpha channel, empty non-subject pixels; do not draw or render a checkerboard. Clean hair/clothing edges. No surrounding scene, no background shadow, no text, watermark, card, graphic or illustration. One realistic portrait cutout.
+
+Generated with built-in ImageGen. Check alpha before use; transparency was requested but the preview includes checkerboard.

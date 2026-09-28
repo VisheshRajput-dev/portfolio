@@ -47,7 +47,7 @@ export default function Contact() {
   return (
     <section className="ct" id="contact" ref={root} data-nav="dark" aria-labelledby="ct-title">
       <header className="ct-head">
-        <p className="t-mono is-mute">( 05 — Contact )</p>
+        <p className="t-mono is-mute">( 06 — Contact )</p>
         <p className="t-mono is-mute">Got an idea?</p>
       </header>
 

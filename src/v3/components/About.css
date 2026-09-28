@@ -1,0 +1,430 @@
+/* About — how I think, dealt as a deck -------------------------------- */
+
+.v3 .ab {
+  --ch: clamp(250px, 46vh, 470px);
+  --cw: calc(var(--ch) * 0.7);
+  --R: calc(var(--ch) * 1.56);
+  --deck-top: 43%;
+  position: relative;
+  height: max(100svh, 780px);
+  overflow: hidden;
+  background: #e7e4dd;
+  color: var(--ink);
+}
+
+/* A soft light falling from the top. */
+.v3 .ab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(90% 60% at 50% 0%, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 70%);
+}
+
+.v3 .ab-head {
+  position: absolute;
+  z-index: 40;
+  top: calc(var(--gutter) + 64px);
+  left: var(--gutter);
+  right: var(--gutter);
+  display: flex;
+  justify-content: space-between;
+}
+
+.v3 .ab-head p { margin: 0; }
+
+/* The note in front, set big. Words rise into place; nothing floats. */
+.v3 .ab-copy {
+  position: absolute;
+  z-index: 40;
+  left: var(--gutter);
+  top: calc(var(--gutter) + 108px);
+  width: min(64vw, 1000px);
+  pointer-events: none;
+}
+
+.v3 .ab-title {
+  margin: 0;
+  font-size: clamp(44px, 6.2vw, 108px);
+  line-height: 0.88;
+}
+
+.v3 .ab-w {
+  display: inline-block;
+  overflow: hidden;
+  padding: 0.06em 0 0.1em;
+  margin: -0.06em 0 -0.1em;
+  vertical-align: top;
+}
+
+.v3 .ab-w > * {
+  display: inline-block;
+  animation: ab-rise 0.9s var(--ease-out) both;
+  animation-delay: calc(var(--i) * 0.05s);
+}
+
+.v3 .ab-title em {
+  color: var(--red);
+  font-size: 1.12em;
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 0.7;
+}
+
+@keyframes ab-rise {
+  from { transform: translateY(105%); }
+}
+
+.v3 .ab-right {
+  position: absolute;
+  z-index: 40;
+  top: calc(var(--gutter) + 118px);
+  right: var(--gutter);
+  width: min(330px, 25vw);
+}
+
+.v3 .ab-side { animation: ab-in 0.8s var(--ease-out) both; }
+
+@keyframes ab-in {
+  from { opacity: 0; transform: translateY(10px); }
+}
+
+.v3 .ab-body {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.v3 .ab-cta {
+  margin-top: 14px;
+  padding: 10px 16px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.4s var(--ease-out), color 0.4s var(--ease-out);
+}
+
+.v3 .ab-cta:hover { background: var(--ink); color: var(--ivory); }
+
+.v3 .ab-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.v3 .ab-btn,
+.v3 .ab-sound {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.35);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.4s var(--ease-out), border-color 0.4s var(--ease-out), color 0.4s var(--ease-out);
+}
+
+.v3 .ab-btn { width: 38px; }
+
+.v3 .ab-btn:hover,
+.v3 .ab-sound:hover { background: var(--ink); border-color: var(--ink); color: var(--ivory); }
+
+.v3 .ab-sound {
+  gap: 10px;
+  padding: 0 14px;
+  margin-left: 6px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.v3 .ab-eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 10px;
+}
+
+.v3 .ab-eq i {
+  width: 2px;
+  height: 3px;
+  background: currentColor;
+}
+
+.v3 .ab-sound.is-on .ab-eq i { animation: ab-eq 0.9s ease-in-out infinite alternate; }
+.v3 .ab-sound.is-on .ab-eq i:nth-child(2) { animation-delay: -0.3s; }
+.v3 .ab-sound.is-on .ab-eq i:nth-child(3) { animation-delay: -0.6s; }
+.v3 .ab-sound.is-on .ab-eq i:nth-child(4) { animation-delay: -0.15s; }
+
+@keyframes ab-eq {
+  from { height: 2px; }
+  to { height: 10px; }
+}
+
+/* The wheel ------------------------------------------------------------ */
+
+.v3 .ab-wheel {
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  top: calc(var(--deck-top) + var(--ch) / 2);
+  width: calc(var(--R) * 2);
+  height: calc(var(--R) * 2);
+  margin-left: calc(var(--R) * -1);
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.v3 .ab-wheel.is-drag { cursor: grabbing; }
+
+.v3 .ab-slot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  will-change: transform;
+}
+
+.v3 .ab-card {
+  position: absolute;
+  left: calc(var(--cw) / -2);
+  top: calc(var(--R) * -1 - var(--ch) / 2);
+  width: var(--cw);
+  height: var(--ch);
+  cursor: pointer;
+}
+
+.v3 .ab-wheel.is-drag .ab-card { cursor: grabbing; }
+
+/* Card stock ----------------------------------------------------------- */
+
+.v3 .ab-face {
+  --pad: calc(var(--cw) * 0.065);
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: calc(var(--cw) * 0.07);
+  background-color: var(--paper);
+  background-image: var(--grain, none);
+  background-size: 160px;
+  color: var(--ink);
+  font-family: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  font-stretch: 125%;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 0 0 1px rgba(14, 13, 12, 0.06),
+    0 1px 1px rgba(14, 13, 12, 0.08),
+    0 12px 22px -12px rgba(14, 13, 12, 0.35),
+    0 40px 70px -32px rgba(14, 13, 12, 0.55);
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px));
+  transition: transform 0.7s var(--ease-out), box-shadow 0.7s var(--ease-out);
+}
+
+.v3 .ab-face.is-tilt { transition: transform 0.18s ease-out, box-shadow 0.7s var(--ease-out); }
+
+.v3 .ab-slot.is-front .ab-face:hover {
+  --lift: -14px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 0 0 1px rgba(14, 13, 12, 0.06),
+    0 1px 1px rgba(14, 13, 12, 0.08),
+    0 18px 30px -14px rgba(14, 13, 12, 0.4),
+    0 60px 90px -36px rgba(14, 13, 12, 0.6);
+}
+
+.v3 .ab-face.ab-ink { background-color: #121110; color: var(--ivory); }
+.v3 .ab-face.ab-red { background-color: #c9352a; color: var(--ink); }
+.v3 .ab-face.ab-hello {
+  color: var(--red);
+  box-shadow:
+    inset 0 0 0 1.5px var(--red),
+    0 12px 22px -12px rgba(14, 13, 12, 0.35),
+    0 40px 70px -32px rgba(14, 13, 12, 0.55);
+}
+
+/* A fine inner frame with corner ticks, like a printed card. */
+.v3 .ab-frame {
+  position: absolute;
+  inset: calc(var(--pad) * 0.55);
+  border: 1px solid currentColor;
+  border-radius: calc(var(--cw) * 0.045);
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+.v3 .ab-tag {
+  position: absolute;
+  z-index: 2;
+  font-family: 'JetBrains Mono', monospace;
+  font-stretch: normal;
+  font-weight: 500;
+  font-size: clamp(7.5px, calc(var(--cw) * 0.036), 9.5px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.v3 .ab-tl { top: calc(var(--pad) * 1.25); left: calc(var(--pad) * 1.25); }
+.v3 .ab-tr {
+  top: calc(var(--pad) * 1.1);
+  right: calc(var(--pad) * 1.25);
+  font-family: 'Archivo', sans-serif;
+  font-stretch: 125%;
+  font-weight: 900;
+  font-size: clamp(9px, calc(var(--cw) * 0.05), 13px);
+  letter-spacing: 0;
+}
+
+.v3 .ab-tr sup { font-size: 0.5em; margin-left: 1px; }
+
+.v3 .ab-art {
+  position: absolute;
+  left: 10%;
+  top: 11%;
+  width: 80%;
+  aspect-ratio: 1;
+  pointer-events: none;
+}
+
+.v3 .ab-name {
+  position: absolute;
+  z-index: 2;
+  left: calc(var(--pad) * 1.25);
+  right: calc(var(--pad) * 1.25);
+  bottom: calc(var(--pad) * 2.7);
+  font-size: calc(var(--cw) * 0.088);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+}
+
+.v3 .ab-name em {
+  color: var(--red);
+  font-size: 1.18em;
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 0.7;
+}
+
+.v3 .ab-face.ab-red .ab-name em { color: var(--ivory); }
+
+.v3 .ab-foot {
+  position: absolute;
+  z-index: 2;
+  left: calc(var(--pad) * 1.25);
+  right: calc(var(--pad) * 1.25);
+  bottom: calc(var(--pad) * 1.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.v3 .ab-foot .ab-tag {
+  position: static;
+  white-space: nowrap;
+  opacity: 0.6;
+}
+
+.v3 .ab-code { opacity: 0.75; }
+
+/* Foil: a sheen sweeps across as a card arrives in front, and the card
+   catches the light under the cursor. */
+.v3 .ab-foil {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    112deg,
+    transparent 30%,
+    rgba(255, 244, 232, 0.5) 45%,
+    rgba(255, 190, 170, 0.28) 50%,
+    rgba(255, 255, 255, 0.4) 55%,
+    transparent 70%
+  );
+  background-size: 300% 100%;
+  background-position: 110% 0;
+  mix-blend-mode: soft-light;
+}
+
+.v3 .ab-slot.is-front .ab-foil { animation: ab-sweep 1.8s var(--ease-in-out) 0.5s both; }
+
+@keyframes ab-sweep {
+  from { background-position: 110% 0; }
+  to { background-position: -10% 0; }
+}
+
+.v3 .ab-foil::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 30%), rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 45%);
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-out);
+}
+
+.v3 .ab-face.is-tilt .ab-foil::after { opacity: 1; }
+
+/* The disc the cards fan around. */
+.v3 .ab-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc((var(--R) - var(--ch) / 2) * 1.96);
+  height: calc((var(--R) - var(--ch) / 2) * 1.96);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.v3 .ab-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 30%, #f3f1ec 0%, #eceae4 45%, #e3e0d9 100%);
+  box-shadow: 0 -10px 40px rgba(14, 13, 12, 0.08), inset 0 2px 0 rgba(255, 255, 255, 0.7);
+}
+
+.v3 .ab-ring svg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: ab-spin 70s linear infinite reverse;
+}
+
+@keyframes ab-spin { to { transform: rotate(360deg); } }
+
+.v3 .ab-ring-text {
+  font-family: 'Archivo', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 4px;
+  fill: var(--ink);
+  fill-opacity: 0.45;
+}
+
+@media (max-width: 760px) {
+  .v3 .ab {
+    --ch: clamp(200px, 31vh, 280px);
+    --deck-top: 55%;
+    height: max(100svh, 740px);
+  }
+  .v3 .ab-copy { top: calc(var(--gutter) + 96px); width: auto; right: var(--gutter); }
+  .v3 .ab-title { font-size: 11vw; }
+  .v3 .ab-right { top: calc(var(--gutter) + 104px + 22vw); left: var(--gutter); width: auto; }
+  .v3 .ab-body { font-size: 14px; }
+  .v3 .ab-controls { margin-top: 14px; }
+}

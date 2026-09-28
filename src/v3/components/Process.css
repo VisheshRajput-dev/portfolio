@@ -1,154 +1,126 @@
+/* Process — the desk setup ------------------------------------------ */
+
 .v3 .proc {
   position: relative;
-  height: 520vh;
-  background: var(--ivory);
-  border-top: 1px solid var(--rule);
+  height: 820vh;
+  background: #0c0b0a;
+  color: var(--ivory);
 }
 
-.v3 .proc-stick {
+.v3 .desk-stage {
   position: sticky;
   top: 0;
   height: 100svh;
   overflow: hidden;
 }
 
-.v3 .proc-canvas {
+.v3 .desk-canvas {
   position: absolute;
   inset: 0;
 }
 
-/* Paper fades over the scene where the copy and the steps sit. */
-.v3 .proc-stick::after {
+/* A soft vignette, like a lens, keeps the eye on the desk. */
+.v3 .desk-stage::after {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 3;
   pointer-events: none;
   background:
-    linear-gradient(90deg, var(--ivory) 0%, rgba(238, 234, 226, 0.92) 24%, rgba(238, 234, 226, 0) 46%),
-    linear-gradient(0deg, var(--ivory) 0%, rgba(238, 234, 226, 0.85) 70px, rgba(238, 234, 226, 0) 170px);
+    radial-gradient(120% 90% at 50% 55%, rgba(12, 11, 10, 0) 55%, rgba(12, 11, 10, 0.55) 100%),
+    linear-gradient(0deg, rgba(12, 11, 10, 0.85) 0, rgba(12, 11, 10, 0) 120px);
 }
 
-.v3 .proc-head,
-.v3 .proc-copy,
-.v3 .proc-foot {
-  z-index: 2;
-}
-
-.v3 .proc-head {
+.v3 .desk-head {
   position: absolute;
-  top: 96px;
+  z-index: 5;
+  top: calc(var(--gutter) + 64px);
   left: var(--gutter);
   right: var(--gutter);
   display: flex;
   justify-content: space-between;
+}
+
+.v3 .desk-head p {
+  margin: 0;
+}
+
+.v3 .desk-to {
+  font-size: 1.35em;
+  text-transform: none;
+  padding: 0 0.1em;
+}
+
+.v3 .desk-title {
+  position: absolute;
+  z-index: 5;
+  left: var(--gutter);
+  top: calc(var(--gutter) + 110px);
+  margin: 0;
+  font-size: clamp(40px, 5.4vw, 96px);
   pointer-events: none;
 }
 
-.v3 .proc-head p { margin: 0; }
-
-.v3 .proc-to {
-  font-size: 16px;
+.v3 .desk-title .t-serif {
+  font-size: 1.1em;
   text-transform: none;
   letter-spacing: 0;
 }
 
-.v3 .proc-copy {
+.v3 .desk-cap {
   position: absolute;
-  left: var(--gutter);
-  top: 50%;
-  transform: translateY(-50%);
-  width: min(460px, 36vw);
-  pointer-events: none;
-}
-
-.v3 .proc-ch {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  transform: translateY(-50%);
-}
-
-.v3 .proc-ch > * {
-  margin: 0;
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.5s var(--ease-out), transform 0.9s var(--ease-out);
-}
-
-.v3 .proc-ch.is-on > * {
-  opacity: 1;
-  transform: none;
-}
-
-.v3 .proc-ch.is-on > :nth-child(2) { transition-delay: 0.05s; }
-.v3 .proc-ch.is-on > :nth-child(3) { transition-delay: 0.12s; }
-.v3 .proc-ch.is-on > :nth-child(4) { transition-delay: 0.18s; }
-
-.v3 .proc-word {
-  font-size: clamp(64px, 8.4vw, 136px);
-  margin: 14px 0 18px !important;
-}
-
-.v3 .proc-line {
-  font-size: clamp(26px, 2.4vw, 38px);
-  line-height: 1.1;
-  margin-bottom: 18px !important;
-}
-
-.v3 .proc-body {
-  max-width: 360px;
-  color: var(--mute);
-  text-transform: none;
-  letter-spacing: 0.02em;
-  font-size: 12.5px;
-  line-height: 1.7;
-}
-
-.v3 .proc-foot {
-  position: absolute;
+  z-index: 5;
   left: var(--gutter);
   right: var(--gutter);
-  bottom: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  pointer-events: none;
-}
-
-.v3 .proc-steps {
+  bottom: calc(var(--gutter) - 6px);
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  color: var(--mute);
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 28px;
 }
 
-.v3 .proc-steps .is-done { color: var(--ink); }
+.v3 .desk-count {
+  margin: 0;
+  font-size: 13px;
+}
 
-.v3 .proc-bar {
+.v3 .desk-line {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  font-size: 14px;
+  animation: desk-in 0.7s var(--ease-out) both;
+}
+
+@keyframes desk-in {
+  from { opacity: 0; transform: translateY(10px); }
+}
+
+.v3 .desk-name {
+  color: var(--red);
+  flex: none;
+}
+
+.v3 .desk-bar {
+  width: 160px;
   height: 1px;
-  background: var(--rule);
+  background: var(--rule-dark);
 }
 
-.v3 .proc-bar i {
+.v3 .desk-bar i {
   display: block;
   height: 100%;
-  background: var(--ink);
+  background: var(--ivory);
   transform: scaleX(0);
   transform-origin: left;
 }
 
-@media (max-width: 800px) {
-  .v3 .proc-stick::after {
-    background: linear-gradient(0deg, var(--ivory) 0%, rgba(238, 234, 226, 0.95) 42%, rgba(238, 234, 226, 0) 62%);
-  }
-  .v3 .proc-copy {
-    top: auto;
-    bottom: 96px;
-    transform: none;
-    width: auto;
-    right: var(--gutter);
-  }
-  .v3 .proc-ch { top: auto; bottom: 0; transform: none; }
-  .v3 .proc-word { font-size: 17vw; }
-  .v3 .proc-canvas { bottom: 30%; }
+@media (max-width: 760px) {
+  .v3 .proc { height: 540vh; }
+  .v3 .desk-title { font-size: 11vw; top: calc(var(--gutter) + 100px); }
+  .v3 .desk-cap { grid-template-columns: auto 1fr; row-gap: 10px; }
+  .v3 .desk-line { grid-column: 1 / -1; grid-row: 2; flex-direction: column; gap: 6px; font-size: 13px; }
+  .v3 .desk-bar { justify-self: end; width: 100px; }
 }
+

@@ -1,0 +1,10 @@
+Use case: photorealistic-natural
+Asset type: premium editorial portrait for the central hero of a warm ivory, black and red minimalist personal developer portfolio.
+Input images: All three supplied images are identity references of the same young man. Use them to preserve his real recognizable identity, especially the face and glasses; do not copy their backgrounds or clothing.
+Primary request: Produce one beautiful, flattering but truthful new studio portrait of this exact young man. Dress him in a matte charcoal cropped Harrington jacket with a neat low collar, unzipped over an ivory crewneck tee, and black trousers.
+Scene/backdrop: plain warm ivory seamless studio background.
+Subject: Preserve the exact recognizable young man's facial proportions, gray translucent rectangular glasses, thick naturally textured black hair, moustache and light beard, warm brown skin and slim build. No face reshaping or skin whitening. Carefully reconcile the multiple face angles of his references.
+Composition/framing: Vertical 2:3 photograph, standing from complete head to mid thigh. Centered compact silhouette, both hands comfortably inside trouser pockets, torso subtly angled about 10 degrees while face looks at camera. Relaxed shoulders, slight friendly closed-mouth smile, natural confident posture. Full hair, shoulders and elbows visible with at least 8 percent top and side margin. Straight eye-level camera, natural flattering portrait lens perspective.
+Lighting/mood: premium natural studio photography, broad soft directional key and gentle fill preserving eye detail through glasses, no intense shadows, clean subtle separation from backdrop.
+Materials/textures: natural skin pores, realistic hair, premium matte cotton jacket, understated natural fabric folds, polished but not airbrushed.
+Constraints: One single portrait, no collage, no text, no typography, no logo, no watermark, no UI, no props, no guitar, no furniture, no halftone, no engraving, no cutout mask. Identity fidelity is the highest priority. Output the clean color photograph for later masking in code.

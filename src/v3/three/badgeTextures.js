@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 /**
  * Printed faces for the ID badge and its strap, drawn on 2D canvases so the
- * card carries the same engraving language as the rest of the site.
+ * card matches the rest of the site.
  */
 
 const INK = "#0e0d0c";
@@ -21,36 +21,24 @@ const loadImage = (src) =>
     img.src = src;
   });
 
-/** Re-draw a photo as horizontal engraved lines whose weight follows tone. */
-function engraveInto(ctx, img, x, y, w, h) {
-  const tmp = document.createElement("canvas");
-  tmp.width = w;
-  tmp.height = h;
-  const t = tmp.getContext("2d");
+/** The photo itself, cover-fitted and anchored to the top to keep the face,
+ * toned like the hero portrait when it develops: mostly mono, a little colour. */
+function photoInto(ctx, img, x, y, w, h) {
   const scale = Math.max(w / img.width, h / img.height);
   const dw = img.width * scale;
   const dh = img.height * scale;
-  t.drawImage(img, (w - dw) / 2, h - dh, dw, dh);
-  const { data } = t.getImageData(0, 0, w, h);
-
-  const gap = 6;
   ctx.save();
   ctx.beginPath();
   ctx.rect(x, y, w, h);
   ctx.clip();
-  ctx.fillStyle = IVORY;
-  for (let row = 0; row < h; row += gap) {
-    for (let col = 0; col < w; col += 2) {
-      const i = ((row + (gap >> 1)) * w + col) * 4;
-      const a = data[i + 3] / 255;
-      if (a < 0.1) continue;
-      const lum = (0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]) / 255;
-      const tone = Math.pow(lum, 0.72);
-      // Ivory lines on the black card: brighter tone, thicker line.
-      const thick = Math.max(0, Math.min(gap - 0.5, tone * gap * 1.15)) * a;
-      if (thick > 0.3) ctx.fillRect(x + col, y + row + (gap - thick) / 2, 2, thick);
-    }
-  }
+  const glow = ctx.createRadialGradient(x + w / 2, y + h * 0.45, 0, x + w / 2, y + h * 0.45, w * 0.7);
+  glow.addColorStop(0, "#2a2724");
+  glow.addColorStop(1, "#171615");
+  ctx.fillStyle = glow;
+  ctx.fillRect(x, y, w, h);
+  ctx.filter = "grayscale(0.65) contrast(1.06)";
+  ctx.drawImage(img, x + (w - dw) / 2, y, dw, dh);
+  ctx.filter = "none";
   ctx.restore();
 }
 
@@ -93,7 +81,7 @@ export async function createCardTextures({ portrait, name, role, company }) {
 
   f.fillStyle = "#171615";
   f.fillRect(56, 146, W - 112, 520);
-  engraveInto(f, img, 56, 146, W - 112, 520);
+  photoInto(f, img, 56, 146, W - 112, 520);
 
   f.fillStyle = IVORY;
   f.font = "900 92px 'Archivo', sans-serif";

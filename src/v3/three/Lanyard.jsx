@@ -7,6 +7,15 @@ import { createCardTextures, createStrapTexture } from "./badgeTextures";
 
 extend({ MeshLineGeometry, MeshLineMaterial });
 
+// meshline finds a strap end by comparing projected points exactly; rounding
+// makes that miss, so the end vertex took a random direction and the strap's
+// tip twisted into a point. Compare with a tolerance instead.
+const fixStrapEnds = (shader) => {
+  shader.vertexShader = shader.vertexShader
+    .replace("if (nextP == currentP)", "if (distance(nextP, currentP) < 1e-5)")
+    .replace("else if (prevP == currentP)", "else if (distance(prevP, currentP) < 1e-5)");
+};
+
 const CARD_W = 1.6;
 const CARD_H = 2.25;
 
@@ -45,14 +54,21 @@ function Badge({ textures, strap, paused }) {
   const [hovered, hover] = useState(false);
   const { width, height } = useThree((s) => s.size);
   const geo = useMemo(cardFace, []);
-  const clip = useMemo(() => new THREE.BoxGeometry(0.34, 0.14, 0.06), []);
+  const clip = useMemo(() => new THREE.BoxGeometry(0.42, 0.18, 0.06), []);
 
   const v = useMemo(
-    () => ({ vec: new THREE.Vector3(), ang: new THREE.Vector3(), rot: new THREE.Vector3(), dir: new THREE.Vector3() }),
+    () => ({
+      vec: new THREE.Vector3(),
+      ang: new THREE.Vector3(),
+      rot: new THREE.Vector3(),
+      dir: new THREE.Vector3(),
+      clip: new THREE.Vector3(),
+      quat: new THREE.Quaternion(),
+    }),
     []
   );
   const [curve] = useState(
-    () => new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()])
+    () => new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()])
   );
   curve.curveType = "chordal";
 
@@ -88,11 +104,18 @@ function Badge({ textures, strap, paused }) {
       const d = Math.max(0.1, Math.min(1, r.current.lerped.distanceTo(r.current.translation())));
       r.current.lerped.lerp(r.current.translation(), delta * (10 + d * 40));
     });
-    curve.points[0].copy(j3.current.translation());
-    curve.points[1].copy(j2.current.lerped);
-    curve.points[2].copy(j1.current.lerped);
-    curve.points[3].copy(fixed.current.translation());
-    band.current.geometry.setPoints(curve.getPoints(32));
+    // The strap ends inside the clip (which is drawn over it), following the
+    // card's tilt, so its end never shows as a folded, pointed tip.
+    const q = card.current.rotation();
+    v.clip.set(0, CARD_H / 2 + 0.02, 0).applyQuaternion(v.quat.set(q.x, q.y, q.z, q.w)).add(card.current.translation());
+    curve.points[0].copy(v.clip);
+    curve.points[1].copy(j3.current.translation());
+    curve.points[2].copy(j2.current.lerped);
+    curve.points[3].copy(j1.current.lerped);
+    curve.points[4].copy(fixed.current.translation());
+    // Drop points that bunch up; a near-zero step makes a spike in the band.
+    const pts = curve.getPoints(40).filter((p, i, a) => i === 0 || p.distanceToSquared(a[i - 1]) > 1e-5);
+    band.current.geometry.setPoints(pts);
     // Keep it facing forward: damp spin around the vertical axis.
     ang.copy(card.current.angvel());
     rot.copy(card.current.rotation());
@@ -135,13 +158,13 @@ function Badge({ textures, strap, paused }) {
             <mesh geometry={geo.face} position={[0, 0, -0.011]} rotation={[0, Math.PI, 0]}>
               <meshStandardMaterial map={textures.back} roughness={0.7} />
             </mesh>
-            <mesh geometry={clip} position={[0, CARD_H / 2 + 0.02, 0]}>
-              <meshStandardMaterial color="#b9b4aa" metalness={0.9} roughness={0.28} />
+            <mesh geometry={clip} position={[0, CARD_H / 2 + 0.02, 0]} renderOrder={2}>
+              <meshStandardMaterial color="#b9b4aa" metalness={0.9} roughness={0.28} depthTest={false} />
             </mesh>
           </group>
         </RigidBody>
       </group>
-      <mesh ref={band}>
+      <mesh ref={band} renderOrder={1}>
         <meshLineGeometry />
         <meshLineMaterial
           color="white"
@@ -151,6 +174,7 @@ function Badge({ textures, strap, paused }) {
           map={strap}
           repeat={[-4, 1]}
           lineWidth={0.95}
+          onBeforeCompile={fixStrapEnds}
         />
       </mesh>
     </>
