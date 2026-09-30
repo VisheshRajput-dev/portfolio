@@ -230,6 +230,36 @@
   transform: scale(1);
 }
 
+/* Apps without a recording: their cover, with the name set over a red glow
+   in case the image isn't there yet. */
+.v3 .work-card-cover {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: radial-gradient(90% 80% at 50% 110%, rgba(210, 55, 44, 0.55), rgba(21, 21, 21, 0) 70%), #151515;
+  opacity: 0;
+  transform: scale(1.12);
+  transition: opacity 0.4s var(--ease-out), transform 1.2s var(--ease-out);
+}
+
+.v3 .work-card-cover.is-on { opacity: 1; transform: scale(1); }
+
+.v3 .work-card-cover span {
+  color: var(--ivory);
+  font-size: 44px;
+}
+
+.v3 .work-card-cover img {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .v3 .work-card-tag {
   position: absolute;
   left: 12px;

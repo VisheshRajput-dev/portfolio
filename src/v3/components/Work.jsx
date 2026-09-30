@@ -101,9 +101,12 @@ export default function Work() {
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17 17 7" /><path d="M8 7h9v9" /></svg>
               </span>
             </Link>
-            {touch && (
-              <video className="work-inline" src={p.video} muted loop playsInline autoPlay preload="metadata" />
-            )}
+            {touch &&
+              (p.video ? (
+                <video className="work-inline" src={p.video} muted loop playsInline autoPlay preload="metadata" />
+              ) : (
+                <img className="work-inline" src={p.cover} alt="" loading="lazy" onError={(e) => (e.currentTarget.style.display = "none")} />
+              ))}
             <p className="t-mono work-line">{p.line}</p>
           </li>
         ))}
@@ -119,18 +122,25 @@ export default function Work() {
       {!touch && (
         <div className={`work-card ${hovered >= 0 ? "is-on" : ""}`} ref={card} aria-hidden="true">
           <div className="work-card-inner">
-            {projects.map((p, i) => (
-              <video
-                key={p.id}
-                ref={(el) => (videos.current[i] = el)}
-                className={hovered === i ? "is-on" : ""}
-                src={p.video}
-                muted
-                loop
-                playsInline
-                preload="none"
-              />
-            ))}
+            {projects.map((p, i) =>
+              p.video ? (
+                <video
+                  key={p.id}
+                  ref={(el) => (videos.current[i] = el)}
+                  className={hovered === i ? "is-on" : ""}
+                  src={p.video}
+                  muted
+                  loop
+                  playsInline
+                  preload="none"
+                />
+              ) : (
+                <div key={p.id} className={`work-card-cover ${hovered === i ? "is-on" : ""}`}>
+                  <img src={p.cover} alt="" loading="lazy" onError={(e) => (e.currentTarget.style.display = "none")} />
+                  <span className="t-display">{p.title}</span>
+                </div>
+              )
+            )}
             <span className="t-mono work-card-tag">{hovered >= 0 ? projects[hovered].title : ""} — view case study</span>
           </div>
         </div>

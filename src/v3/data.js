@@ -21,8 +21,26 @@ export const socials = [
   { label: "Instagram", href: "https://www.instagram.com/vishesh_rajput.dev/" },
 ];
 
-// ids match the existing /project/:id detail route
+// ids match the /project/:id route. Apps without a screen recording show
+// their cover image instead.
 export const projects = [
+  {
+    id: 5,
+    title: "PointsFly",
+    kind: "Web + mobile + AI",
+    line: "India's first AI-native rewards app. I build the web app, the mobile app and AIRA, its rewards agent.",
+    stack: ["Next.js", "Node.js", "Express", "MongoDB", "AWS", "Clerk"],
+    cover: "/work/pointsfly/cover.jpg",
+  },
+  {
+    id: 6,
+    title: "DoMore",
+    kind: "Mobile app + web",
+    line: "A focus app and app blocker, live on Android and iOS. I engineered it end to end.",
+    stack: ["Android", "iOS", "Web"],
+    cover: "/work/domore/web-1.jpg",
+    live: "https://domoreapp.in/",
+  },
   {
     id: 1,
     title: "RealDesk",

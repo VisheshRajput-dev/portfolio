@@ -2,195 +2,193 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "../v3.css";
 import { gsap, ScrollTrigger, getLenis, prefersReducedMotion, splitChars, useSmoothScroll } from "../lib/motion";
+import { attachStepSnap } from "../lib/stepSnap";
 import { cases, caseById } from "../cases";
 import { person, socials } from "../data";
 import SEO from "../../components/SEO";
 import "./CaseStudy.css";
 
 /**
- * A project, told as an editorial case study: the name set big, the live
- * product playing in a browser frame, what it does, the screens on a
- * horizontal strip, the hard parts, what came of it, and the next case.
+ * A project on a dark stage. The device (a phone for apps, a browser for
+ * the web) holds centre stage while you scroll; each step is a chapter:
+ * the screen wipes to the next one, the device turns, and the caption
+ * beside it changes. Then the hard parts, and the next case.
  */
 
 const pad = (n) => String(n).padStart(2, "0");
-const domain = (url) => url?.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+// How the device sits for each chapter: it turns a little every step.
+const POSES = [
+  [-16, 6],
+  [12, 4],
+  [-8, -3],
+  [16, 5],
+  [-13, -2],
+  [7, 6],
+  [-4, 2],
+];
 
 const Arrow = ({ d = "ne" }) => (
   <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    {d === "ne" && (
-      <>
-        <path d="M7 17 17 7" />
-        <path d="M8 7h9v9" />
-      </>
-    )}
-    {d === "w" && (
-      <>
-        <path d="M19 12H5" />
-        <path d="m11 6-6 6 6 6" />
-      </>
-    )}
-    {d === "e" && (
-      <>
-        <path d="M5 12h14" />
-        <path d="m13 6 6 6-6 6" />
-      </>
-    )}
+    {d === "ne" && <path d="M7 17 17 7M8 7h9v9" />}
+    {d === "w" && <path d="M19 12H5m6-6-6 6 6 6" />}
+    {d === "e" && <path d="M5 12h14m-6-6 6 6-6 6" />}
+    {d === "s" && <path d="M12 5v14m-6-6 6 6 6-6" />}
   </svg>
 );
 
-function Browser({ url, children, className = "" }) {
-  return (
-    <div className={`cs-browser ${className}`}>
-      <div className="cs-browser-bar">
-        <span className="cs-dots" aria-hidden="true">
-          <i />
-          <i />
-          <i />
-        </span>
-        <span className="t-mono cs-url">{url}</span>
-        <span className="cs-dots cs-dots-ghost" aria-hidden="true" />
+/** One screen. Until its file exists, a placeholder in the app's voice. */
+function Screen({ chapter, name, on, videoRef }) {
+  const [missing, setMissing] = useState(false);
+  const cls = `cs-screen ${on ? "is-on" : ""}`;
+  if (chapter.video) {
+    return (
+      <div className={cls}>
+        <div className="cs-crop">
+          <video ref={videoRef} src={chapter.video} poster={chapter.poster} muted loop playsInline preload="metadata" />
+        </div>
       </div>
-      <div className="cs-browser-body">{children}</div>
+    );
+  }
+  if (missing || !chapter.src) {
+    return (
+      <div className={`${cls} cs-ph`}>
+        <span className="t-mono">{name}</span>
+        <strong className="t-display">{chapter.title}</strong>
+        <span className="t-mono cs-ph-note">Screen coming soon</span>
+      </div>
+    );
+  }
+  return (
+    <div className={cls}>
+      <img src={chapter.src} alt={`${name}: ${chapter.title}`} onError={() => setMissing(true)} draggable="false" />
     </div>
   );
 }
 
 function Case({ c }) {
   const root = useRef(null);
+  const stage = useRef(null);
   const video = useRef(null);
+  const trigger = useRef(null);
   const navigate = useNavigate();
+  const [active, setActive] = useState(0);
   const index = cases.indexOf(c);
   const next = cases[(index + 1) % cases.length];
-  const [playing, setPlaying] = useState(false);
+  const n = c.chapters.length;
+  const ch = c.chapters[active];
+  const kinds = [...new Set(c.chapters.map((x) => x.device))];
+  const [ry, rx] = POSES[active % POSES.length];
 
-  // The recording only plays while it's on screen.
-  useEffect(() => {
-    const v = video.current;
-    if (!v) return undefined;
-    const io = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
-          v.preload = "auto";
-          v.play()
-            .then(() => setPlaying(true))
-            .catch(() => {});
-        } else {
-          v.pause();
-          setPlaying(false);
-        }
-      },
-      { threshold: 0.2 }
-    );
-    io.observe(v);
-    return () => io.disconnect();
-  }, []);
+  // Scroll drives the chapter; each flick finishes one.
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      trigger.current = ScrollTrigger.create({
+        trigger: ".cs-stage",
+        start: "top top",
+        end: "bottom bottom",
+        onUpdate: (self) => {
+          const k = Math.round(self.progress * (n - 1));
+          setActive((a) => (a === k ? a : k));
+          gsap.set(".cs-prog i", { scaleX: self.progress });
+        },
+      });
+    }, root);
+    const stops = c.chapters.map((_, i) => i / (n - 1));
+    const unsnap = n > 1 ? attachStepSnap(() => trigger.current, stops) : () => {};
+    return () => {
+      unsnap();
+      ctx.revert();
+    };
+  }, [c, n]);
 
+  // Opening and section reveals.
   useLayoutEffect(() => {
     if (prefersReducedMotion()) return undefined;
     const ctx = gsap.context(() => {}, root);
     let alive = true;
-
     document.fonts.ready.then(() => {
       if (!alive) return;
       ctx.add(() => {
-        // Opening: the name rises, then everything else settles in.
         const title = splitChars(".cs-title");
         gsap
           .timeline({ defaults: { ease: "expo.out" }, delay: 0.1 })
-          .from(title.chars, { yPercent: 115, duration: 1.4, stagger: 0.035 })
-          .from(".cs-in", { y: 24, opacity: 0, duration: 1.1, stagger: 0.06 }, 0.45)
-          .from(".cs-meta > div", { y: 16, opacity: 0, duration: 1, stagger: 0.05 }, 0.7);
-
-        // The film opens up as it comes into view.
-        gsap.fromTo(
-          ".cs-film .cs-browser",
-          { scale: 0.84, borderRadius: 28 },
-          {
-            scale: 1,
-            borderRadius: 10,
-            ease: "none",
-            scrollTrigger: { trigger: ".cs-film", start: "top bottom", end: "top 12%", scrub: true },
-          }
-        );
-
-        // The overview reads itself in, word by word, as you scroll.
-        gsap.fromTo(
-          ".cs-ow",
-          { opacity: 0.12 },
-          {
-            opacity: 1,
-            ease: "none",
-            stagger: 0.1,
-            scrollTrigger: { trigger: ".cs-over-text", start: "top 78%", end: "bottom 52%", scrub: true },
-          }
-        );
-
-        gsap.utils.toArray(".cs-reveal").forEach((el) =>
-          gsap.from(el, {
-            y: 40,
-            opacity: 0,
-            duration: 1.2,
-            ease: "expo.out",
-            scrollTrigger: { trigger: el, start: "top 86%" },
-          })
-        );
-
-        // Screens slide past on a strip while the section holds still.
-        const mm = gsap.matchMedia();
-        mm.add("(min-width: 761px)", () => {
-          const track = root.current.querySelector(".cs-track");
-          const dist = () => track.scrollWidth - window.innerWidth;
-          gsap.to(track, {
-            x: () => -dist(),
-            ease: "none",
-            scrollTrigger: {
-              trigger: ".cs-gal",
-              start: "top top",
-              end: () => `+=${dist()}`,
-              pin: true,
-              scrub: 0.6,
-              invalidateOnRefresh: true,
-              onUpdate: (self) => gsap.set(".cs-gal-bar i", { scaleX: self.progress }),
-            },
-          });
-          gsap.to(".cs-gal-ghost", {
-            xPercent: -20,
-            ease: "none",
-            scrollTrigger: { trigger: ".cs-gal", start: "top top", end: () => `+=${dist()}`, scrub: true },
-          });
+          .from(title.chars, { yPercent: 115, duration: 1.5, stagger: 0.035 })
+          .from(".cs-in", { y: 24, opacity: 0, duration: 1.1, stagger: 0.07 }, 0.5);
+        // The device rises out of the opening as you scroll into the stage.
+        gsap.from(".cs-rig", {
+          yPercent: 30,
+          scale: 0.86,
+          ease: "none",
+          scrollTrigger: { trigger: ".cs-stage", start: "top bottom", end: "top top", scrub: true },
         });
-
+        gsap.utils.toArray(".cs-reveal").forEach((el) =>
+          gsap.from(el, { y: 40, opacity: 0, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 88%" } })
+        );
         const nextName = splitChars(".cs-next-name");
         gsap.from(nextName.chars, {
           yPercent: 115,
           duration: 1.2,
           ease: "expo.out",
           stagger: 0.03,
-          scrollTrigger: { trigger: ".cs-next", start: "top 70%" },
+          scrollTrigger: { trigger: ".cs-next", start: "top 72%" },
         });
         ScrollTrigger.refresh();
       });
     });
-
     return () => {
       alive = false;
       ctx.revert();
     };
   }, []);
 
+  // The device leans toward the cursor, on top of its pose.
+  useEffect(() => {
+    const el = stage.current;
+    if (!el || prefersReducedMotion()) return undefined;
+    const move = (e) => {
+      const x = e.clientX / window.innerWidth - 0.5;
+      const y = e.clientY / window.innerHeight - 0.5;
+      el.style.setProperty("--px", `${(x * 8).toFixed(2)}deg`);
+      el.style.setProperty("--py", `${(-y * 6).toFixed(2)}deg`);
+    };
+    window.addEventListener("pointermove", move);
+    return () => window.removeEventListener("pointermove", move);
+  }, []);
+
+  // The recording plays only while its chapter is up.
+  useEffect(() => {
+    const v = video.current;
+    if (!v) return;
+    if (ch.video) {
+      v.preload = "auto";
+      v.play().catch(() => {});
+    } else v.pause();
+  }, [ch]);
+
+  const goTo = (i) => {
+    const st = trigger.current;
+    const lenis = getLenis();
+    if (!st) return;
+    const y = st.start + (i / (n - 1)) * (st.end - st.start);
+    if (lenis) lenis.scrollTo(y, { duration: 1.2, lock: true });
+    else window.scrollTo({ top: y, behavior: "smooth" });
+  };
+
   const goNext = (e) => {
     e.preventDefault();
     navigate(`/project/${next.id}`);
   };
+
+  const hasNotes = c.challenges || c.outcome || c.tech;
 
   return (
     <div className="v3 cs" ref={root}>
       <SEO
         title={`${c.title} — case study | Vishesh Rajput`}
         description={c.line}
-        keywords={`${c.title}, Vishesh Rajput, ${c.tech.join(", ")}`}
-        image={c.cover}
+        keywords={`${c.title}, Vishesh Rajput, ${(c.tech || c.stack || []).join(", ")}`}
+        image={c.cover || c.chapters.find((x) => x.src)?.src}
       />
 
       <header className="cs-bar">
@@ -203,149 +201,176 @@ function Case({ c }) {
         <p className="t-mono cs-of">
           Case {pad(index + 1)} / {pad(cases.length)}
         </p>
-        <a className="t-mono cs-live" href={c.live} target="_blank" rel="noreferrer">
-          Visit live <Arrow />
-        </a>
+        {c.links[0] ? (
+          <a className="t-mono cs-pill" href={c.links[0].href} target="_blank" rel="noreferrer">
+            Visit <Arrow />
+          </a>
+        ) : (
+          <span />
+        )}
       </header>
 
       <main>
         {/* Opening ------------------------------------------------------ */}
         <section className="cs-hero">
-          <p className="t-mono is-mute cs-in">
+          <div className="cs-glow" aria-hidden="true" />
+          <p className="t-mono cs-kick cs-in">
             ( Case {pad(index + 1)} — {c.kind} )
           </p>
-          <h1 className="t-display cs-title" style={{ "--len": c.title.length }}>
-            {c.title}
-          </h1>
-          <div className="cs-lede">
+          <div className="cs-hero-side">
             <p className="t-serif cs-tagline cs-in">
               <em>{c.tagline}</em>
             </p>
-            <p className="t-body cs-line cs-in">{c.lede || c.line}</p>
+            <p className="t-body cs-lede cs-in">{c.lede}</p>
+            <dl className="cs-meta cs-in">
+              <div>
+                <dt className="t-mono">Role</dt>
+                <dd className="t-mono">{c.role}</dd>
+              </div>
+              <div>
+                <dt className="t-mono">Platforms</dt>
+                <dd className="t-mono">{c.platforms.join(" · ")}</dd>
+              </div>
+              {c.links.length > 0 && (
+                <div>
+                  <dt className="t-mono">Links</dt>
+                  <dd className="t-mono cs-links">
+                    {c.links.map((l) => (
+                      <a key={l.href} href={l.href} target="_blank" rel="noreferrer">
+                        {l.label} <Arrow />
+                      </a>
+                    ))}
+                  </dd>
+                </div>
+              )}
+            </dl>
           </div>
-          <div className="cs-meta">
-            <div>
-              <p className="t-mono is-mute">Type</p>
-              <p className="t-mono">{c.category}</p>
-            </div>
-            <div>
-              <p className="t-mono is-mute">Built with</p>
-              <p className="t-mono">{c.tech.slice(0, 4).join(" · ")}</p>
-            </div>
-            <div>
-              <p className="t-mono is-mute">Live</p>
-              <a className="t-mono cs-ul" href={c.live} target="_blank" rel="noreferrer">
-                {domain(c.live)} <Arrow />
-              </a>
-            </div>
-            <div>
-              <p className="t-mono is-mute">Source</p>
-              <a className="t-mono cs-ul" href={c.github} target="_blank" rel="noreferrer">
-                GitHub <Arrow />
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {/* The product, running ------------------------------------------ */}
-        <section className="cs-film" aria-label={`${c.title}, recorded`}>
-          <Browser url={domain(c.live)}>
-            <div className="cs-crop">
-              <video ref={video} src={c.video} muted loop playsInline preload="metadata" />
-            </div>
-            <span className={`t-mono cs-rec ${playing ? "is-on" : ""}`}>
-              <i /> Live recording
-            </span>
-          </Browser>
-        </section>
-
-        {/* Overview ----------------------------------------------------- */}
-        <section className="cs-over">
-          <p className="t-mono is-mute cs-label">( 01 — Overview )</p>
-          <p className="cs-over-text">
-            {c.overview.split(" ").map((w, i) => (
-              <span key={i} className="cs-ow">
-                {w}{" "}
-              </span>
-            ))}
+          <h1 className="t-display cs-title" style={{ "--len": c.title.length }}>
+            {c.title}
+          </h1>
+          <p className="t-mono cs-down cs-in">
+            <Arrow d="s" /> {n} chapters
           </p>
         </section>
 
-        {/* What it does ------------------------------------------------- */}
-        <section className="cs-feat">
-          <p className="t-mono is-mute cs-label">( 02 — What it does )</p>
-          <ol className="cs-feat-list">
-            {c.highlights.map(([title, text], i) => (
-              <li key={title} className="cs-reveal">
-                <span className="t-mono is-red">{pad(i + 1)}</span>
-                <h3 className="t-display">{title}</h3>
-                <p className="t-body">{text}</p>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        {/* Screens ------------------------------------------------------ */}
-        <section className="cs-gal" data-nav="dark" aria-label="Screens">
-          <div className="cs-gal-ghost t-display" aria-hidden="true">
-            Screens — {c.title} — Screens
-          </div>
-          <header className="cs-gal-head">
-            <p className="t-mono">( 03 — Screens )</p>
-            <div className="cs-gal-bar" aria-hidden="true">
-              <i />
-            </div>
-          </header>
-          <div className="cs-track">
-            {c.gallery.map((src, i) => (
-              <figure key={src} className="cs-shot">
-                <Browser url={domain(c.live)}>
-                  <img src={src} alt={`${c.title}, screen ${i + 1}`} loading="lazy" draggable="false" />
-                </Browser>
-                <figcaption className="t-mono">
-                  Fig. {pad(i + 1)} <span>/ {pad(c.gallery.length)}</span>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </section>
-
-        {/* The hard parts ----------------------------------------------- */}
-        <section className="cs-hard" data-nav="dark">
-          <p className="t-mono cs-label">( 04 — The hard parts )</p>
-          <ol>
-            {c.challenges.map((t, i) => (
-              <li key={t} className="cs-reveal">
-                <span className="t-display">{pad(i + 1)}</span>
-                <p className="t-body">{t}</p>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        {/* Outcome + stack ---------------------------------------------- */}
-        <section className="cs-out">
-          <p className="t-mono is-mute cs-label">( 05 — Outcome )</p>
-          <blockquote className="t-serif cs-quote cs-reveal">
-            <span className="is-red" aria-hidden="true">
-              “
+        {/* The stage ---------------------------------------------------- */}
+        <section className="cs-stage" style={{ "--n": n }} aria-label={`${c.title}, chapter by chapter`}>
+          <div className="cs-pin" ref={stage} data-device={ch.device}>
+            <span className="cs-bignum t-display" aria-hidden="true" key={active}>
+              {pad(active + 1)}
             </span>
-            {c.outcome}
-          </blockquote>
-          <div className="cs-stack cs-reveal">
-            <p className="t-mono is-mute">Stack</p>
-            <ul>
-              {c.tech.map((t) => (
-                <li key={t} className="t-mono">
-                  {t}
-                </li>
+
+            <div className="cs-caps" aria-live="polite">
+              {c.chapters.map((x, i) => (
+                <div key={x.title} className={`cs-cap ${i === active ? "is-on" : i < active ? "is-past" : ""}`}>
+                  <p className="t-mono cs-cap-k">
+                    <span className="is-red">{pad(i + 1)}</span> / {pad(n)} — {x.kicker}
+                  </p>
+                  <h2 className="t-display">{x.title}</h2>
+                  <p className="t-body">{x.text}</p>
+                </div>
               ))}
-            </ul>
+            </div>
+
+            <div className="cs-rig" style={{ "--ry": `${ry}deg`, "--rx": `${rx}deg` }}>
+              {kinds.includes("phone") && (
+                <div className={`cs-phone ${ch.device === "phone" ? "is-shown" : ""}`}>
+                  <div className="cs-phone-glass">
+                    {c.chapters.map((x, i) =>
+                      x.device === "phone" ? <Screen key={i} chapter={x} name={c.title} on={i === active || (ch.device !== "phone" && i === lastOf(c.chapters, "phone", active))} /> : null
+                    )}
+                    <span className="cs-island" />
+                  </div>
+                </div>
+              )}
+              {kinds.includes("web") && (
+                <div className={`cs-web ${ch.device === "web" ? "is-shown" : ""}`}>
+                  <div className="cs-web-bar">
+                    <span className="cs-dots" aria-hidden="true">
+                      <i />
+                      <i />
+                      <i />
+                    </span>
+                    <span className="t-mono cs-url">{c.links[0]?.label || `${c.slug}.app`}</span>
+                    <span />
+                  </div>
+                  <div className="cs-web-glass">
+                    {c.chapters.map((x, i) =>
+                      x.device === "web" ? (
+                        <Screen
+                          key={i}
+                          chapter={x}
+                          name={c.title}
+                          on={i === active || (ch.device !== "web" && i === lastOf(c.chapters, "web", active))}
+                          videoRef={x.video ? video : undefined}
+                        />
+                      ) : null
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <nav className="cs-steps" aria-label="Chapters">
+              {c.chapters.map((x, i) => (
+                <button
+                  key={x.title}
+                  type="button"
+                  className={`t-mono ${i === active ? "is-on" : ""}`}
+                  onClick={() => goTo(i)}
+                  aria-label={`Chapter ${i + 1}: ${x.title}`}
+                >
+                  {pad(i + 1)}
+                </button>
+              ))}
+              <span className="cs-prog" aria-hidden="true">
+                <i />
+              </span>
+            </nav>
           </div>
         </section>
+
+        {/* Notes -------------------------------------------------------- */}
+        {hasNotes && (
+          <section className="cs-notes">
+            {c.challenges && (
+              <div className="cs-hard">
+                <p className="t-mono cs-label">( The hard parts )</p>
+                <ol>
+                  {c.challenges.map((t, i) => (
+                    <li key={t} className="cs-reveal">
+                      <span className="t-display">{pad(i + 1)}</span>
+                      <p className="t-body">{t}</p>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+            {c.outcome && (
+              <blockquote className="t-serif cs-quote cs-reveal">
+                <span className="is-red" aria-hidden="true">
+                  “
+                </span>
+                {c.outcome}
+              </blockquote>
+            )}
+            {c.tech && (
+              <div className="cs-stack cs-reveal">
+                <p className="t-mono cs-label">Built with</p>
+                <ul>
+                  {c.tech.map((t) => (
+                    <li key={t} className="t-mono">
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </section>
+        )}
 
         {/* Next case ---------------------------------------------------- */}
-        <a className="cs-next" href={`/project/${next.id}`} onClick={goNext} data-nav="dark">
+        <a className="cs-next" href={`/project/${next.id}`} onClick={goNext}>
           <div className="cs-next-top">
             <p className="t-mono">( Next case )</p>
             <p className="t-mono">
@@ -359,14 +384,13 @@ function Case({ c }) {
             <p className="t-serif">
               <em>{next.tagline}</em>
             </p>
-            <span className="t-mono cs-next-go">
+            <span className="t-mono cs-pill">
               Open case <Arrow d="e" />
             </span>
           </div>
-          <img className="cs-next-cover" src={next.cover} alt="" aria-hidden="true" />
         </a>
 
-        <footer className="cs-foot" data-nav="dark">
+        <footer className="cs-foot">
           <a className="t-mono" href={`mailto:${person.email}`}>
             {person.email}
           </a>
@@ -389,6 +413,20 @@ function Case({ c }) {
   );
 }
 
+// When the stage shows the other device, the hidden one keeps the screen
+// it last showed (the nearest chapter of its kind), so it never goes blank.
+function lastOf(chapters, kind, active) {
+  let best = -1;
+  let dist = Infinity;
+  chapters.forEach((x, i) => {
+    if (x.device === kind && Math.abs(i - active) < dist) {
+      best = i;
+      dist = Math.abs(i - active);
+    }
+  });
+  return best;
+}
+
 export default function CaseStudy() {
   const { id } = useParams();
   const c = caseById(id);
@@ -398,8 +436,8 @@ export default function CaseStudy() {
 
   useEffect(() => {
     const html = document.documentElement;
-    html.classList.add("v3-root");
-    return () => html.classList.remove("v3-root");
+    html.classList.add("v3-root", "cs-root");
+    return () => html.classList.remove("v3-root", "cs-root");
   }, []);
 
   // Each case starts at the top.
@@ -411,9 +449,9 @@ export default function CaseStudy() {
   if (!c) {
     return (
       <div className="v3 cs cs-missing">
-        <p className="t-mono is-mute">( 404 )</p>
+        <p className="t-mono">( 404 )</p>
         <h1 className="t-display">No such case</h1>
-        <button type="button" className="t-mono cs-live" onClick={() => navigate("/")}>
+        <button type="button" className="t-mono cs-pill" onClick={() => navigate("/")}>
           <Arrow d="w" /> Back home
         </button>
       </div>
