@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 // Base tokens first so each section's stylesheet can override them.
 import "./v3.css";
@@ -18,6 +18,8 @@ import { home } from "../seo/site.mjs";
 export default function HomeV3() {
   const [ready, setReady] = useState(false);
   const { state } = useLocation();
+  // Coming back from a case study: the section to land on, read once.
+  const returnTo = useRef(state?.to);
 
   useSmoothScroll();
 
@@ -28,8 +30,7 @@ export default function HomeV3() {
       lenis?.start();
       document.documentElement.style.overflow = "";
       ScrollTrigger.refresh();
-      // Coming back from a case study: land on the section it came from.
-      if (state?.to) requestAnimationFrame(() => scrollToTarget(state.to, { immediate: true }));
+      if (returnTo.current) requestAnimationFrame(() => scrollToTarget(returnTo.current, { immediate: true }));
     } else {
       lenis?.stop();
       document.documentElement.style.overflow = "hidden";
