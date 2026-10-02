@@ -35,7 +35,7 @@ const socials = `<p><a href="https://github.com/VisheshRajput-dev">GitHub</a> ·
 
 const homeBody = () => `
 ${nav}
-<header><h1>Vishesh Rajput</h1>
+<header><img src="/vishesh-rajput.jpg" alt="Vishesh Rajput, Founding Engineer at PointsFly" width="160" height="160" style="border-radius:50%" /><h1>Vishesh Rajput</h1>
 <p>Founding Engineer at <a href="${POINTSFLY}">PointsFly</a> (pointsfly.ai), Noida, India. Also known as Vishesh Dev.</p></header>
 <section><h2>Founding Engineer at PointsFly</h2>
 <p>I joined PointsFly as its founding engineer and built it from the first commit: the pointsfly.ai web app, the PointsFly iOS and Android apps, AIRA, the AI rewards agent that tells you the best credit card for every purchase, and the airline award points prediction model.</p>
@@ -112,9 +112,9 @@ const urls = [
 writeFileSync(
   join(build, "sitemap.xml"),
   `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${urls
-  .map(([loc, priority, freq]) => `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${freq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`)
+  .map(([loc, priority, freq]) => `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${freq}</changefreq>\n    <priority>${priority}</priority>${loc === `${BASE}/` ? `\n    <image:image><image:loc>${BASE}/vishesh-rajput.jpg</image:loc></image:image>` : ""}\n  </url>`)
   .join("\n")}
 </urlset>
 `

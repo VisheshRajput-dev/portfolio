@@ -9,6 +9,17 @@
 export const BASE = "https://visheshrajputdev-portfolio.vercel.app";
 export const POINTSFLY = "https://pointsfly.ai/";
 
+// The real photo of me, so search engines don't borrow someone else's.
+export const HEADSHOT = {
+  "@type": "ImageObject",
+  "@id": `${BASE}/#headshot`,
+  url: `${BASE}/vishesh-rajput.jpg`,
+  contentUrl: `${BASE}/vishesh-rajput.jpg`,
+  width: 800,
+  height: 800,
+  caption: "Vishesh Rajput, Founding Engineer at PointsFly",
+};
+
 export const STORES = {
   pointsfly: {
     ios: "https://apps.apple.com/in/app/pointsfly/id6791210809",
@@ -76,7 +87,7 @@ const person = {
   description:
     "Vishesh Rajput (Vishesh Dev), Founding Engineer at PointsFly (pointsfly.ai), built the PointsFly web app, the iOS and Android apps, AIRA (the AI agent that picks the best credit card for every purchase) and the airline award points prediction model.",
   url: `${BASE}/`,
-  image: `${BASE}/avatar.png`,
+  image: HEADSHOT,
   email: `mailto:${EMAIL}`,
   worksFor: { "@id": ORG_ID },
   hasOccupation: {
@@ -162,7 +173,7 @@ const website = {
 /** Who, where and what: on every page. */
 export const siteGraph = {
   "@context": "https://schema.org",
-  "@graph": [person, org, app, aira, website],
+  "@graph": [person, org, app, aira, website, HEADSHOT],
 };
 
 // Case studies, in the order of the work list.
@@ -284,6 +295,21 @@ export const home = {
     "Vishesh Rajput is the Founding Engineer at PointsFly (pointsfly.ai): builder of the PointsFly web and mobile apps, AIRA, the AI agent that picks your best credit card, and the airline award points prediction model.",
   keywords: HOME_KEYWORDS,
   image: "/og.jpg",
+  structuredData: {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ProfilePage",
+        "@id": `${BASE}/#webpage`,
+        url: `${BASE}/`,
+        name: "Vishesh Rajput · Founding Engineer at PointsFly",
+        isPartOf: { "@id": `${BASE}/#website` },
+        mainEntity: { "@id": PERSON_ID },
+        about: { "@id": PERSON_ID },
+        primaryImageOfPage: { "@id": `${BASE}/#headshot` },
+      },
+    ],
+  },
 };
 
 /** Meta and structured data for one case study. */
