@@ -169,27 +169,6 @@
   background: #151515;
 }
 
-.v3 .work-foot {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 40px;
-}
-
-.v3 .work-all {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 20px;
-  border: 1px solid var(--rule-dark);
-  border-radius: 999px;
-  transition: background 0.4s var(--ease-out), color 0.4s var(--ease-out);
-}
-
-.v3 .work-all:hover {
-  background: var(--ivory);
-  color: var(--ink);
-}
-
 /* Cursor-following preview */
 .v3 .work-card {
   position: absolute;

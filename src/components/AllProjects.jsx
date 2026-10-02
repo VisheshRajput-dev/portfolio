@@ -774,7 +774,7 @@ const AllProjects = () => {
         title="Projects by Vishesh Rajput | Full-Stack Case Studies and Product Builds"
         description="Explore full-stack projects by Vishesh Rajput, including RealDesk, DevSync, Vishti Shop, and VishtiConvertor. Case studies cover product thinking, engineering decisions, and implementation across React, Next.js, Node.js, MongoDB, and modern web tools."
         keywords="Vishesh Rajput projects, Vishesh Rajput portfolio projects, Vishesh Rajput case studies, RealDesk, DevSync, Vishti Shop, VishtiConvertor, full-stack projects, React projects, Node.js projects, MongoDB projects, frontend projects, product engineering portfolio"
-        image="/logo.png"
+        image="/avatar.png"
         structuredData={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",

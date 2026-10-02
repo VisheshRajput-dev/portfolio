@@ -47,6 +47,24 @@ export default function Work() {
     });
   }, [hovered]);
 
+  // On touch, each inline recording loads and plays only while it's on
+  // screen, so scrolling past the list doesn't download every video.
+  useEffect(() => {
+    if (!touch) return undefined;
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach(({ target: v, isIntersecting }) => {
+          if (isIntersecting) {
+            v.preload = "auto";
+            v.play().catch(() => {});
+          } else v.pause();
+        }),
+      { threshold: 0.5 }
+    );
+    root.current.querySelectorAll(".work-inline[data-video]").forEach((v) => io.observe(v));
+    return () => io.disconnect();
+  }, [touch]);
+
   useLayoutEffect(() => {
     if (prefersReducedMotion()) return undefined;
     const ctx = gsap.context(() => {
@@ -90,7 +108,7 @@ export default function Work() {
             className={`work-row ${hovered === i ? "is-hover" : ""}`}
             onPointerEnter={() => !touch && setHovered(i)}
           >
-            <Link to={`/project/${p.id}`} className="work-link" aria-label={`${p.title} — case study`}>
+            <Link to={`/project/${p.slug}`} className="work-link" aria-label={`${p.title} — case study`}>
               <span className="t-mono work-num">0{i + 1}</span>
               <span className="t-display work-name">{p.display || p.title}</span>
               <span className="work-meta">
@@ -103,7 +121,7 @@ export default function Work() {
             </Link>
             {touch &&
               (p.video ? (
-                <video className="work-inline" src={p.video} muted loop playsInline autoPlay preload="metadata" />
+                <video className="work-inline" data-video src={p.video} poster={p.cover} muted loop playsInline preload="none" />
               ) : (
                 <img className="work-inline" src={p.cover} alt="" loading="lazy" onError={(e) => (e.currentTarget.style.display = "none")} />
               ))}
@@ -111,13 +129,6 @@ export default function Work() {
           </li>
         ))}
       </ol>
-
-      <div className="work-foot">
-        <Link to="/projects" className="t-mono work-all">
-          All projects & experiments
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
-        </Link>
-      </div>
 
       {!touch && (
         <div className={`work-card ${hovered >= 0 ? "is-on" : ""}`} ref={card} aria-hidden="true">

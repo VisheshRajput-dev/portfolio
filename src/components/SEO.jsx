@@ -1,17 +1,17 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { BASE } from '../seo/site.mjs';
 
 const SEO = ({ 
-  title = "Vishesh Rajput | Founding Engineer at PointsFly | Full-Stack Developer",
+  title = "Vishesh Rajput · Founding Engineer at PointsFly",
   description = "Vishesh Rajput is a Founding Engineer at PointsFly, building PointsFly and AIRA across web, mobile, rewards intelligence, and modern full-stack systems with Next.js, Node.js, Express.js, MongoDB, AWS, and Clerk.",
   keywords = "Vishesh Rajput, Vishesh Rajput developer, Vishesh Rajput portfolio, Vishesh Rajput software engineer, Founding Engineer, Founding Engineer PointsFly, PointsFly, PointsFly developer, PointsFly founding engineer, AIRA, AIRA AI rewards agent, AI rewards platform, fin travel platform, credit card points, credit card rewards, travel rewards, reward redemption, Next.js developer, Node.js developer, Express.js developer, MongoDB developer, AWS developer, Clerk authentication, full-stack developer India, software engineer Noida",
-  image = "/logo.png",
+  image = "/avatar.png",
   type = "website",
   structuredData = null
 }) => {
   const location = useLocation();
-  const baseUrl = "https://visheshrajputdev-portfolio.vercel.app";
-  const url = `${baseUrl}${location.pathname}`;
+  const url = `${BASE}${location.pathname === "/" ? "/" : location.pathname.replace(/\/$/, "")}`;
 
   useEffect(() => {
     // Update document title
@@ -44,7 +44,7 @@ const SEO = ({
     updateMetaTag('og:description', description, true);
     updateMetaTag('og:url', url, true);
     updateMetaTag('og:type', type, true);
-    updateMetaTag('og:site_name', 'Vishesh Rajput Portfolio', true);
+    updateMetaTag('og:site_name', 'Vishesh Rajput', true);
     updateMetaTag('og:locale', 'en_IN', true);
 
     // Update Twitter tags
@@ -56,14 +56,11 @@ const SEO = ({
     updateMetaTag('twitter:site', '@vishesh_ra3046');
     
     // Keep social previews brand-led instead of using a personal photo
-    const absoluteImage = image ? `${baseUrl}${image}` : '';
+    const absoluteImage = image ? `${BASE}${image}` : '';
     if (absoluteImage) {
       updateMetaTag('og:image', absoluteImage, true);
       updateMetaTag('og:image:secure_url', absoluteImage, true);
-      updateMetaTag('og:image:width', '1200', true);
-      updateMetaTag('og:image:height', '1200', true);
-      updateMetaTag('og:image:type', 'image/png', true);
-      updateMetaTag('og:image:alt', 'Vishesh Rajput Portfolio', true);
+      updateMetaTag('og:image:alt', title, true);
       updateMetaTag('twitter:image', absoluteImage);
     }
 

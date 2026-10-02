@@ -636,7 +636,7 @@ const ProjectDetail = () => {
     "software engineering project"
   ].join(", ");
   const projectDescription = project.overview || project.description || `Explore ${project.title} by Vishesh Rajput.`;
-  const primaryImage = galleryImages[0] || "/logo.png";
+  const primaryImage = galleryImages[0] || "/avatar.png";
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",

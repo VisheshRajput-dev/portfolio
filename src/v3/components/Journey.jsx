@@ -13,8 +13,8 @@ const badge = {
 };
 
 const stats = [
-  { n: "3+", label: "Client projects shipped\nin 2-week timelines" },
-  { n: "2 mo", label: "Navadurga portal,\ncontract to production" },
+  { n: "8+", label: "Client projects shipped\nin 2-week timelines" },
+  { n: "8 mo", label: "Founding engineer\nat PointsFly" },
   { n: String(projects.length).padStart(2, "0"), label: "Products of mine\nlive on the web" },
 ];
 

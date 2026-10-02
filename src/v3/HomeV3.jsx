@@ -12,6 +12,8 @@ import Process from "./components/Process";
 import Work from "./components/Work";
 import Journey from "./components/Journey";
 import Contact from "./components/Contact";
+import SEO from "../components/SEO";
+import { home } from "../seo/site.mjs";
 
 export default function HomeV3() {
   const [ready, setReady] = useState(false);
@@ -46,6 +48,7 @@ export default function HomeV3() {
 
   return (
     <div className="v3">
+      <SEO {...home} />
       <Preloader onDone={() => setReady(true)} />
       <Nav ready={ready} />
       <main>

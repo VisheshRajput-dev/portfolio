@@ -57,7 +57,7 @@ const searchableContent = [
       id: "realdesk",
       title: "RealDesk",
       content: "Developer internship simulator realistic tasks bug reports deadlines client interactions code editor multi-file support AI review",
-      href: "/project/1",
+      href: "/project/realdesk",
       icon: HiCodeBracket,
       category: "Project"
     },
@@ -65,7 +65,7 @@ const searchableContent = [
       id: "devsync",
       title: "DevSync",
       content: "Collaborative platform developers sync code collaborate projects real-time collaboration code syncing multi-file support",
-      href: "/project/2",
+      href: "/project/devsync",
       icon: HiCodeBracket,
       category: "Project"
     },
@@ -73,7 +73,7 @@ const searchableContent = [
       id: "vishti-shop",
       title: "vishti-shop",
       content: "E-commerce platform selling products multi-user login admin dashboard product order management payment integration Razorpay",
-      href: "/project/3",
+      href: "/project/vishti-shop",
       icon: HiCodeBracket,
       category: "Project"
     }

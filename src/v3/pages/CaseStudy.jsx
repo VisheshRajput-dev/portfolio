@@ -1,11 +1,12 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import "../v3.css";
 import { gsap, ScrollTrigger, getLenis, prefersReducedMotion, splitChars, useSmoothScroll } from "../lib/motion";
 import { attachStepSnap } from "../lib/stepSnap";
-import { cases, caseById } from "../cases";
+import { cases, findCase } from "../cases";
 import { person, socials } from "../data";
 import SEO from "../../components/SEO";
+import { caseSeo } from "../../seo/site.mjs";
 import "./CaseStudy.css";
 
 /**
@@ -177,19 +178,15 @@ function Case({ c }) {
 
   const goNext = (e) => {
     e.preventDefault();
-    navigate(`/project/${next.id}`);
+    navigate(`/project/${next.slug}`);
   };
 
   const hasNotes = c.challenges || c.outcome || c.tech;
+  const seo = caseSeo(c.slug);
 
   return (
     <div className="v3 cs" ref={root}>
-      <SEO
-        title={`${c.title} — case study | Vishesh Rajput`}
-        description={c.line}
-        keywords={`${c.title}, Vishesh Rajput, ${(c.tech || c.stack || []).join(", ")}`}
-        image={c.cover || c.chapters.find((x) => x.src)?.src}
-      />
+      <SEO {...seo} />
 
       <header className="cs-bar">
         <Link to="/" className="cs-logo" aria-label="Home">
@@ -370,7 +367,7 @@ function Case({ c }) {
         )}
 
         {/* Next case ---------------------------------------------------- */}
-        <a className="cs-next" href={`/project/${next.id}`} onClick={goNext}>
+        <a className="cs-next" href={`/project/${next.slug}`} onClick={goNext}>
           <div className="cs-next-top">
             <p className="t-mono">( Next case )</p>
             <p className="t-mono">
@@ -428,8 +425,8 @@ function lastOf(chapters, kind, active) {
 }
 
 export default function CaseStudy() {
-  const { id } = useParams();
-  const c = caseById(id);
+  const { slug } = useParams();
+  const c = findCase(slug);
   const navigate = useNavigate();
 
   useSmoothScroll();
@@ -444,7 +441,7 @@ export default function CaseStudy() {
   useLayoutEffect(() => {
     getLenis()?.scrollTo(0, { immediate: true, force: true });
     window.scrollTo(0, 0);
-  }, [id]);
+  }, [slug]);
 
   if (!c) {
     return (
@@ -457,5 +454,7 @@ export default function CaseStudy() {
       </div>
     );
   }
+  // Old links (/project/1) move to the named URL.
+  if (slug !== c.slug) return <Navigate to={`/project/${c.slug}`} replace />;
   return <Case key={c.id} c={c} />;
 }

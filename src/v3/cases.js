@@ -1,9 +1,10 @@
 /**
- * Case studies for /project/:id. Copy for the web projects comes from the
+ * Case studies for /project/:slug. Copy for the web projects comes from the
  * original project pages; DoMore's from its own site; PointsFly's from its
  * public description.
  */
 import { projects } from "./data";
+import { STORES } from "../seo/site.mjs";
 import realdesk3 from "../assets/domeimages/realdesk/3.png";
 import realdesk4 from "../assets/domeimages/realdesk/4.png";
 import realdesk5 from "../assets/domeimages/realdesk/5.png";
@@ -26,47 +27,55 @@ import vishticonvertor7 from "../assets/domeimages/vishticonvertor/7.png";
  * screen, one caption. Screens for the apps live in public/work/<slug>/;
  * until a file is there, the page draws a placeholder in its place.
  */
-const app = (slug, n) => `/work/${slug}/app-${n}.png`;
+const app = (slug, n) => `/work/${slug}/app-${n}.jpg`;
 
 const details = [
   {
     id: 5,
-    slug: "pointsfly",
     tagline: "India's first AI-native rewards app",
-    lede: "Built from the first commit as founding engineer: the web app, the mobile app, and AIRA, the rewards agent inside both.",
+    lede: "Built from the first commit as founding engineer: the web app at pointsfly.ai, the iOS and Android apps, and AIRA, the rewards agent inside both.",
     role: "Founding engineer — web, mobile & AIRA",
     platforms: ["Android", "iOS", "Web"],
-    links: [],
-    chapters: [
-      { device: "phone", kicker: "AIRA", title: "An agent for your cards", text: "AIRA manages your credit-card wallet and tells you the best card to use for any purchase.", src: app("pointsfly", 1) },
-      { device: "phone", kicker: "Points", title: "Every point, live", text: "Reward points across every card, tracked in real time.", src: app("pointsfly", 2) },
-      { device: "phone", kicker: "Travel", title: "Fly on points", text: "Search and book flights and hotels directly on points, inside the app.", src: app("pointsfly", 3) },
-      { device: "phone", kicker: "Alerts", title: "A nudge at the till", text: "Store alerts along the way, so the right card is out before you pay.", src: app("pointsfly", 4) },
-      { device: "web", kicker: "Web tools", title: "Free tools, on the web", text: "A points calculator and a card recommender built on the PointsFly golden rule: under ₹1 a point is poor, ₹1–3 is good, above ₹3 is great.", src: "/work/pointsfly/web-1.png" },
+    links: [
+      { label: "pointsfly.ai", href: "https://pointsfly.ai/" },
+      { label: "App Store", href: STORES.pointsfly.ios },
+      { label: "Google Play", href: STORES.pointsfly.android },
     ],
-    tech: ["Next.js", "Node.js", "Express", "MongoDB", "AWS", "Clerk"],
+    chapters: [
+      { device: "phone", kicker: "AIRA", title: "The first AI agent for rewards", text: "AIRA, the Autonomous Intelligent Rewards Agent, sits at the centre of the app: ask it anything about your cards, points and trips.", src: app("pointsfly", 1) },
+      { device: "phone", kicker: "Best card", title: "The right card, wherever you are", text: "A live map of stores near you with the best card for each one, plus store alerts that nudge you before you pay.", src: app("pointsfly", 2) },
+      { device: "phone", kicker: "Wallet", title: "Every card, one wallet", text: "All your credit cards in a single stack, with the portfolio's value in rupees and every point earned.", src: app("pointsfly", 3) },
+      { device: "phone", kicker: "Add cards", title: "Your cards, found for you", text: "Sync statements from Gmail, Outlook or Yahoo, connect Amex, upload a PDF, or add a card by hand.", src: app("pointsfly", 4) },
+      { device: "phone", kicker: "Loyalty", title: "Airline and hotel points, synced", text: "Connect loyalty programs once and balances stay fresh automatically, valued in rupees.", src: app("pointsfly", 5) },
+      { device: "phone", kicker: "Dream destination", title: "Points become a trip", text: "Pick a route and watch it fill up as you earn, powered by the airline award points prediction model. At 100% you're ready to book.", src: app("pointsfly", 6) },
+      { device: "phone", kicker: "Trips", title: "Every journey, together", text: "Flights, trains and hotels pulled into one timeline, with itineraries a tap away.", src: app("pointsfly", 7) },
+      { device: "web", kicker: "Web", title: "pointsfly.ai", text: "The website: search award flights and hotels, meet AIRA, and use the free points calculator and card recommender.", video: "/work/pointsfly/web.mp4", poster: "/work/pointsfly/cover.jpg" },
+    ],
+    tech: ["Next.js", "Flutter", "Node.js", "Express", "MongoDB", "AWS", "Clerk", "OpenAI"],
   },
   {
     id: 6,
-    slug: "domore",
     tagline: "Focus on what matters.",
     lede: "A focus app and app blocker for self-aware procrastinators, students and creators. I engineered it end to end: the Android and iOS apps, and the web.",
     role: "Engineering, end to end",
     platforms: ["Android", "iOS", "Web"],
-    links: [{ label: "domoreapp.in", href: "https://domoreapp.in/" }],
+    links: [
+      { label: "domoreapp.in", href: "https://domoreapp.in/" },
+      { label: "App Store", href: STORES.domore.ios },
+      { label: "Google Play", href: STORES.domore.android },
+    ],
     chapters: [
-      { device: "phone", kicker: "App blocker", title: "Set your blocks", text: "Pick the apps that steal your time and block them instantly, on all your devices.", src: app("domore", 1) },
-      { device: "phone", kicker: "Friction", title: "Open apps mindfully", text: "Add friction where the habit lives: make specific apps hard to open.", src: app("domore", 2) },
-      { device: "phone", kicker: "Deep focus", title: "God Mode", text: "Notifications off, flip clock on. One hour with every distraction blocked.", src: app("domore", 3) },
-      { device: "phone", kicker: "Tasks", title: "Plan it, keep the streak", text: "Daily tasks with reminders, and a to-do streak you won't want to break.", src: app("domore", 4) },
-      { device: "phone", kicker: "Sleep", title: "Smart sleep", text: "Custom schedules, late-night blocking, and the morning culprit: the first app you open after waking.", src: app("domore", 5) },
-      { device: "phone", kicker: "Together", title: "Friends & leaderboard", text: "Compare streaks and screen time, and climb the weekly leaderboard.", src: app("domore", 6) },
-      { device: "web", kicker: "Web", title: "Its home on the web", text: "domoreapp.in: the product site, in the app's own black and red.", src: "/work/domore/web-1.jpg" },
+      { device: "phone", kicker: "Focus", title: "Pick a time, block the noise", text: "Set a focus timer, choose the apps that steal your time, and start.", src: app("domore", 1) },
+      { device: "phone", kicker: "App blocker", title: "Blocked until it's done", text: "While the session runs, blocked apps stay locked. Need air? Take a break without ending it.", src: app("domore", 2) },
+      { device: "phone", kicker: "Tasks", title: "Plan it, keep the streak", text: "Daily tasks with reminders, and a to-do streak you won't want to break.", src: app("domore", 3) },
+      { device: "phone", kicker: "Sleep", title: "Smart sleep", text: "Bedtime and wake-up schedules, apps that lock at night, and an honest score for your last scroll and first pickup.", src: app("domore", 4) },
+      { device: "phone", kicker: "Together", title: "Climb the leaderboard", text: "Streaks and screen time, ranked against everyone on the app.", src: app("domore", 5) },
+      { device: "phone", kicker: "Screen time", title: "Your week, in numbers", text: "Weekly usage at a glance, with a detailed breakdown a tap away.", src: app("domore", 6) },
+      { device: "web", kicker: "Web", title: "Its home on the web", text: "domoreapp.in: the product site, in the app's own black and red.", video: "/work/domore/web.mp4", poster: "/work/domore/web-1.jpg" },
     ],
   },
   {
     id: 1,
-    slug: "realdesk",
     tagline: "A developer internship simulator",
     lede: "Real tasks, bug reports, deadlines and client messages, so learning feels like the first week on a real team.",
     role: "Design & build",
@@ -88,7 +97,6 @@ const details = [
   },
   {
     id: 2,
-    slug: "devsync",
     tagline: "Team collaboration and project sync",
     lede: "Messages, commits and tasks for a whole team, kept in sync live in one dashboard.",
     role: "Design & build",
@@ -110,7 +118,6 @@ const details = [
   },
   {
     id: 3,
-    slug: "vishti-shop",
     tagline: "A modern e-commerce platform",
     lede: "Browsing, cart, secure payments and an admin panel: quick for shoppers, dependable for whoever runs it.",
     role: "Design & build",
@@ -132,7 +139,6 @@ const details = [
   },
   {
     id: 4,
-    slug: "vishticonvertor",
     tagline: "An image converter and editor, in the browser",
     lede: "Convert, compress and edit images in seven formats without ever uploading them. Everything happens on your own device.",
     role: "Design & build",
@@ -171,4 +177,5 @@ const withChapters = (c) => {
 };
 
 export const cases = projects.map((p) => withChapters({ ...p, ...details.find((d) => d.id === p.id) }));
-export const caseById = (id) => cases.find((c) => c.id === Number(id));
+// Takes a slug, or one of the old numeric ids (those redirect to the slug).
+export const findCase = (param) => cases.find((c) => c.slug === param || String(c.id) === param);

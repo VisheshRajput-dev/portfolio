@@ -21,28 +21,36 @@ export const socials = [
   { label: "Instagram", href: "https://www.instagram.com/vishesh_rajput.dev/" },
 ];
 
-// ids match the /project/:id route. Apps without a screen recording show
-// their cover image instead.
+// Each case lives at /project/<slug>; the numeric ids are the old URLs,
+// which redirect to the slug. Apps without a screen recording show their
+// cover image instead. Recordings of pointsfly.ai and domoreapp.in live in
+// public/work/<slug>/web.mp4.
 export const projects = [
   {
     id: 5,
+    slug: "pointsfly",
     title: "PointsFly",
     kind: "Web + mobile + AI",
     line: "India's first AI-native rewards app. I build the web app, the mobile app and AIRA, its rewards agent.",
-    stack: ["Next.js", "Node.js", "Express", "MongoDB", "AWS", "Clerk"],
+    stack: ["Next.js", "Flutter", "Node.js", "Express", "MongoDB", "AWS", "Clerk"],
     cover: "/work/pointsfly/cover.jpg",
+    video: "/work/pointsfly/web.mp4",
+    live: "https://pointsfly.ai/",
   },
   {
     id: 6,
+    slug: "domore",
     title: "DoMore",
     kind: "Mobile app + web",
     line: "A focus app and app blocker, live on Android and iOS. I engineered it end to end.",
     stack: ["Android", "iOS", "Web"],
     cover: "/work/domore/web-1.jpg",
+    video: "/work/domore/web.mp4",
     live: "https://domoreapp.in/",
   },
   {
     id: 1,
+    slug: "realdesk",
     title: "RealDesk",
     kind: "Web platform",
     line: "A developer internship simulator: real tasks, bug reports, deadlines and client conversations.",
@@ -52,6 +60,7 @@ export const projects = [
   },
   {
     id: 2,
+    slug: "devsync",
     title: "DevSync",
     kind: "Real-time tool",
     line: "Code together in real time: synced files, multi-file editing and shared sessions.",
@@ -61,6 +70,7 @@ export const projects = [
   },
   {
     id: 3,
+    slug: "vishti-shop",
     title: "Vishti-shop",
     kind: "E-commerce",
     line: "A storefront with multi-user login, payments and an admin dashboard for products and orders.",
@@ -70,6 +80,7 @@ export const projects = [
   },
   {
     id: 4,
+    slug: "vishticonvertor",
     title: "VishtiConvertor",
     // Soft hyphen lets the display title break on narrow screens.
     display: "Vishti\u00ADConvertor",
@@ -87,7 +98,7 @@ export const journey = [
     role: "Founding Engineer",
     org: "PointsFly",
     where: "Onsite, Noida",
-    note: "Building the PointsFly web app, mobile app and AIRA from scratch: point valuation, flight and hotel redemptions, card management and an AI rewards assistant.",
+    note: "Building PointsFly (pointsfly.ai) from the first commit: the web app, the iOS and Android apps, AIRA, the AI agent that picks the best card for every purchase, and the airline award points prediction model. Plus point valuation, flight and hotel redemptions and card management.",
     current: true,
   },
   {

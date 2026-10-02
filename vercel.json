@@ -1,6 +1,42 @@
 {
   "headers": [
     {
+      "source": "/static/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/work/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/process/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/(favicon.ico|favicon-16.png|favicon-32.png|apple-touch-icon.png|icon-192.png|icon-512.png|icon-maskable-512.png|avatar.png)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    },
+    {
       "source": "/sitemap.xml",
       "headers": [
         {
@@ -40,7 +76,73 @@
       ]
     }
   ],
+  "redirects": [
+    {
+      "source": "/classic",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/projects",
+      "destination": "/#work",
+      "permanent": true
+    },
+    {
+      "source": "/project/1",
+      "destination": "/project/realdesk",
+      "permanent": true
+    },
+    {
+      "source": "/project/2",
+      "destination": "/project/devsync",
+      "permanent": true
+    },
+    {
+      "source": "/project/3",
+      "destination": "/project/vishti-shop",
+      "permanent": true
+    },
+    {
+      "source": "/project/4",
+      "destination": "/project/vishticonvertor",
+      "permanent": true
+    },
+    {
+      "source": "/project/5",
+      "destination": "/project/pointsfly",
+      "permanent": true
+    },
+    {
+      "source": "/project/6",
+      "destination": "/project/domore",
+      "permanent": true
+    }
+  ],
   "rewrites": [
+    {
+      "source": "/project/realdesk",
+      "destination": "/project/realdesk/index.html"
+    },
+    {
+      "source": "/project/devsync",
+      "destination": "/project/devsync/index.html"
+    },
+    {
+      "source": "/project/vishti-shop",
+      "destination": "/project/vishti-shop/index.html"
+    },
+    {
+      "source": "/project/vishticonvertor",
+      "destination": "/project/vishticonvertor/index.html"
+    },
+    {
+      "source": "/project/pointsfly",
+      "destination": "/project/pointsfly/index.html"
+    },
+    {
+      "source": "/project/domore",
+      "destination": "/project/domore/index.html"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
