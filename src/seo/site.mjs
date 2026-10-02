@@ -283,7 +283,7 @@ export const home = {
   description:
     "Vishesh Rajput is the Founding Engineer at PointsFly (pointsfly.ai): builder of the PointsFly web and mobile apps, AIRA, the AI agent that picks your best credit card, and the airline award points prediction model.",
   keywords: HOME_KEYWORDS,
-  image: "/avatar.png",
+  image: "/og.jpg",
 };
 
 /** Meta and structured data for one case study. */
@@ -294,7 +294,7 @@ export function casePage(c) {
     title: `${c.title}: ${c.tagline} | Vishesh Rajput`,
     description: c.description,
     keywords: c.keywords,
-    image: c.image || "/avatar.png",
+    image: c.image || "/og.jpg",
     structuredData: {
       "@context": "https://schema.org",
       "@graph": [

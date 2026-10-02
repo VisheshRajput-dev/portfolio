@@ -164,4 +164,7 @@
   .v3 .hero-last { bottom: 13vh; }
   .v3 .hero-portrait { --ph: 62vh; }
   .v3 .hero-flourish { left: 46%; top: 22vh; font-size: 15vw; }
+  /* The foot line crosses the hoodie here: stay legible on paper and cloth. */
+  .v3 .hero-foot { mix-blend-mode: difference; }
+  .v3 .hero-foot p { color: #eeeae2; }
 }

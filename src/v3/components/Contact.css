@@ -29,6 +29,8 @@
 .v3 .ct-a,
 .v3 .ct-b {
   font-size: 13.6vw;
+  /* The letters are split for the reveal; never let a word wrap between them. */
+  white-space: nowrap;
 }
 
 .v3 .ct-b {
@@ -107,9 +109,10 @@
 }
 
 @media (max-width: 800px) {
-  .v3 .ct-a, .v3 .ct-b { font-size: 17vw; }
-  .v3 .ct-into { left: 8%; font-size: 16vw; }
-  .v3 .ct-row { grid-template-columns: 1fr auto; }
-  .v3 .ct-lead { grid-column: 1 / -1; }
+  .v3 .ct-a, .v3 .ct-b { font-size: 13vw; }
+  .v3 .ct-into { left: 12%; font-size: 15vw; }
+  .v3 .ct-row { grid-template-columns: auto; justify-items: start; gap: 22px; }
+  /* The address is one long word: size it to the screen so it never clips. */
+  .v3 .ct-mail { font-size: 3.9vw; }
   .v3 .ct-foot { grid-template-columns: 1fr; }
 }

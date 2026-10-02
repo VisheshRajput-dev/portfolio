@@ -325,7 +325,8 @@ html.cs-root { background: #0b0a09; }
 
 /* Browser. */
 .v3 .cs-web {
-  width: min(56vw, 980px);
+  /* Never wider than its column (tablets in portrait). */
+  width: min(56vw, 980px, 100%);
   overflow: hidden;
   border-radius: 12px;
   background: #151413;

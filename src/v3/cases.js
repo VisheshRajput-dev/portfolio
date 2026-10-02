@@ -5,22 +5,22 @@
  */
 import { projects } from "./data";
 import { STORES } from "../seo/site.mjs";
-import realdesk3 from "../assets/domeimages/realdesk/3.png";
-import realdesk4 from "../assets/domeimages/realdesk/4.png";
-import realdesk5 from "../assets/domeimages/realdesk/5.png";
-import realdesk2 from "../assets/domeimages/realdesk/2.png";
-import devsync1 from "../assets/domeimages/devsync/1.png";
-import devsync2 from "../assets/domeimages/devsync/2.png";
-import devsync3 from "../assets/domeimages/devsync/3.png";
-import devsync5 from "../assets/domeimages/devsync/5.png";
-import vishtishop1 from "../assets/domeimages/vishtishop/1.png";
-import vishtishop2 from "../assets/domeimages/vishtishop/2.png";
-import vishtishop4 from "../assets/domeimages/vishtishop/4.png";
-import vishtishop5 from "../assets/domeimages/vishtishop/5.png";
-import vishticonvertor1 from "../assets/domeimages/vishticonvertor/1.png";
-import vishticonvertor2 from "../assets/domeimages/vishticonvertor/2.png";
-import vishticonvertor3 from "../assets/domeimages/vishticonvertor/3.png";
-import vishticonvertor7 from "../assets/domeimages/vishticonvertor/7.png";
+import realdesk3 from "../assets/domeimages/realdesk/3.jpg";
+import realdesk4 from "../assets/domeimages/realdesk/4.jpg";
+import realdesk5 from "../assets/domeimages/realdesk/5.jpg";
+import realdesk2 from "../assets/domeimages/realdesk/2.jpg";
+import devsync1 from "../assets/domeimages/devsync/1.jpg";
+import devsync2 from "../assets/domeimages/devsync/2.jpg";
+import devsync3 from "../assets/domeimages/devsync/3.jpg";
+import devsync5 from "../assets/domeimages/devsync/5.jpg";
+import vishtishop1 from "../assets/domeimages/vishtishop/1.jpg";
+import vishtishop2 from "../assets/domeimages/vishtishop/2.jpg";
+import vishtishop4 from "../assets/domeimages/vishtishop/4.jpg";
+import vishtishop5 from "../assets/domeimages/vishtishop/5.jpg";
+import vishticonvertor1 from "../assets/domeimages/vishticonvertor/1.jpg";
+import vishticonvertor2 from "../assets/domeimages/vishticonvertor/2.jpg";
+import vishticonvertor3 from "../assets/domeimages/vishticonvertor/3.jpg";
+import vishticonvertor7 from "../assets/domeimages/vishticonvertor/7.jpg";
 
 /*
  * Each case is told in chapters: one device (a phone or a browser), one
