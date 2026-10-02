@@ -84,6 +84,10 @@ const mod = (k) => ((k % N) + N) % N;
 // Slot s holds item (N - s) % N, so turning the wheel forward one step
 // brings the next item to the front.
 const itemOf = (s) => mod(N - s);
+// How far the cards around the front part while the deck turns, and over
+// what span (degrees) either side of it.
+const PART = 1.4;
+const PART_W = 26;
 
 function Words({ text, card = false }) {
   // Spaces sit between the word boxes (not inside them) so lines can wrap.
@@ -181,6 +185,7 @@ export default function About() {
     let front = 0;
     let frontSlot = -1;
     let visible = false;
+    let open = 0;
 
     s.target = 0;
     s.goTo = (target, user) => {
@@ -221,6 +226,12 @@ export default function About() {
     );
     io.observe(root.current);
 
+    // Browsers only allow audio after a gesture; any click or key on the
+    // page counts, so the auto-turn can be heard without touching the deck.
+    const wake = () => sound.wake();
+    window.addEventListener("pointerdown", wake, { passive: true });
+    window.addEventListener("keydown", wake);
+
     const tick = (time, dt) => {
       const d = Math.min(dt, 50) / 1000;
       if (d <= 0) return;
@@ -249,24 +260,35 @@ export default function About() {
             c.v = 0;
             c.p = 0;
           });
-          if (move.user) sound.land();
+          if (visible) sound.land();
           move = null;
         }
       } else if (visible && !s.hover && !document.hidden && !prefersReducedMotion() && clock >= nextAuto) {
         s.goTo(s.target + STEP, false);
       }
 
-      // Which card is in front; a flick each time one passes, when it's you
-      // turning the deck.
+      // Which card is in front; a flick each time one passes, whether you or
+      // the deck itself is turning it, as long as the deck is on screen.
       const k = Math.round(s.angle() / STEP);
       if (k !== front) {
         front = k;
         setActive(mod(k));
-        if (s.drag || move?.user) sound.flick(Math.abs(cards[0].v) / 260);
+        if (visible && (s.drag || move)) sound.flick(Math.max(0.45, Math.abs(cards[0].v) / 260));
       }
 
+      // While the deck turns, the cards around the front part a little, so
+      // the old front card and the new one are clear of each other by the
+      // time they swap places in the stack; at rest the fan is unchanged.
+      let q = 0;
+      cards.forEach((c) => (q += Math.min(1, Math.max(0, c.p))));
+      q /= cards.length;
+      const openTo = s.drag ? 1 : move ? Math.min(1, 1.6 * Math.sin(Math.PI * q)) : 0;
+      open += (openTo - open) * (1 - Math.exp(-d / 0.12));
+      const spread = (a) => a * (1 + PART * open * Math.exp(-((a / PART_W) ** 2)));
+
       const placed = s.placed();
-      placed
+      const shown = placed.map(spread);
+      shown
         .map((a, i) => [a, i])
         .sort((x, y) => Math.abs(y[0]) - Math.abs(x[0]))
         .forEach(([, i], rank) => {
@@ -277,8 +299,8 @@ export default function About() {
         });
       let near = 0;
       slots.forEach((el, i) => {
-        const a = placed[i];
-        if (Math.abs(a) < Math.abs(placed[near])) near = i;
+        const a = shown[i];
+        if (Math.abs(placed[i]) < Math.abs(placed[near])) near = i;
         const push = Math.sin(Math.PI * Math.min(1, Math.max(0, cards[i].p))) * 10;
         el.style.transform = `rotate(${a.toFixed(3)}deg) translate3d(0, ${(-push).toFixed(2)}px, 0)`;
         const vis = Math.abs(a) > LOOP / 2 - STEP * 0.6 ? "hidden" : "visible";
@@ -296,6 +318,8 @@ export default function About() {
     gsap.ticker.add(tick);
     return () => {
       io.disconnect();
+      window.removeEventListener("pointerdown", wake);
+      window.removeEventListener("keydown", wake);
       gsap.ticker.remove(tick);
     };
   }, [sound]);
